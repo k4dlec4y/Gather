@@ -4,21 +4,37 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WPF.Views.User"
+	  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="EventsPageView">
 
-	<Grid Background="White">
+	<StackPanel Background="White">
+		<StackPanel Orientation="Horizontal">
+			<TextBox x:Name="SearchBox" Width="300" Height="20" Margin="10" VerticalAlignment="Top"
+                 Text="{Binding SearchQuery}"/>
+			<Button x:Name="SearchButton" Content="Search" Width="100" Height="20" Margin="10" VerticalAlignment="Top"
+					Command="{Binding FilterEventsCommand}"/>
+		</StackPanel>
+
 		<ListBox x:Name="EventList"
              BorderThickness="1"
              ScrollViewer.VerticalScrollBarVisibility="Auto"
-             SelectionChanged="EventList_SelectionChanged">
+			 ItemsSource="{Binding Events}"
+             SelectedItem="{Binding SelectedEvent, Mode=TwoWay}">
+
+			<i:Interaction.Triggers>
+				<i:EventTrigger EventName="SelectionChanged">
+					<i:InvokeCommandAction Command="{Binding SelectEventCommand}" />
+				</i:EventTrigger>
+			</i:Interaction.Triggers>
+
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<Border BorderBrush="#DDD" BorderThickness="0 0 0 1" Padding="10" Margin="5" Cursor="Hand">
 						<StackPanel Orientation="Horizontal" Margin="5">
 							<Image Source="{Binding ImagePath}"
-                               Width="600" Height="480"
+                               Width="400" Height="300"
                                Margin="0,0,10,0"
                                Stretch="UniformToFill"/>
 							<StackPanel>
@@ -30,5 +46,5 @@
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
-	</Grid>
+	</StackPanel>
 </Page>

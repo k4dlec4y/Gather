@@ -2,7 +2,7 @@
 {
     public class User
     {
-        public string Name { get; set; }
+        public string Username { get; set; }
 		public int Age { get; set; }
 		public string PasswordHash{ get; set; }
 
@@ -11,9 +11,9 @@
 
         public List<User> Friends { get; set; } = new List<User>();
 
-		public User(string name, int age, string hash)
+		public User(string username, int age, string hash)
         {
-            Name = name;
+            Username = username;
             Age = age;
             PasswordHash = hash;
 		}

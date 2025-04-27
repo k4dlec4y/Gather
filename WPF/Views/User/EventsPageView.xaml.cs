@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using WPF.Models;
+using WPF.Viewmodels.User;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WPF.Views.User
 {
@@ -12,18 +14,7 @@ namespace WPF.Views.User
 		public EventsPageView()
 		{
 			InitializeComponent();
-			EventList.ItemsSource = Managers.EventManager.GetEvents();
-		}
-
-		private void EventList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			if (EventList.SelectedItem is Event selectedEvent)
-			{
-				MessageBox.Show($"Clicked on: {selectedEvent.Name}");
-			}
-
-			// Optional: reset selection so click works multiple times
-			EventList.SelectedItem = null;
+			DataContext = new EventsPageViewModel();
 		}
 	}
 }

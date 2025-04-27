@@ -19,16 +19,16 @@ namespace WPF.Views.User
     /// </summary>
     public partial class MainView : Window
     {
-        public MainView()
+		public MainView()
         {
             InitializeComponent();
-            MainFrame.Content = new EventsPageView();
+			MainFrame.Navigate(new EventsPageView());
 		}
 
         private void Events_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Content = new EventsPageView();
-        }
+			MainFrame.Navigate(new EventsPageView());
+		}
 
 		private void FriendList_Click(object sender, RoutedEventArgs e)
 		{
@@ -37,7 +37,7 @@ namespace WPF.Views.User
 
 		private void Settings_Click(object sender, RoutedEventArgs e)
 		{
-            MainFrame.Content = new SettingsPageView();
+			MainFrame.Navigate(new SettingsPageView());
 		}
 
 	}

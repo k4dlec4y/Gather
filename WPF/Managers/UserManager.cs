@@ -14,8 +14,16 @@ namespace WPF.Managers
 
         public static ObservableCollection<User> GetUsers() => Users;
 
-        public static void addUser(User user) => Users.Add(user);
+        public static bool addUser(User user)
+        {
+            if (Users.Select(u => u.Username).Contains(user.Username))
+            {
+                return false;
+            }
+            Users.Add(user);
+            return true;
+        }
 
-		public static void deleteUser(User user) => Users.Remove(user);
+		public static bool deleteUser(User user) => Users.Remove(user);
 	}
 }
