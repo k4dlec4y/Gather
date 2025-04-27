@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WPF.Models
+﻿namespace WPF.Models
 {
-	public class FriendRequest
-    {
-    }
+	public class FriendRequest : Message
+	{
+		public FriendRequest(User user, User to, string content) : base(user, to, content) { }
+	}
 }

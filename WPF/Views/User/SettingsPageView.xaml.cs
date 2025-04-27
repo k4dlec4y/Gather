@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WPF.Views
+namespace WPF.Views.User
 {
     /// <summary>
-    /// Interaction logic for MyUpcomingEvents.xaml
+    /// Interaction logic for SettingsPageView.xaml
     /// </summary>
-    public partial class MyUpcomingEvents : UserControl
+    public partial class SettingsPageView : Page
     {
-        public MyUpcomingEvents()
+        public SettingsPageView()
         {
             InitializeComponent();
         }

@@ -10,36 +10,35 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WPF.Views
+namespace WPF.Views.User
 {
     /// <summary>
-    /// Interaction logic for UserMainView.xaml
+    /// Interaction logic for MainView.xaml
     /// </summary>
-	public partial class UserMainWindowView : Window
-	{
-		public UserMainWindowView()
-		{
-			InitializeComponent();
-			MainContentArea.Content = new HomeView(); // default view
+    public partial class MainView : Window
+    {
+        public MainView()
+        {
+            InitializeComponent();
+            MainFrame.Content = new EventsPageView();
 		}
 
-		private void Home_Click(object sender, RoutedEventArgs e)
-		{
-			MainContentArea.Content = new HomeView();
-		}
+        private void Events_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Content = new EventsPageView();
+        }
 
 		private void FriendList_Click(object sender, RoutedEventArgs e)
 		{
-			MainContentArea.Content = new FriendListView();
+
 		}
 
 		private void Settings_Click(object sender, RoutedEventArgs e)
 		{
-			MainContentArea.Content = new SettingsView();
+            MainFrame.Content = new SettingsPageView();
 		}
+
 	}
 }
-
