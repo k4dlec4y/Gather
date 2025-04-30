@@ -13,16 +13,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WPF.Views.User
+namespace WPF.Views.UserV
 {
     /// <summary>
     /// Interaction logic for SettingsPageView.xaml
     /// </summary>
     public partial class SettingsPageView : Page
     {
-        public SettingsPageView()
+        public SettingsPageView(Viewmodels.UserVM.MainViewModel main)
         {
             InitializeComponent();
+            DataContext = new Viewmodels.UserVM.SettingsPageViewModel(main); 
         }
     }
 }

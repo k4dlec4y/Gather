@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using WPF.Models;
 
-namespace WPF.Viewmodels.User
+namespace WPF.Viewmodels.UserVM
 {
-    class EventDetailsViewModel
+    public partial class EventDetailsViewModel : ObservableObject
     {
+        [ObservableProperty]
+        private Event _event;
+
+        public EventDetailsViewModel(Event @event)
+        {
+            Event = @event;
+        }
     }
 }

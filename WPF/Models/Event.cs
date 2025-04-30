@@ -14,6 +14,8 @@ namespace WPF.Models
 
 		public ObservableCollection<string> Categories { get; init; }
 
+		public ObservableCollection<User> Participants { get; } = new();
+
 		public Event(
 			DateTime date,
 			string location,
@@ -30,6 +32,27 @@ namespace WPF.Models
 			ImagePath = image;
 			Organizer = organizer;
 			Name = name;
+		}
+
+		public bool AddParticipant(User participant)
+		{
+			if (Participants.Select(p => p.Username).Contains(participant.Username))
+			{
+				return false;
+			}
+			Participants.Add(participant);
+			return true;
+		}
+
+		public bool DeleteParticipant(User participant)
+		{
+			return Participants.Remove(participant);
+		}
+
+
+		public bool ContainsParticipant(User participant)
+		{
+			return Participants.Any(p => p.Username == participant.Username);
 		}
 	}
 }

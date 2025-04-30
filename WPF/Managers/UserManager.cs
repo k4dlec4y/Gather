@@ -5,25 +5,28 @@ namespace WPF.Managers
 {
     public static class UserManager
     {
-        private static ObservableCollection<User> Users { get; set; } =
+        private static ObservableCollection<User> _users { get; set; } =
         [
-            new User("Matus", 24, "dasd"),
-			new User("Pavol", 18, "dasd"),
-			new User("Zdenek", 18, "dasd"),
+            new User("Matus", System.Text.Encoding.UTF8.GetBytes("dasd")),
 		];
 
-        public static ObservableCollection<User> GetUsers() => Users;
+        public static ObservableCollection<User> GetUsers() => _users;
 
-        public static bool addUser(User user)
+        public static void AddUser(User user) => _users.Add(user);
+
+		public static bool DeleteUser(User user) => _users.Remove(user);
+
+        public static bool ContainsUsername(string username) 
+            => _users.Any(u => u.Username == username);
+
+        public static (bool, User) GetUser(string username)
         {
-            if (Users.Select(u => u.Username).Contains(user.Username))
+			var user = _users.Where(u => u.Username == username);
+            if (user.Count() == 0)
             {
-                return false;
-            }
-            Users.Add(user);
-            return true;
+				return (false, new User("", []));
+			}
+            return (true, user.ElementAt(0));
         }
-
-		public static bool deleteUser(User user) => Users.Remove(user);
 	}
 }

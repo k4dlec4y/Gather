@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WPF.Viewmodels;
 
 namespace WPF.Views
 {
@@ -22,6 +23,13 @@ namespace WPF.Views
         public LoginView()
         {
 			InitializeComponent();
-        }
-    }
+			DataContext = new LoginViewModel();
+		}
+
+		private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+		{
+			if (DataContext != null)
+			{ ((LoginViewModel)DataContext).SecurePassword = ((PasswordBox)sender).SecurePassword; }
+		}
+	}
 }

@@ -2,7 +2,7 @@
 {
 	public class EventOrganizer : User
     {
-        public EventOrganizer(string name, int age, string hash) : base(name, age, hash) { }
+        public EventOrganizer(string name, byte[] hash) : base(name, hash) { }
 
     }
 }

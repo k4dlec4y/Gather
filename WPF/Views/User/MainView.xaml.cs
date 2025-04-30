@@ -1,44 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
-namespace WPF.Views.User
+namespace WPF.Views.UserV
 {
     /// <summary>
     /// Interaction logic for MainView.xaml
     /// </summary>
     public partial class MainView : Window
     {
-		public MainView()
+		public MainView(Models.User user)
         {
             InitializeComponent();
-			MainFrame.Navigate(new EventsPageView());
+            DataContext = new Viewmodels.UserVM.MainViewModel(user);
 		}
-
-        private void Events_Click(object sender, RoutedEventArgs e)
-        {
-			MainFrame.Navigate(new EventsPageView());
-		}
-
-		private void FriendList_Click(object sender, RoutedEventArgs e)
-		{
-
-		}
-
-		private void Settings_Click(object sender, RoutedEventArgs e)
-		{
-			MainFrame.Navigate(new SettingsPageView());
-		}
-
 	}
 }

@@ -1,0 +1,120 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Runtime.InteropServices;
+using System.Security;
+using System.Security.Cryptography;
+using System.Text;
+using System.Windows;
+using WPF.Managers;
+
+namespace WPF.Viewmodels
+{
+	public partial class LoginViewModel : ObservableObject
+	{
+		[ObservableProperty]
+		private string _username = "";
+
+		[ObservableProperty]
+		private SecureString _securePassword = new SecureString();
+
+		[ObservableProperty]
+		private string _selectedRole = "Basic User";
+
+		private byte[] _receivePasswordHash()
+		{
+			if (SecurePassword == null)
+			{
+				MessageBox.Show("Please enter another password");
+				return Array.Empty<byte>();
+			}
+
+			string? plainPassword = Marshal.PtrToStringUni(Marshal.SecureStringToGlobalAllocUnicode(SecurePassword));
+
+			if (plainPassword == null)
+			{
+				MessageBox.Show("Please enter another password");
+				return Array.Empty<byte>();
+			}
+
+			using (SHA256 sha256 = SHA256.Create())
+			{
+				byte[] inputBytes = Encoding.UTF8.GetBytes(plainPassword);
+				plainPassword = null;
+				byte[] passwordHash = sha256.ComputeHash(inputBytes);
+				inputBytes = Array.Empty<byte>();
+				return passwordHash;
+			}
+		}
+
+		public List<string> Roles { get; } = new() { "Basic User", "Organizer", "Admin" };
+
+		/*[RelayCommand]
+		public void ChangeRole(string newRole)
+		{
+			SelectedRole = newRole;
+		}*/
+
+		[RelayCommand]
+		public void Login()
+		{
+			if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(SelectedRole))
+			{
+				MessageBox.Show("Please enter all fields");
+				return;
+			}
+
+			switch (SelectedRole)
+			{
+				case "Basic User":
+
+					(bool exists, WPF.Models.User user) = UserManager.GetUser(Username);
+					var hash = _receivePasswordHash();
+
+					if (!exists || !user.PasswordHash.SequenceEqual(hash))
+					{
+						MessageBox.Show("Invalid username or password");
+						return;
+					}
+
+					var window = new Views.UserV.MainView(user);
+					window.Show();
+					break;
+			}
+		}
+
+		[RelayCommand]
+		public void Register()
+		{
+			if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(SelectedRole))
+			{
+				MessageBox.Show("Please enter all fields");
+				return;
+			}
+
+			switch (SelectedRole)
+			{
+				case "Basic User":
+
+					var hash = _receivePasswordHash();
+
+					if (UserManager.ContainsUsername(Username))
+					{
+						MessageBox.Show("Username already exists");
+						return;
+					}
+
+					Models.User user = new Models.User(Username, hash);
+
+					UserManager.AddUser(user);
+
+					var window = new Views.UserV.MainView(user);
+					window.Show();
+					break;
+
+				default:
+					MessageBox.Show("You can register only as basic user");
+					break;
+			}
+		}
+	}
+}
