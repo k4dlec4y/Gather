@@ -1,16 +1,31 @@
-﻿<Window x:Class="WPF.Views.UserV.EventDetailsView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WPF.Views.UserV"
-        mc:Ignorable="d"
-        Title="Event details" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+﻿<Window
+	x:Class="WPF.Views.UserV.EventDetailsView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:local="clr-namespace:WPF.Views.UserV"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	Title="Event details"
+	Width="800"
+	Height="600"
+	WindowStartupLocation="CenterScreen"
+	mc:Ignorable="d">
 	<Grid Margin="20">
 		<StackPanel>
-			<Image Source="{Binding Event.ImagePath}" Height="300" Stretch="UniformToFill" Margin="0,0,0,20"/>
-			<TextBlock Text="{Binding Event.Name}" FontSize="30" FontWeight="Bold" Margin="0,0,0,10"/>
-			<TextBlock Text="{Binding Event.Description}" FontSize="18" TextWrapping="Wrap"/>
+			<Image
+				Height="300"
+				Margin="0,0,0,20"
+				Source="{Binding Event.ImagePath}"
+				Stretch="UniformToFill" />
+			<TextBlock
+				Margin="0,0,0,10"
+				FontSize="30"
+				FontWeight="Bold"
+				Text="{Binding Event.Name}" />
+			<TextBlock
+				FontSize="18"
+				Text="{Binding Event.Description}"
+				TextWrapping="Wrap" />
 		</StackPanel>
 	</Grid>
 </Window>

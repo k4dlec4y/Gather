@@ -7,8 +7,8 @@ using WPF.Views.UserV;
 
 namespace WPF.Viewmodels.UserVM
 {
-    public partial class EventsPageViewModel : ObservableObject
-    {
+	public partial class EventsPageViewModel : ObservableObject
+	{
 		public ObservableCollection<Event> Events { get; set; }
 
 		[ObservableProperty]
@@ -24,9 +24,14 @@ namespace WPF.Viewmodels.UserVM
 		private MainViewModel _mainVM;
 
 		public EventsPageViewModel(MainViewModel main)
-        {
-            Events = EventManager.GetEvents();
+		{
+			SetUpEvents();
 			MainVM = main;
+		}
+
+		public async void SetUpEvents()
+		{
+			Events = await EventManager.GetEvents();
 		}
 
 		[RelayCommand]
@@ -42,17 +47,34 @@ namespace WPF.Viewmodels.UserVM
 		[RelayCommand]
 		public void FilterEvents()
 		{
-			var filtered = EventManager.GetEvents()
+			SetUpEvents();
+			var filtered = (IsParticipatingOnly ? MainVM.User.EventsToAttend : Events)
 				.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
 					.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
 				.ToList();
 
-			/*if (isParticipatingOnly)
-			{
-				filtered = filtered.Where(e => e.ContainsParticipant());
-			}*/
-
 			Events = new ObservableCollection<Event>(filtered);
+			OnPropertyChanged(nameof(Events));
+		}
+
+		[RelayCommand]
+		public void Participate(Event selectedEvent)
+		{
+			var currentUser = MainVM.User;
+			bool isCurrentlyParticipating = selectedEvent.ContainsParticipant(currentUser);
+
+			if (isCurrentlyParticipating)
+			{
+				selectedEvent.DeleteParticipant(currentUser);
+				MainVM.User.EventsToAttend.Remove(selectedEvent);
+			}
+			else
+			{
+				selectedEvent.AddParticipant(currentUser);
+				MainVM.User.EventsToAttend.Add(selectedEvent);
+			}
+
+			// Force update the checkbox state
 			OnPropertyChanged(nameof(Events));
 		}
 	}

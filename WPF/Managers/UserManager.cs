@@ -1,32 +1,55 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
+using WPF.Data;
 using WPF.Models;
 
 namespace WPF.Managers
 {
-    public static class UserManager
-    {
-        private static ObservableCollection<User> _users { get; set; } =
-        [
-            new User("Matus", System.Text.Encoding.UTF8.GetBytes("dasd")),
-		];
+	public static class UserManager
+	{
+		public static async Task<ObservableCollection<User>> GetUsers()
+		{
+			using var context = new AppDbContext();
+			return new ObservableCollection<User>(await context.Users
+				.Include(u => u.EventsToAttend)
+				.Include(u => u.Friends)
+				.Include(u => u.Messages)
+				.ToListAsync());
+		}
 
-        public static ObservableCollection<User> GetUsers() => _users;
+		public static async Task<(bool success, User? user)> GetUser(string username)
+		{
+			using var context = new AppDbContext();
+			var user = await context.Users
+				.Include(u => u.EventsToAttend)
+				.Include(u => u.Friends)
+				.Include(u => u.Messages)
+				.FirstOrDefaultAsync(u => u.Username == username);
 
-        public static void AddUser(User user) => _users.Add(user);
+			return user != null ? (true, user) : (false, null);
+		}
 
-		public static bool DeleteUser(User user) => _users.Remove(user);
+		public static async Task<bool> ContainsUser(string username)
+		{
+			using var context = new AppDbContext();
+			var user = await context.Users
+				.FirstOrDefaultAsync(u => u.Username == username);
 
-        public static bool ContainsUsername(string username) 
-            => _users.Any(u => u.Username == username);
+			return user != null;
+		}
 
-        public static (bool, User) GetUser(string username)
-        {
-			var user = _users.Where(u => u.Username == username);
-            if (user.Count() == 0)
-            {
-				return (false, new User("", []));
-			}
-            return (true, user.ElementAt(0));
-        }
+		public static async Task AddUser(User user)
+		{
+			using var context = new AppDbContext();
+			await context.Users.AddAsync(user);
+			await context.SaveChangesAsync();
+		}
+
+		public static async Task RemoveUser(User user)
+		{
+			using var context = new AppDbContext();
+			context.Users.Remove(user);
+			await context.SaveChangesAsync();
+		}
 	}
 }

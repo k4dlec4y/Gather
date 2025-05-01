@@ -1,38 +1,25 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 namespace WPF.Models
 {
 	public class Event
 	{
-		public string Name { get; set; }
-		public string Description { get; set; }
-		public string ImagePath { get; set; }
+		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int Id { get; set; }
 
+		public required string Name { get; set; }
+		public required string Description { get; set; }
+		public required string ImagePath { get; set; }
 		public DateTime Date { get; set; }
-		public string Location { get; set; }
+		public required string Location { get; set; }
 
-		public EventOrganizer Organizer { get; init; }
+		public int OrganizerId { get; set; }
+		public virtual required EventOrganizer Organizer { get; set; }
 
-		public ObservableCollection<string> Categories { get; init; }
-
-		public ObservableCollection<User> Participants { get; } = new();
-
-		public Event(
-			DateTime date,
-			string location,
-			ObservableCollection<string> categories,
-			string description,
-			string image,
-			EventOrganizer organizer,
-			string name)
-		{
-			Date = date;
-			Location = location;
-			Categories = categories;
-			Description = description;
-			ImagePath = image;
-			Organizer = organizer;
-			Name = name;
-		}
+		public virtual ICollection<string> Categories { get; set; } = new ObservableCollection<string>();
+		public virtual ICollection<User> Participants { get; set; } = new ObservableCollection<User>();
 
 		public bool AddParticipant(User participant)
 		{

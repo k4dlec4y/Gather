@@ -1,19 +1,39 @@
-﻿using System.Collections.ObjectModel;
-using System.IO;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
+using WPF.Data;
 using WPF.Models;
 
 namespace WPF.Managers
 {
 	public static class EventManager
 	{
-		private static ObservableCollection<Event> Events =
-		[
-			new Event(new DateTime(2025, 12, 4, 3, 0, 0), "Brno", ["SPORT"], "sport activity with family", new Uri(Path.GetFullPath(Path.Combine("Data", "event_image.jpg"))).AbsoluteUri, new EventOrganizer("Jano", System.Text.Encoding.UTF8.GetBytes("dasd")), "Olympiada"),
-			new Event(new DateTime(2025, 4, 6, 12, 0, 0), "Trencin", ["Family, Music"], "concert v trencine, prid", new Uri(Path.GetFullPath(Path.Combine("Data", "event_image.jpg"))).AbsoluteUri, new EventOrganizer("Jano", System.Text.Encoding.UTF8.GetBytes("dasd")), "Garaz")
-		];
+		public async static Task<ObservableCollection<Event>> GetEvents()
+		{
+			using var context = new AppDbContext();
+			return new ObservableCollection<Event>(await context.Events
+				.Include(e => e.Organizer)
+				.Include(e => e.Participants)
+				.ToListAsync());
+		}
 
-		public static ObservableCollection<Event> GetEvents() => Events;
+		public static async Task<bool> ContainsEvent(Event e)
+		{
+			using var context = new AppDbContext();
+			return await context.Events.ContainsAsync(e);
+		}
 
-		public static void AddEvent(Event e) => Events.Add(e);
+		public static async Task AddEvent(Event e)
+		{
+			using var context = new AppDbContext();
+			context.Events.Add(e);
+			await context.SaveChangesAsync();
+		}
+
+		public static async Task RemoveEvent(Event e)
+		{
+			using var context = new AppDbContext();
+			context.Events.Remove(e);
+			await context.SaveChangesAsync();
+		}
 	}
 }

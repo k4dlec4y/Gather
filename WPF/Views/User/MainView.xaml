@@ -1,23 +1,44 @@
-﻿<Window x:Class="WPF.Views.UserV.MainView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WPF.Views.UserV"
-        mc:Ignorable="d"
-        Title="MainView" Height="800" Width="1600" WindowStartupLocation="CenterScreen">
+﻿<Window
+	x:Class="WPF.Views.UserV.MainView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:local="clr-namespace:WPF.Views.UserV"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	Title="MainView"
+	Width="1600"
+	Height="800"
+	WindowStartupLocation="CenterScreen"
+	mc:Ignorable="d">
 	<Grid x:Name="Grid">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="150"/>
-			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="150" />
+			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 
 		<StackPanel Grid.Column="0" Background="LightGray">
-			<Button x:Name="Events" Content="Events" Margin="5" Command="{Binding EventsCommand}"/>
-			<Button Content="Friend List" Margin="5" Command="{Binding FriendListCommand}"/>
-			<Button Content="Settings" Margin="5" Command="{Binding SettingsCommand}"/>
+			<Button
+				x:Name="Events"
+				Margin="5"
+				Command="{Binding EventsCommand}"
+				Content="Events" />
+			<Button
+				Margin="5"
+				Command="{Binding FriendListCommand}"
+				Content="Friend List" />
+			<Button
+				Margin="5"
+				Command="{Binding InboxCommand}"
+				Content="Inbox" />
+			<Button
+				Margin="5"
+				Command="{Binding SettingsCommand}"
+				Content="Settings" />
 		</StackPanel>
 
-		<Frame x:Name="MainFrame" Grid.Column="1" Content="{Binding CurrentPage}"/>
+		<Frame
+			x:Name="MainFrame"
+			Grid.Column="1"
+			Content="{Binding CurrentPage}" />
 	</Grid>
 </Window>

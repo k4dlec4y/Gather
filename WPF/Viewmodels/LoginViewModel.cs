@@ -55,7 +55,7 @@ namespace WPF.Viewmodels
 		}*/
 
 		[RelayCommand]
-		public void Login()
+		public async Task Login()
 		{
 			if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(SelectedRole))
 			{
@@ -67,7 +67,7 @@ namespace WPF.Viewmodels
 			{
 				case "Basic User":
 
-					(bool exists, WPF.Models.User user) = UserManager.GetUser(Username);
+					(bool exists, Models.User? user) = await UserManager.GetUser(Username);
 					var hash = _receivePasswordHash();
 
 					if (!exists || !user.PasswordHash.SequenceEqual(hash))
@@ -83,7 +83,7 @@ namespace WPF.Viewmodels
 		}
 
 		[RelayCommand]
-		public void Register()
+		public async Task Register()
 		{
 			if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(SelectedRole))
 			{
@@ -97,7 +97,7 @@ namespace WPF.Viewmodels
 
 					var hash = _receivePasswordHash();
 
-					if (UserManager.ContainsUsername(Username))
+					if (await UserManager.ContainsUser(Username))
 					{
 						MessageBox.Show("Username already exists");
 						return;
@@ -105,7 +105,7 @@ namespace WPF.Viewmodels
 
 					Models.User user = new Models.User(Username, hash);
 
-					UserManager.AddUser(user);
+					await UserManager.AddUser(user);
 
 					var window = new Views.UserV.MainView(user);
 					window.Show();
