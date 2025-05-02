@@ -13,9 +13,11 @@ namespace WPF.Models
 		public string Username { get; set; }
 		public byte[] PasswordHash { get; set; }
 
-		public ICollection<Event> EventsToAttend { get; set; } = new ObservableCollection<Event>();
-		public ICollection<Message> Messages { get; set; } = new List<Message>();
-		public ICollection<User> Friends { get; set; } = new List<User>();
+		public ObservableCollection<Event> EventsToAttend { get; set; } = new ();
+		public ObservableCollection<Message> Inbox { get; set; } = new ();
+		public ObservableCollection<FriendRequest> FriendRequests { get; set; } = new();
+		public ObservableCollection<Invite> Invites { get; set; } = new();
+		public ObservableCollection<User> Friends { get; set; } = new ();
 
 		public User(string username, byte[] hash)
 		{

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WPF.Models;
 
-public class Message
+public class FriendRequest
 {
 	[Key]
 	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]

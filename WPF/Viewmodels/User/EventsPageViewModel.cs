@@ -48,7 +48,7 @@ namespace WPF.Viewmodels.UserVM
 		public void FilterEvents()
 		{
 			SetUpEvents();
-			var filtered = (IsParticipatingOnly ? MainVM.User.EventsToAttend : Events)
+			var filtered = (IsParticipatingOnly ? MainVM.CurrentUser.EventsToAttend : Events)
 				.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
 					.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
 				.ToList();
@@ -60,18 +60,18 @@ namespace WPF.Viewmodels.UserVM
 		[RelayCommand]
 		public void Participate(Event selectedEvent)
 		{
-			var currentUser = MainVM.User;
+			var currentUser = MainVM.CurrentUser;
 			bool isCurrentlyParticipating = selectedEvent.ContainsParticipant(currentUser);
 
 			if (isCurrentlyParticipating)
 			{
 				selectedEvent.DeleteParticipant(currentUser);
-				MainVM.User.EventsToAttend.Remove(selectedEvent);
+				MainVM.CurrentUser.EventsToAttend.Remove(selectedEvent);
 			}
 			else
 			{
 				selectedEvent.AddParticipant(currentUser);
-				MainVM.User.EventsToAttend.Add(selectedEvent);
+				MainVM.CurrentUser.EventsToAttend.Add(selectedEvent);
 			}
 
 			// Force update the checkbox state

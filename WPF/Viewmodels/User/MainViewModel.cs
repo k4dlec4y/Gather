@@ -11,12 +11,12 @@ namespace WPF.Viewmodels.UserVM
         private Page _currentPage;
 
         [ObservableProperty]
-        private Models.User _user;
+        private Models.User _currentUser;
 
         public MainViewModel(Models.User user)
         {
             CurrentPage = new EventsPageView(this);
-            User = user;
+            CurrentUser = user;
         }
 
         [RelayCommand]
@@ -26,11 +26,16 @@ namespace WPF.Viewmodels.UserVM
 		}
 
 		[RelayCommand]
-		public void FriendList()
+		public void Friends()
         {
+			CurrentPage = new FriendsPageView(this);
+		}
 
-        }
-
+		[RelayCommand]
+		public void Inbox()
+		{
+			CurrentPage = new InboxPageView(this);
+		}
 
 		[RelayCommand]
 		public void Settings()

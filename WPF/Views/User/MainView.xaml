@@ -24,8 +24,8 @@
 				Content="Events" />
 			<Button
 				Margin="5"
-				Command="{Binding FriendListCommand}"
-				Content="Friend List" />
+				Command="{Binding FriendsCommand}"
+				Content="Friends" />
 			<Button
 				Margin="5"
 				Command="{Binding InboxCommand}"
