@@ -59,9 +59,9 @@ namespace WPF.Viewmodels.UserVM
 		}
 
 		[RelayCommand]
-		public async Task RemoveFriend()
+		public async Task RemoveFriend(User friend)
 		{
-			//await FriendRequestManager.DeleteFriendship(MainVM.User.Friends.FirstOrDefault(f => f.Username == SelectedUser));
+			await FriendshipManager.DeleteFriendship(MainVM.CurrentUser, friend);
 		}
 	}
 }
