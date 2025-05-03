@@ -48,12 +48,6 @@ namespace WPF.Viewmodels
 
 		public List<string> Roles { get; } = new() { "Basic User", "Organizer", "Admin" };
 
-		/*[RelayCommand]
-		public void ChangeRole(string newRole)
-		{
-			SelectedRole = newRole;
-		}*/
-
 		[RelayCommand]
 		public async Task Login()
 		{

@@ -13,11 +13,11 @@ namespace WPF.Viewmodels.UserVM
         [ObservableProperty]
         private Models.User _currentUser;
 
-        public MainViewModel(Models.User user)
+		public MainViewModel(Models.User user)
         {
             CurrentPage = new EventsPageView(this);
             CurrentUser = user;
-        }
+		}
 
         [RelayCommand]
         public void Events()

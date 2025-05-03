@@ -10,35 +10,54 @@
 	Height="800"
 	WindowStartupLocation="CenterScreen"
 	mc:Ignorable="d">
+
 	<Grid x:Name="Grid">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="150" />
+			<ColumnDefinition Width="200" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 
-		<StackPanel Grid.Column="0" Background="LightGray">
+		<StackPanel Grid.Column="0" Background="Pink">
 			<Button
 				x:Name="Events"
-				Margin="5"
+				Margin="10"
+				Background="Aquamarine"
+				BorderBrush="Aquamarine"
 				Command="{Binding EventsCommand}"
-				Content="Events" />
+				Content="Events"
+				FontSize="18"
+				Foreground="White" />
 			<Button
-				Margin="5"
+				Margin="10,0,10,10"
+				Background="Aquamarine"
+				BorderBrush="Aquamarine"
 				Command="{Binding FriendsCommand}"
-				Content="Friends" />
+				Content="Friends"
+				FontSize="18"
+				Foreground="White" />
 			<Button
-				Margin="5"
+				Margin="10,0,10,10"
+				Background="Aquamarine"
+				BorderBrush="Aquamarine"
 				Command="{Binding InboxCommand}"
-				Content="Inbox" />
+				Content="Inbox"
+				FontSize="18"
+				Foreground="White" />
 			<Button
-				Margin="5"
+				Margin="10,0,10,10"
+				Background="Aquamarine"
+				BorderBrush="Aquamarine"
 				Command="{Binding SettingsCommand}"
-				Content="Settings" />
+				Content="Settings"
+				FontSize="18"
+				Foreground="White" />
 		</StackPanel>
 
 		<Frame
 			x:Name="MainFrame"
 			Grid.Column="1"
-			Content="{Binding CurrentPage}" />
+			Background="Aquamarine"
+			Content="{Binding CurrentPage}"
+			NavigationUIVisibility="Hidden" />
 	</Grid>
 </Window>

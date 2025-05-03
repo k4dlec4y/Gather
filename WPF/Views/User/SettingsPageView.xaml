@@ -8,25 +8,104 @@
 	Title="SettingsPageView"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
-	Background="White"
+	Background="Aquamarine"
 	mc:Ignorable="d">
 
-	<StackPanel
-		Margin="20"
-		HorizontalAlignment="Left"
-		VerticalAlignment="Top">
-
+	<StackPanel Margin="10" Orientation="Vertical">
 		<Label
-			HorizontalAlignment="Center"
-			Content="Click the button below to sign out:"
-			FontSize="16" />
-
-		<Button
-			Width="120"
-			Height="40"
-			Background="Tomato"
-			Content="Sign Out"
-			FontWeight="Bold"
+			Margin="20,20,0,20"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Center"
+			Background="Pink"
+			BorderBrush="Pink"
+			Content="{Binding MainVM.CurrentUser.Username, StringFormat='User - {0}'}"
+			FontSize="16"
 			Foreground="White" />
+
+		<Grid Margin="20">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="80" />
+				<ColumnDefinition Width="120" />
+			</Grid.ColumnDefinitions>
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+
+			<Label
+				Grid.Row="0"
+				Grid.Column="0"
+				HorizontalAlignment="Left"
+				VerticalAlignment="Center"
+				Background="Pink"
+				BorderBrush="Pink"
+				Content="Sign out:"
+				FontSize="16"
+				Foreground="White" />
+
+			<Button
+				Grid.Row="0"
+				Grid.Column="2"
+				Height="40"
+				Margin="10,10,10,10"
+				Background="Pink"
+				BorderBrush="Pink"
+				Command="{Binding SignOutCommand}"
+				Content="Sign Out"
+				FontSize="16"
+				FontWeight="Bold"
+				Foreground="White" />
+
+			<Label
+				Grid.Row="1"
+				Grid.Column="0"
+				HorizontalAlignment="Left"
+				VerticalAlignment="Center"
+				Background="Pink"
+				BorderBrush="Pink"
+				Content="Become event organizer!"
+				FontSize="16"
+				Foreground="White" />
+
+			<Button
+				Grid.Row="1"
+				Grid.Column="2"
+				Height="40"
+				Margin="10,10,10,10"
+				Background="Pink"
+				BorderBrush="Pink"
+				Command="{Binding BecomeOrganizerCommand}"
+				Content="Apply"
+				FontSize="16"
+				FontWeight="Bold"
+				Foreground="White" />
+
+			<Label
+				Grid.Row="2"
+				Grid.Column="0"
+				HorizontalAlignment="Left"
+				VerticalAlignment="Center"
+				Background="Pink"
+				BorderBrush="Pink"
+				Content="Delete account"
+				FontSize="16"
+				Foreground="White" />
+
+			<Button
+				Grid.Row="2"
+				Grid.Column="2"
+				Height="40"
+				Margin="10,10,10,10"
+				Background="Pink"
+				BorderBrush="Pink"
+				Command="{Binding DeleteAccountCommand}"
+				Content="Delete"
+				FontSize="16"
+				FontWeight="Bold"
+				Foreground="White" />
+		</Grid>
 	</StackPanel>
 </Page>

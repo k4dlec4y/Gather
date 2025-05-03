@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.ObjectModel;
 
 namespace WPF.Models
 {
@@ -9,7 +10,9 @@ namespace WPF.Models
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
 
-		public required string Name { get; set; }
+		public required string Username { get; set; }
 		public required byte[] PasswordHash { get; set; }
+
+		public ObservableCollection<Event> OrganizedEvents { get; set; } = new();
 	}
 }
