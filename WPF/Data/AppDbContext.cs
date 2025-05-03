@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
 	public DbSet<FriendRequest> FriendRequests { get; set; }
 	public DbSet<Friendship> Friendships { get; set; }
 	public DbSet<Invite> Invites { get; set; }
+	public DbSet<BecomeOrganizerRequest> BecomeOrganizerRequests { get; set; }
 
 	public AppDbContext() : base()
 	{
@@ -131,6 +132,16 @@ public class AppDbContext : DbContext
 			.HasOne(i => i.Event)
 			.WithMany()
 			.HasForeignKey(i => i.EventId)
+			.OnDelete(DeleteBehavior.Cascade);
+
+		// BecomeOrganizerRequest
+		modelBuilder.Entity<BecomeOrganizerRequest>()
+			.HasKey(b => b.Id);
+
+		modelBuilder.Entity<BecomeOrganizerRequest>()
+			.HasOne(b => b.User)
+			.WithMany()
+			.HasForeignKey(b => b.UserId)
 			.OnDelete(DeleteBehavior.Cascade);
 
 		base.OnModelCreating(modelBuilder);

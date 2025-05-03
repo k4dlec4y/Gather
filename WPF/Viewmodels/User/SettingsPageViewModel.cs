@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Linq;
 using System.Windows;
 
 namespace WPF.Viewmodels.UserVM;
@@ -29,9 +28,10 @@ public partial class SettingsPageViewModel : ObservableObject
 	}
 
 	[RelayCommand]
-	public async Task BecomeOrganizer()
+	public void BecomeOrganizer()
 	{
-		
+		Window request = new Views.UserV.SendBecomeOrganizerRequestView(MainVM.CurrentUser);
+		request.Show();
 	}
 
 	[RelayCommand]
