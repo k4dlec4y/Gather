@@ -45,32 +45,39 @@ public static class EventOrganizerManager
 			await transaction.RollbackAsync();
 		}
 	}
-	public static async Task UpdateEventOrganizer(EventOrganizer eventOrganizer)
+	public static async Task<bool> UpdateEventOrganizer(EventOrganizer eventOrganizer)
 	{
 		using var db = new AppDbContext();
 		using var transaction = await db.Database.BeginTransactionAsync();
 		try
 		{
 			db.EventOrganizers.Update(eventOrganizer);
-			db.SaveChanges();
+			await db.SaveChangesAsync();
+			await transaction.CommitAsync();
+			return true;
 		}
 		catch
 		{
 			await transaction.RollbackAsync();
+			return false;
 		}
 	}
-	public static async Task DeleteEventOrganizer(EventOrganizer eventOrganizer)
+	public static async Task<bool> DeleteEventOrganizer(EventOrganizer eventOrganizer)
 	{
 		using var db = new AppDbContext();
 		using var transaction = await db.Database.BeginTransactionAsync();
 		try
 		{
 			db.EventOrganizers.Remove(eventOrganizer);
-			db.SaveChanges();
+			db.Events.RemoveRange(eventOrganizer.Events);
+			await db.SaveChangesAsync();
+			await transaction.CommitAsync();
+			return true;
 		}
 		catch
 		{
 			await transaction.RollbackAsync();
+			return false;
 		}
 	}
 }

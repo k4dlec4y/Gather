@@ -77,8 +77,8 @@ namespace WPF.Viewmodels
 					return;
 				}
 
-				var window = new Views.UserV.MainView(user);
-				window.Show();
+				var windowU = new Views.UserV.MainView(user);
+				windowU.Show();
 				return;
 			}
 
@@ -92,8 +92,8 @@ namespace WPF.Viewmodels
 				return;
 			}
 
-			//var window = new Views.OrganizerV.MainView(eventOrganizer);
-			window.Show();
+			var windowO = new Views.Organizer.MainView(eventOrganizer);
+			windowO.Show();
 			return;
 		}
 

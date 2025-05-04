@@ -32,12 +32,12 @@ public static class FriendshipManager
 			user1.Friends.Remove(user2);
 			user2.Friends.Remove(user1);
 
-			context.SaveChanges();
-			transaction.Commit();
+			await context.SaveChangesAsync();
+			await transaction.CommitAsync();
 		}
 		catch
 		{
-			transaction.Rollback();
+			await transaction.RollbackAsync();
 			MessageBox.Show("Something went wrong. Please, try again");
 		}
 	}

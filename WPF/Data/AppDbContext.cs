@@ -75,7 +75,7 @@ public class AppDbContext : DbContext
 
 		modelBuilder.Entity<Event>()
 			.HasOne(e => e.Organizer)
-			.WithMany(eo => eo.OrganizedEvents)
+			.WithMany(eo => eo.Events)
 			.HasForeignKey(e => e.OrganizerId);
 
 		// Event Participants

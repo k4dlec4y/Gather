@@ -29,13 +29,19 @@ namespace WPF.Viewmodels.UserVM
 
 			if (RequestText.Length > 200)
 			{
-				MessageBox.Show($"Maximum length has been exceeded by {RequestText.Length - 200} characters!");
+				MessageBox.Show($"Your description exceeded the maximum size by {RequestText.Length - 200} characters!");
 				return;
 			}
 
 			if (await Managers.BecomeOrganizerRequestManager.ContainsRequest(_currentUser.Username))
 			{
 				MessageBox.Show("You already have a pending request!");
+				return;
+			}
+
+			if (await Managers.EventOrganizerManager.GetEventOrganizerByUsername(_currentUser.Username) != null)
+			{
+				MessageBox.Show("You are already an organizer!");
 				return;
 			}
 
@@ -54,7 +60,7 @@ namespace WPF.Viewmodels.UserVM
 			}
 			else
 			{
-				MessageBox.Show("Failed to send request!");
+				MessageBox.Show("Failed to send request! Please try again");
 			}
 		}
 	}
