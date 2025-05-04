@@ -12,6 +12,7 @@ namespace WPF.Models
 
 		public required string Username { get; set; }
 		public required byte[] PasswordHash { get; set; }
+		public required string Info { get; set; }
 
 		public ObservableCollection<Event> OrganizedEvents { get; set; } = new();
 	}

@@ -27,6 +27,12 @@ namespace WPF.Viewmodels.UserVM
 				return;
 			}
 
+			if (RequestText.Length > 200)
+			{
+				MessageBox.Show($"Maximum length has been exceeded by {RequestText.Length - 200} characters!");
+				return;
+			}
+
 			if (await Managers.BecomeOrganizerRequestManager.ContainsRequest(_currentUser.Username))
 			{
 				MessageBox.Show("You already have a pending request!");

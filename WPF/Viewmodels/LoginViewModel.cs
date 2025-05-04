@@ -92,6 +92,12 @@ namespace WPF.Viewmodels
 				return;
 			}
 
+			if (Username.Length > 30)
+			{
+				MessageBox.Show($"Maximum length has been exceeded by {Username.Length - 30} characters!");
+				return;
+			}
+
 			switch (SelectedRole)
 			{
 				case "Basic User":

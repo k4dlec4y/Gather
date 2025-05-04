@@ -32,6 +32,7 @@
 		<ListBox
 			Grid.Row="1"
 			Grid.Column="0"
+			Width="1450"
 			BorderThickness="0"
 			ItemsSource="{Binding MainVM.CurrentUser.Inbox}"
 			ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -41,18 +42,39 @@
 						Padding="5"
 						BorderBrush="LightGray"
 						BorderThickness="0,0,0,1">
-						<StackPanel Orientation="Horizontal">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="200" />
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="Auto" />
+								<ColumnDefinition Width="100" />
+							</Grid.ColumnDefinitions>
+
 							<TextBlock
-								Width="200"
+								Grid.Column="0"
+								Margin="5,0,0,0"
+								HorizontalAlignment="Left"
 								VerticalAlignment="Center"
 								FontSize="18"
-								Text="{Binding From.Username}" />
+								Text="{Binding From.Username, StringFormat='From: {0}'}" />
+
 							<TextBlock
-								Width="auto"
+								Grid.Column="1"
+								Margin="5,0,0,0"
+								HorizontalAlignment="Center"
 								VerticalAlignment="Center"
 								FontSize="14"
 								Text="{Binding Content}" />
-						</StackPanel>
+
+							<Button
+								Grid.Column="2"
+								Width="100"
+								Margin="5,0,0,0"
+								Padding="10,5"
+								Command="{Binding DataContext.DeleteMessageCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+								CommandParameter="{Binding}"
+								Content="Delete" />
+						</Grid>
 					</Border>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
@@ -67,6 +89,7 @@
 		<ListBox
 			Grid.Row="3"
 			Grid.Column="0"
+			Width="1450"
 			BorderThickness="0"
 			ItemsSource="{Binding MainVM.CurrentUser.Invites}"
 			ScrollViewer.VerticalScrollBarVisibility="Auto">

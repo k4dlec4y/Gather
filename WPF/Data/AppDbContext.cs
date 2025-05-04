@@ -51,6 +51,24 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<EventOrganizer>()
 			.HasKey(eo => eo.Id);
 
+		modelBuilder.Entity<EventOrganizer>()
+			.Property(eo => eo.Username)
+			.HasMaxLength(30)
+			.IsRequired();
+
+		modelBuilder.Entity<EventOrganizer>()
+			.Property(eo => eo.PasswordHash)
+			.IsRequired();
+
+		modelBuilder.Entity<EventOrganizer>()
+			.Property(eo => eo.Info)
+			.HasMaxLength(200)
+			.IsRequired();
+
+		modelBuilder.Entity<EventOrganizer>()
+			.HasIndex(eo => eo.Username)
+			.IsUnique();
+
 		// Event
 		modelBuilder.Entity<Event>()
 			.HasKey(e => e.Id);
@@ -155,6 +173,14 @@ public class AppDbContext : DbContext
 			.WithMany()
 			.HasForeignKey(b => b.UserId)
 			.OnDelete(DeleteBehavior.Cascade);
+
+		// Data
+		modelBuilder.Entity<User>().HasData(
+			new User("admin", Convert.FromHexString("CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB"))
+			{
+				Id = 1
+			}
+		);
 
 		base.OnModelCreating(modelBuilder);
 	}

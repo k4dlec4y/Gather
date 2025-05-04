@@ -41,7 +41,8 @@
 								FontSize="14"
 								Text="{Binding User.Username}" />
 							<TextBlock
-								Width="200"
+								Width="auto"
+								Height="auto"
 								VerticalAlignment="Center"
 								FontSize="14"
 								Text="{Binding RequestText}" />

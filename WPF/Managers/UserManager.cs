@@ -63,6 +63,11 @@ public static class UserManager
 
 	public static async Task<bool> RemoveUser(User user)
 	{
+		if (user.Username == "admin")
+		{
+			return false;
+		}
+
 		using var context = new AppDbContext();
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try
@@ -73,6 +78,7 @@ public static class UserManager
 			var friendships = context.Users
 				.Where(u => u.Friends.Contains(user))
 				.ToList();
+
 			foreach (var friend in friendships)
 			{
 				friend.Friends.Remove(user);
@@ -140,6 +146,11 @@ public static class UserManager
 
 	public static async Task<bool> UpdateUser(User user)
 	{
+		if (user.Username == "admin")
+		{
+			return false;
+		}
+
 		using var context = new AppDbContext();
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try

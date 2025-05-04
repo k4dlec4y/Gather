@@ -55,6 +55,13 @@ public static class BecomeOrganizerRequestManager
 		try
 		{
 			context.BecomeOrganizerRequests.Remove(bor);
+			await context.Messages
+				.AddAsync(new Message
+				{
+					FromId = 1,
+					ToId = bor.User.Id,
+					Content = "You have been rejected as an event organizer.",
+				});
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();
 			return true;
@@ -77,10 +84,18 @@ public static class BecomeOrganizerRequestManager
 			var eo = new EventOrganizer
 			{
 				Username = bor.User.Username,
-				PasswordHash = bor.User.PasswordHash
+				PasswordHash = bor.User.PasswordHash,
+				Info = bor.RequestText
 			};
 			await context.EventOrganizers.AddAsync(eo);
 			context.BecomeOrganizerRequests.Remove(bor);
+			await context.Messages
+				.AddAsync(new Message
+				{
+					FromId = 1,
+					ToId = bor.User.Id,
+					Content = "You have been accepted as an event organizer.",
+				});
 
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();

@@ -25,6 +25,12 @@ public partial class InboxPageViewModel : ObservableObject
 	[RelayCommand]
 	public async Task RejectFriendRequest(FriendRequest friendRequest)
 	{
+		await FriendRequestManager.DeleteFriendRequest(friendRequest);
+	}
 
+	[RelayCommand]
+	public async Task DeleteMessage(Message message)
+	{
+		await MessageManager.DeleteMessage(message);
 	}
 }
