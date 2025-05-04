@@ -4,31 +4,224 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	Title="Login"
-	Width="400"
-	Height="350"
+	Width="450"
+	Height="550"
+	Background="#FF000000"
+	FontFamily="Segoe UI"
+	ResizeMode="NoResize"
 	WindowStartupLocation="CenterScreen">
+	<Window.Resources>
+		<Style TargetType="TextBlock">
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="Margin" Value="0,5,0,5" />
+		</Style>
+
+		<Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
+			<Setter Property="Background" Value="#1AFFFFFF" />
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="BorderBrush" Value="#FF7FFFD4" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="Height" Value="30" />
+			<Setter Property="Margin" Value="0,0,0,15" />
+			<Setter Property="Padding" Value="5" />
+		</Style>
+
+		<Style BasedOn="{StaticResource {x:Type PasswordBox}}" TargetType="PasswordBox">
+			<Setter Property="Background" Value="#1AFFFFFF" />
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="BorderBrush" Value="#FF7FFFD4" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="Height" Value="30" />
+			<Setter Property="Margin" Value="0,0,0,15" />
+			<Setter Property="Padding" Value="5" />
+		</Style>
+
+		<Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="ComboBox">
+			<Setter Property="Background" Value="#1AFFFFFF" />
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="TextElement.Foreground" Value="White" />
+			<Setter Property="BorderBrush" Value="#FFFF00FF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="Height" Value="30" />
+			<Setter Property="Margin" Value="0,0,0,20" />
+			<Setter Property="Padding" Value="5" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="ComboBox">
+						<Grid>
+							<Border
+								x:Name="border"
+								Background="{TemplateBinding Background}"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								CornerRadius="3" />
+							<ToggleButton
+								x:Name="toggleButton"
+								Background="Transparent"
+								BorderBrush="Transparent"
+								ClickMode="Press"
+								Focusable="False"
+								IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition />
+										<ColumnDefinition Width="20" />
+									</Grid.ColumnDefinitions>
+									<ContentPresenter
+										Margin="4,2,0,2"
+										HorizontalAlignment="Left"
+										VerticalAlignment="Center"
+										Content="{TemplateBinding SelectionBoxItem}"
+										ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+										ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+										TextElement.Foreground="White" />
+									<Path
+										x:Name="arrow"
+										Grid.Column="1"
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center"
+										Data="M 0 0 L 4 4 L 8 0 Z"
+										Fill="#FF7FFFD4" />
+								</Grid>
+							</ToggleButton>
+							<Popup
+								x:Name="PART_Popup"
+								Width="300"
+								HorizontalAlignment="Center"
+								AllowsTransparency="True"
+								Focusable="False"
+								IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
+								Placement="Bottom"
+								PopupAnimation="Slide">
+								<Border
+									x:Name="dropDownBorder"
+									Padding="5"
+									Background="#FF0A0A0A"
+									BorderBrush="#FF7FFFD4"
+									BorderThickness="1"
+									CornerRadius="0,0,3,3">
+									<ScrollViewer>
+										<ItemsPresenter Width="200" HorizontalAlignment="Center" />
+									</ScrollViewer>
+								</Border>
+							</Popup>
+						</Grid>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter TargetName="border" Property="BorderBrush" Value="#FF9EFFE1" />
+							</Trigger>
+							<Trigger Property="IsDropDownOpen" Value="True">
+								<Setter TargetName="border" Property="Background" Value="#2AFFFFFF" />
+								<Setter TargetName="border" Property="BorderBrush" Value="#FF9EFFE1" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+
+			<!--  ItemContainerStyle for dropdown items  -->
+			<Setter Property="ItemContainerStyle">
+				<Setter.Value>
+					<Style TargetType="ComboBoxItem">
+						<Setter Property="Background" Value="#FF0A0A0A" />
+						<Setter Property="Foreground" Value="White" />
+						<Setter Property="TextElement.Foreground" Value="White" />
+						<Setter Property="BorderThickness" Value="0" />
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ComboBoxItem">
+									<Border Padding="5,2" Background="{TemplateBinding Background}">
+										<ContentPresenter />
+									</Border>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsHighlighted" Value="True">
+											<Setter Property="Background" Value="#FF7FFFD4" />
+											<Setter Property="Foreground" Value="Black" />
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style TargetType="Button">
+			<Setter Property="Background" Value="#1AFFFFFF" />
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="BorderBrush" Value="#FFFF00FF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="Height" Value="35" />
+			<Setter Property="Margin" Value="0,10,0,10" />
+			<Setter Property="FontWeight" Value="Bold" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Border
+							Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							CornerRadius="3">
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="Background" Value="#AFAF00AF" />
+					<Setter Property="Foreground" Value="Black" />
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+	</Window.Resources>
 	<StackPanel
-		Width="295"
-		Height="324"
+		Width="300"
 		HorizontalAlignment="Center"
 		VerticalAlignment="Center">
-		<TextBlock Margin="0,15,5,5" Text="Username" />
+		<TextBlock
+			Margin="0,0,0,30"
+			HorizontalAlignment="Center"
+			FontSize="24"
+			FontWeight="Bold"
+			Text="GATHER">
+			<TextBlock.Foreground>
+				<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+					<GradientStop Offset="0.3" Color="#FFFF00FF" />
+					<GradientStop Offset="0.7" Color="#FF7FFFD4" />
+				</LinearGradientBrush>
+			</TextBlock.Foreground>
+			<TextBlock.Effect>
+				<DropShadowEffect
+					BlurRadius="12"
+					Opacity="0.8"
+					ShadowDepth="0"
+					Color="#FFFF00FF" />
+			</TextBlock.Effect>
+		</TextBlock>
+
+		<TextBlock Text="USERNAME" />
 		<TextBox Text="{Binding Username}" />
 
-		<TextBlock Text="Password" />
+		<TextBlock Text="PASSWORD" />
 		<PasswordBox PasswordChanged="PasswordBox_PasswordChanged" />
 
-		<TextBlock Text="Role" />
-		<ComboBox
-			Name="RoleComboBox"
-			Margin="0,10,0,10"
-			ItemsSource="{Binding Roles}"
-			SelectedItem="{Binding SelectedRole, Mode=TwoWay}" />
+		<TextBlock Text="ROLE" />
+		<ComboBox ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole, Mode=TwoWay}" />
 
 		<Button
-			Margin="0,10,0,10"
+			Margin="0,20,0,10"
+			Background="#FFFF00FF"
 			Command="{Binding LoginCommand}"
-			Content="Login" />
-		<Button Command="{Binding RegisterCommand}" Content="Register" />
+			Content="LOGIN"
+			Foreground="#FF000000" />
+
+		<Button
+			BorderBrush="#FFFF00FF"
+			Command="{Binding RegisterCommand}"
+			Content="REGISTER"
+			Foreground="#FFFF00FF" />
 	</StackPanel>
 </Window>
