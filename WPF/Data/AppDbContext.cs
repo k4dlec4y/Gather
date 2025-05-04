@@ -62,9 +62,21 @@ public class AppDbContext : DbContext
 
 		// Event Participants
 		modelBuilder.Entity<Event>()
-			.HasMany(e => e.Participants)
-			.WithMany(u => u.EventsToAttend)
-			.UsingEntity(j => j.ToTable("EventAttendance"));
+		.HasMany(e => e.Participants)
+		.WithMany(u => u.EventsToAttend)
+		.UsingEntity<Dictionary<string, object>>(
+			"EventAttendance",
+			j => j.HasOne<User>()
+				  .WithMany()
+				  .HasForeignKey("UserId")
+				  .OnDelete(DeleteBehavior.Cascade),
+			j => j.HasOne<Event>()
+				  .WithMany()
+				  .HasForeignKey("EventId")
+				  .OnDelete(DeleteBehavior.Cascade),
+			j => j.HasKey("EventId", "UserId")
+		);
+
 
 		modelBuilder.Entity<User>()
 			.HasMany(u => u.Friends)

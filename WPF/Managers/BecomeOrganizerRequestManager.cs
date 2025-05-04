@@ -9,14 +9,14 @@ namespace WPF.Managers;
 
 public static class BecomeOrganizerRequestManager
 {
-	public static async Task<ObservableCollection<BecomeOrganizerRequest>> GetRequests()
+	public static ObservableCollection<BecomeOrganizerRequest> GetRequests()
 	{
 		using var context = new AppDbContext();
 
 		return new ObservableCollection<BecomeOrganizerRequest>(
-			await context.BecomeOrganizerRequests
+			context.BecomeOrganizerRequests
 			.Include(r => r.User)
-			.ToListAsync()
+			.ToList()
 		);
 	}
 
@@ -59,8 +59,10 @@ public static class BecomeOrganizerRequestManager
 			await transaction.CommitAsync();
 			return true;
 		}
-		catch
+		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
 			return false;
 		}
@@ -72,16 +74,10 @@ public static class BecomeOrganizerRequestManager
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try
 		{
-			var user = await context.Users.FindAsync(bor.UserId);
-			if (user == null)
-			{
-				await transaction.RollbackAsync();
-				return false;
-			}
 			var eo = new EventOrganizer
 			{
-				Username = user.Username,
-				PasswordHash = user.PasswordHash
+				Username = bor.User.Username,
+				PasswordHash = bor.User.PasswordHash
 			};
 			await context.EventOrganizers.AddAsync(eo);
 			context.BecomeOrganizerRequests.Remove(bor);
@@ -90,8 +86,10 @@ public static class BecomeOrganizerRequestManager
 			await transaction.CommitAsync();
 			return true;
 		}
-		catch
+		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
 			return false;
 		}

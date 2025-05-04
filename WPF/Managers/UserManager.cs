@@ -26,7 +26,7 @@ public static class UserManager
 			.ToListAsync());
 	}
 
-	public static async Task<(bool success, User? user)> GetUser(string username)
+	public static async Task<User?> GetUser(string username)
 	{
 		using var context = new AppDbContext();
 		var user = await context.Users
@@ -42,7 +42,7 @@ public static class UserManager
 				.ThenInclude(f => f.From)
 			.FirstOrDefaultAsync(u => u.Username == username);
 
-		return user != null ? (true, user) : (false, null);
+		return user;
 	}
 
 	public static async Task<bool> ContainsUser(string username)

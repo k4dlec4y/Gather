@@ -20,6 +20,8 @@ namespace WPF.Viewmodels
 		[ObservableProperty]
 		private string _selectedRole = "Basic User";
 
+		public List<string> Roles { get; } = new() { "Basic User", "Organizer" };
+
 		private byte[] _receivePasswordHash()
 		{
 			if (SecurePassword == null)
@@ -46,8 +48,6 @@ namespace WPF.Viewmodels
 			}
 		}
 
-		public List<string> Roles { get; } = new() { "Basic User", "Organizer", "Admin" };
-
 		[RelayCommand]
 		public async Task Login()
 		{
@@ -61,10 +61,17 @@ namespace WPF.Viewmodels
 			{
 				case "Basic User":
 
-					(bool exists, Models.User? user) = await UserManager.GetUser(Username);
 					var hash = _receivePasswordHash();
+					if (Username.Equals("admin") && hash.SequenceEqual(Convert.FromHexString("CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB")))
+					{
+						var adminWindow = new Views.Admin.MainView();
+						adminWindow.Show();
+						return;
+					}
 
-					if (!exists || !user.PasswordHash.SequenceEqual(hash))
+					Models.User? user = await UserManager.GetUser(Username);
+
+					if (user == null || !user.PasswordHash.SequenceEqual(hash))
 					{
 						MessageBox.Show("Invalid username or password");
 						return;

@@ -7,13 +7,13 @@ namespace WPF.Managers;
 
 public static class EventManager
 {
-	public async static Task<ObservableCollection<Event>> GetEvents()
+	public static ObservableCollection<Event> GetEvents()
 	{
 		using var context = new AppDbContext();
-		return new ObservableCollection<Event>(await context.Events
+		return new ObservableCollection<Event>(context.Events
 			.Include(e => e.Organizer)
 			.Include(e => e.Participants)
-			.ToListAsync());
+			.ToList());
 	}
 
 	public static async Task<bool> ContainsEvent(Event e)
@@ -22,17 +22,49 @@ public static class EventManager
 		return await context.Events.ContainsAsync(e);
 	}
 
-	public static async Task AddEvent(Event e)
+	public static async Task<bool> AddEvent(Event e)
 	{
 		using var context = new AppDbContext();
-		context.Events.Add(e);
-		await context.SaveChangesAsync();
+		using var transaction = await context.Database.BeginTransactionAsync();
+		try
+		{
+			context.Events.Add(e);
+			await context.SaveChangesAsync();
+			await transaction.CommitAsync();
+			return true;
+		}
+		catch
+		{
+			await transaction.RollbackAsync();
+			return false;
+		}
 	}
 
-	public static async Task RemoveEvent(Event e)
+	public static async Task<bool> RemoveEvent(Event e)
 	{
 		using var context = new AppDbContext();
-		context.Events.Remove(e);
-		await context.SaveChangesAsync();
+		using var transaction = await context.Database.BeginTransactionAsync();
+		try
+		{
+			var eventToDelete = await context.Events
+				.Include(e => e.Participants)
+				.Include(e => e.Categories)
+				.FirstOrDefaultAsync(ev => ev.Id == e.Id);
+
+			if (eventToDelete == null)
+			{
+				return false;
+			}
+
+			context.Events.Remove(eventToDelete);
+			await context.SaveChangesAsync();
+			await transaction.CommitAsync();
+			return true;
+		}
+		catch
+		{
+			await transaction.RollbackAsync();
+			return false;
+		}
 	}
 }

@@ -5,77 +5,69 @@ using WPF.Managers;
 using WPF.Models;
 using WPF.Views.UserV;
 
-namespace WPF.Viewmodels.UserVM
+namespace WPF.Viewmodels.UserVM;
+
+public partial class EventsPageViewModel : ObservableObject
 {
-	public partial class EventsPageViewModel : ObservableObject
+	public ObservableCollection<Event> Events { get; set; } = EventManager.GetEvents();
+
+	[ObservableProperty]
+	private Event? _selectedEvent;
+
+	[ObservableProperty]
+	private string _searchQuery = "";
+
+	[ObservableProperty]
+	private bool _isParticipatingOnly = false;
+
+	[ObservableProperty]
+	private MainViewModel _mainVM;
+
+	public EventsPageViewModel(MainViewModel main)
 	{
-		public ObservableCollection<Event> Events { get; set; }
+		MainVM = main;
+	}
 
-		[ObservableProperty]
-		private Event? _selectedEvent;
-
-		[ObservableProperty]
-		private string _searchQuery = "";
-
-		[ObservableProperty]
-		private bool _isParticipatingOnly = false;
-
-		[ObservableProperty]
-		private MainViewModel _mainVM;
-
-		public EventsPageViewModel(MainViewModel main)
+	[RelayCommand]
+	public void SelectEvent()
+	{
+		if (SelectedEvent != null)
 		{
-			SetUpEvents();
-			MainVM = main;
+			var detailWindow = new EventDetailsView(SelectedEvent);
+			detailWindow.Show();
+		}
+	}
+
+	[RelayCommand]
+	public void FilterEvents()
+	{
+		var filtered = (IsParticipatingOnly ? MainVM.CurrentUser.EventsToAttend : EventManager.GetEvents())
+			.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
+				.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
+			.ToList();
+
+		Events = new ObservableCollection<Event>(filtered);
+		OnPropertyChanged(nameof(Events));
+	}
+
+	[RelayCommand]
+	public void Participate(Event selectedEvent)
+	{
+		var currentUser = MainVM.CurrentUser;
+		bool isCurrentlyParticipating = selectedEvent.ContainsParticipant(currentUser);
+
+		if (isCurrentlyParticipating)
+		{
+			selectedEvent.DeleteParticipant(currentUser);
+			MainVM.CurrentUser.EventsToAttend.Remove(selectedEvent);
+		}
+		else
+		{
+			selectedEvent.AddParticipant(currentUser);
+			MainVM.CurrentUser.EventsToAttend.Add(selectedEvent);
 		}
 
-		public async void SetUpEvents()
-		{
-			Events = await EventManager.GetEvents();
-		}
-
-		[RelayCommand]
-		public void SelectEvent()
-		{
-			if (SelectedEvent != null)
-			{
-				var detailWindow = new EventDetailsView(SelectedEvent);
-				detailWindow.Show();
-			}
-		}
-
-		[RelayCommand]
-		public void FilterEvents()
-		{
-			SetUpEvents();
-			var filtered = (IsParticipatingOnly ? MainVM.CurrentUser.EventsToAttend : Events)
-				.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
-					.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
-				.ToList();
-
-			Events = new ObservableCollection<Event>(filtered);
-			OnPropertyChanged(nameof(Events));
-		}
-
-		[RelayCommand]
-		public void Participate(Event selectedEvent)
-		{
-			var currentUser = MainVM.CurrentUser;
-			bool isCurrentlyParticipating = selectedEvent.ContainsParticipant(currentUser);
-
-			if (isCurrentlyParticipating)
-			{
-				selectedEvent.DeleteParticipant(currentUser);
-				MainVM.CurrentUser.EventsToAttend.Remove(selectedEvent);
-			}
-			else
-			{
-				selectedEvent.AddParticipant(currentUser);
-				MainVM.CurrentUser.EventsToAttend.Add(selectedEvent);
-			}
-
-			// Force update the checkbox state
-			OnPropertyChanged(nameof(Events));
-		}
+		// Force update the checkbox state
+		OnPropertyChanged(nameof(Events));
 	}
 }
