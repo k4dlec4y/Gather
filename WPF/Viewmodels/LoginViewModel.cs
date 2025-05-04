@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using WPF.Managers;
+using WPF.Models;
 
 namespace WPF.Viewmodels
 {
@@ -57,30 +58,43 @@ namespace WPF.Viewmodels
 				return;
 			}
 
-			switch (SelectedRole)
+			var hash = _receivePasswordHash();
+
+			if (SelectedRole.Equals("Basic User"))
 			{
-				case "Basic User":
+				if (Username.Equals("admin") && hash.SequenceEqual(Convert.FromHexString("CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB")))
+				{
+					var adminWindow = new Views.Admin.MainView();
+					adminWindow.Show();
+					return;
+				}
 
-					var hash = _receivePasswordHash();
-					if (Username.Equals("admin") && hash.SequenceEqual(Convert.FromHexString("CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB")))
-					{
-						var adminWindow = new Views.Admin.MainView();
-						adminWindow.Show();
-						return;
-					}
+				User? user = await UserManager.GetUser(Username);
 
-					Models.User? user = await UserManager.GetUser(Username);
+				if (user == null || !user.PasswordHash.SequenceEqual(hash))
+				{
+					MessageBox.Show("Invalid username or password");
+					return;
+				}
 
-					if (user == null || !user.PasswordHash.SequenceEqual(hash))
-					{
-						MessageBox.Show("Invalid username or password");
-						return;
-					}
-
-					var window = new Views.UserV.MainView(user);
-					window.Show();
-					break;
+				var window = new Views.UserV.MainView(user);
+				window.Show();
+				return;
 			}
+
+			// SelectedRole.Equals("Organizer")
+
+			EventOrganizer? eventOrganizer = await EventOrganizerManager.GetEventOrganizerByUsername(Username);
+
+			if (eventOrganizer == null || !eventOrganizer.PasswordHash.SequenceEqual(hash))
+			{
+				MessageBox.Show("Invalid username or password");
+				return;
+			}
+
+			//var window = new Views.OrganizerV.MainView(eventOrganizer);
+			window.Show();
+			return;
 		}
 
 		[RelayCommand]
@@ -98,30 +112,26 @@ namespace WPF.Viewmodels
 				return;
 			}
 
-			switch (SelectedRole)
+			if (!SelectedRole.Equals("Basic User"))
 			{
-				case "Basic User":
-
-					var hash = _receivePasswordHash();
-
-					if (await UserManager.ContainsUser(Username))
-					{
-						MessageBox.Show("Username already exists");
-						return;
-					}
-
-					Models.User user = new Models.User(Username, hash);
-
-					await UserManager.AddUser(user);
-
-					var window = new Views.UserV.MainView(user);
-					window.Show();
-					break;
-
-				default:
-					MessageBox.Show("You can register only as basic user");
-					break;
+				MessageBox.Show("You can register only as basic user");
+				return;
 			}
+
+			var hash = _receivePasswordHash();
+
+			if (await UserManager.ContainsUser(Username))
+			{
+				MessageBox.Show("Username already exists");
+				return;
+			}
+
+			Models.User user = new Models.User(Username, hash);
+
+			await UserManager.AddUser(user);
+
+			var window = new Views.UserV.MainView(user);
+			window.Show();
 		}
 	}
 }
