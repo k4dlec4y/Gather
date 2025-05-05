@@ -69,9 +69,19 @@ public class AppDbContext : DbContext
 			.HasIndex(eo => eo.Username)
 			.IsUnique();
 
+		modelBuilder.Entity<EventOrganizer>()
+			.HasMany(eo => eo.Events)
+			.WithOne(e => e.Organizer)
+			.HasForeignKey(e => e.OrganizerId)
+			.OnDelete(DeleteBehavior.Cascade);
+
 		// Event
 		modelBuilder.Entity<Event>()
 			.HasKey(e => e.Id);
+
+		modelBuilder.Entity<Event>()
+			.Property(e => e.OrganizerId)
+			.IsRequired();
 
 		modelBuilder.Entity<Event>()
 			.HasOne(e => e.Organizer)

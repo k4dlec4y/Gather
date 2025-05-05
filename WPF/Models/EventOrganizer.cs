@@ -14,6 +14,6 @@ namespace WPF.Models
 		public required byte[] PasswordHash { get; set; }
 		public required string Info { get; set; }
 
-		public ObservableCollection<Event> Events { get; set; } = new();
+		public ICollection<Event> Events { get; set; } = new List<Event>();
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using WPF.Data;
 using WPF.Models;
 
@@ -22,7 +23,7 @@ public static class EventManager
 		return await context.Events.ContainsAsync(e);
 	}
 
-	public static async Task<bool> AddEvent(Event e)
+	public static async Task<bool> CreateEvent(Event e)
 	{
 		using var context = new AppDbContext();
 		using var transaction = await context.Database.BeginTransactionAsync();
@@ -33,8 +34,10 @@ public static class EventManager
 			await transaction.CommitAsync();
 			return true;
 		}
-		catch
+		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
 			return false;
 		}
@@ -46,23 +49,17 @@ public static class EventManager
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try
 		{
-			var eventToDelete = await context.Events
-				.Include(e => e.Participants)
-				.Include(e => e.Categories)
-				.FirstOrDefaultAsync(ev => ev.Id == e.Id);
+			context.Events.Attach(e);
+			context.Events.Remove(e);
 
-			if (eventToDelete == null)
-			{
-				return false;
-			}
-
-			context.Events.Remove(eventToDelete);
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();
 			return true;
 		}
-		catch
+		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
 			return false;
 		}

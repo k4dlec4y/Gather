@@ -33,9 +33,10 @@ public partial class EventsPageViewModel : ObservableObject
 	{
 		if (SelectedEvent != null)
 		{
-			var detailWindow = new EventDetailsView(SelectedEvent);
+			var detailWindow = new Views.EventDetailsView(SelectedEvent);
 			detailWindow.Show();
 		}
+		SelectedEvent = null;
 	}
 
 	[RelayCommand]
@@ -66,8 +67,5 @@ public partial class EventsPageViewModel : ObservableObject
 			selectedEvent.AddParticipant(currentUser);
 			MainVM.CurrentUser.EventsToAttend.Add(selectedEvent);
 		}
-
-		// Force update the checkbox state
-		OnPropertyChanged(nameof(Events));
 	}
 }

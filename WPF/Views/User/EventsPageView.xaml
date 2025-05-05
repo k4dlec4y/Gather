@@ -78,7 +78,7 @@
 									Text="{Binding Name}" />
 								<CheckBox
 									Name="Participate"
-									Command="{Binding ParticipateCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+									Command="{Binding DataContext.ParticipateCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
 									CommandParameter="{Binding}"
 									Content="I will attend" />
 								<TextBlock

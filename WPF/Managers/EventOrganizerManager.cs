@@ -12,24 +12,33 @@ public static class EventOrganizerManager
 		{
 			return db.EventOrganizers
 				.Include(eo => eo.Events)
-				.ThenInclude(e => e.Participants)
+					.ThenInclude(e => e.Participants)
 				.ToList();
 		}
 	}
+
 	public static async Task<EventOrganizer?> GetEventOrganizerById(int id)
 	{
 		using (var db = new AppDbContext())
 		{
-			return await db.EventOrganizers.FirstOrDefaultAsync(eo => eo.Id == id);
+			return await db.EventOrganizers
+				.Include(eo => eo.Events)
+					.ThenInclude(e => e.Participants)
+				.FirstOrDefaultAsync(eo => eo.Id == id);
 		}
 	}
+
 	public static async Task<EventOrganizer?> GetEventOrganizerByUsername(string username)
 	{
 		using (var db = new AppDbContext())
 		{
-			return await db.EventOrganizers.FirstOrDefaultAsync(eo => eo.Username == username);
+			return await db.EventOrganizers
+				.Include(eo => eo.Events)
+					.ThenInclude(e => e.Participants)
+				.FirstOrDefaultAsync(eo => eo.Username == username);
 		}
 	}
+
 	public static async Task AddEventOrganizer(EventOrganizer eventOrganizer)
 	{
 		using var db = new AppDbContext();
@@ -45,6 +54,7 @@ public static class EventOrganizerManager
 			await transaction.RollbackAsync();
 		}
 	}
+
 	public static async Task<bool> UpdateEventOrganizer(EventOrganizer eventOrganizer)
 	{
 		using var db = new AppDbContext();
@@ -62,6 +72,7 @@ public static class EventOrganizerManager
 			return false;
 		}
 	}
+
 	public static async Task<bool> DeleteEventOrganizer(EventOrganizer eventOrganizer)
 	{
 		using var db = new AppDbContext();
