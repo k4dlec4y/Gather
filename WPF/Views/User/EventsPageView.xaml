@@ -12,10 +12,6 @@
 	d:DesignWidth="800"
 	mc:Ignorable="d">
 
-	<Page.Resources>
-		<converters:ContainsUserConverter x:Key="ContainsUserConverter" />
-	</Page.Resources>
-
 	<StackPanel Background="White">
 
 		<StackPanel Orientation="Horizontal">
@@ -47,7 +43,7 @@
 			x:Name="EventList"
 			BorderThickness="1"
 			ItemsSource="{Binding Events}"
-			ScrollViewer.VerticalScrollBarVisibility="Auto"
+			ScrollViewer.VerticalScrollBarVisibility="Visible"
 			SelectedItem="{Binding SelectedEvent, Mode=TwoWay}">
 
 			<i:Interaction.Triggers>
@@ -76,11 +72,18 @@
 									FontSize="24"
 									FontWeight="Bold"
 									Text="{Binding Name}" />
-								<CheckBox
-									Name="Participate"
-									Command="{Binding DataContext.ParticipateCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-									CommandParameter="{Binding}"
-									Content="I will attend" />
+								<StackPanel Margin="5" Orientation="Horizontal">
+									<CheckBox
+										Name="Participate"
+										IsChecked="{Binding IsCurrentUserParticipating, Mode=TwoWay}"
+										IsEnabled="False" />
+
+									<Button
+										Name="ChangeParticipation"
+										Command="{Binding DataContext.ParticipateCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+										CommandParameter="{Binding}"
+										Content="Change Participation" />
+								</StackPanel>
 								<TextBlock
 									FontSize="16"
 									Foreground="Gray"
@@ -91,6 +94,11 @@
 									Foreground="Gray"
 									Text="{Binding Description}"
 									TextWrapping="Wrap" />
+								<TextBlock
+									Margin="5,0,0,0"
+									VerticalAlignment="Center"
+									FontStyle="Italic"
+									Text="{Binding Participants.Count, StringFormat=' ({0} participants)'}" />
 							</StackPanel>
 						</StackPanel>
 					</Border>

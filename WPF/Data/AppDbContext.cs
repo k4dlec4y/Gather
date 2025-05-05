@@ -88,6 +88,9 @@ public class AppDbContext : DbContext
 			.WithMany(eo => eo.Events)
 			.HasForeignKey(e => e.OrganizerId);
 
+		modelBuilder.Entity<Event>()
+		.Ignore(e => e.IsCurrentUserParticipating);
+
 		// Event Participants
 		modelBuilder.Entity<Event>()
 		.HasMany(e => e.Participants)

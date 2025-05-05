@@ -15,8 +15,8 @@ namespace WPF.Viewmodels.UserVM
 
 		public MainViewModel(Models.User user)
         {
-            CurrentPage = new EventsPageView(this);
-            CurrentUser = user;
+			CurrentUser = user;
+			CurrentPage = new EventsPageView(this);
 		}
 
         [RelayCommand]

@@ -21,7 +21,9 @@ public static class UserManager
 				.ThenInclude(i => i.Event)
 			.Include(u => u.FriendRequests)
 				.ThenInclude(f => f.From)
-			.ToListAsync());
+			.AsNoTracking()
+			.ToListAsync()
+		);
 	}
 
 	public static async Task<User?> GetUser(string username)

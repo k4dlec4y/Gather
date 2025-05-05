@@ -11,9 +11,11 @@ public class Event
 	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	public int Id { get; set; }
 
-	public string Name { get; set; }
-	public string Description { get; set; }
-	public string ImageName { get; set; }
+	public string Name { get; set; } = string.Empty;
+	public string Description { get; set; } = string.Empty;
+	public DateTime Date { get; set; }
+	public string Location { get; set; } = string.Empty;
+	public string ImageName { get; set; } = string.Empty;
 	public string ImagePath
 	{
 		get
@@ -21,8 +23,6 @@ public class Event
 			return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", ImageName);
 		}
 	}
-	public DateTime Date { get; set; }
-	public string Location { get; set; }
 
 	public int OrganizerId { get; set; }
 	public EventOrganizer Organizer { get; set; }
@@ -30,19 +30,22 @@ public class Event
 	public ObservableCollection<string> Categories { get; set; }
 	public ObservableCollection<User> Participants { get; set; } = new ObservableCollection<User>();
 
-	public bool AddParticipant(User participant)
+	[NotMapped]
+	public bool IsCurrentUserParticipating { get; set; }
+
+	public async Task<bool> AddParticipant(User participant)
 	{
 		if (Participants.Select(p => p.Username).Contains(participant.Username))
 		{
 			return false;
 		}
-		Participants.Add(participant);
-		return true;
+
+		return await Managers.ParticipationManager.AddParticipation(this, participant);
 	}
 
-	public bool DeleteParticipant(User participant)
+	public async Task<bool> DeleteParticipant(User participant)
 	{
-		return Participants.Remove(participant);
+		return await Managers.ParticipationManager.RemoveParticipation(this, participant);
 	}
 
 	public bool ContainsParticipant(User participant)

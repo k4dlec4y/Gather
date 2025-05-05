@@ -17,6 +17,40 @@ public static class EventManager
 			.ToList());
 	}
 
+	public static ObservableCollection<Event> GetEvents(User user)
+	{
+		using var context = new AppDbContext();
+		var events = context.Events
+			.Include(e => e.Organizer)
+			.Include(e => e.Participants)
+			.ToList();
+
+		foreach (var ev in events)
+		{
+			Debug.WriteLine($"Event: {ev.Name}, {ev.Participants.Any(p => p.Id == user.Id)},  Participants: {string.Join(", ", ev.Participants.Select(p => p.Username))}");
+			ev.IsCurrentUserParticipating = ev.Participants.Any(p => p.Id == user.Id);
+		}
+
+		return new ObservableCollection<Event>(events);
+	}
+
+	public static ObservableCollection<Event> GetEventsUserAttend(User user)
+	{
+		using var context = new AppDbContext();
+		var events = context.Events
+			.Include(e => e.Organizer)
+			.Include(e => e.Participants)
+			.Where(e => e.Participants.Any(p => p.Id == user.Id))
+			.ToList();
+
+		foreach (var ev in events)
+		{
+			ev.IsCurrentUserParticipating = true;
+		}
+
+		return new ObservableCollection<Event>(events);
+	}
+
 	public static async Task<bool> ContainsEvent(Event e)
 	{
 		using var context = new AppDbContext();
@@ -49,7 +83,6 @@ public static class EventManager
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try
 		{
-			context.Events.Attach(e);
 			context.Events.Remove(e);
 
 			await context.SaveChangesAsync();
