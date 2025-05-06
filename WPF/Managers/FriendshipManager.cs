@@ -2,6 +2,7 @@
 using WPF.Data;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace WPF.Managers;
 
@@ -35,10 +36,11 @@ public static class FriendshipManager
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();
 		}
-		catch
+		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
-			MessageBox.Show("Something went wrong. Please, try again");
 		}
 	}
 }

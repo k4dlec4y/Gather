@@ -197,4 +197,9 @@ public class AppDbContext : DbContext
 
 		base.OnModelCreating(modelBuilder);
 	}
+
+	public void TrackEntity<TEntity>(TEntity entity) where TEntity : class
+	{
+		Entry(entity).State = EntityState.Modified;
+	}
 }

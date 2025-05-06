@@ -15,6 +15,7 @@ public static class BecomeOrganizerRequestManager
 
 		return new ObservableCollection<BecomeOrganizerRequest>(
 			context.BecomeOrganizerRequests
+			.AsNoTracking()
 			.Include(r => r.User)
 			.ToList()
 		);
@@ -25,6 +26,7 @@ public static class BecomeOrganizerRequestManager
 		using var context = new AppDbContext();
 
 		return await context.BecomeOrganizerRequests
+			.AsNoTracking()
 			.Include(r => r.User)
 			.AnyAsync(r => r.User.Username == username);
 	}

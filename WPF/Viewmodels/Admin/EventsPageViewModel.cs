@@ -21,7 +21,7 @@ public partial class EventsPageViewModel : ObservableObject
 	{
 		if (SelectedEvent != null)
 		{
-			var detailWindow = new Views.EventDetailsView(SelectedEvent);
+			var detailWindow = new Views.EventDetailsView(SelectedEvent, []);
 			detailWindow.Show();
 		}
 		SelectedEvent = null;

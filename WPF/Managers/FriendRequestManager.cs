@@ -1,6 +1,7 @@
 ﻿using WPF.Data;
 using WPF.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace WPF.Managers;
 
@@ -10,20 +11,17 @@ public static class FriendRequestManager
 	{
 		using var context = new AppDbContext();
 		using var transaction = await context.Database.BeginTransactionAsync();
-
 		try
 		{
 			var friendRequest = new FriendRequest
 			{
-				From = sender,
 				FromId = sender.Id,
-				To = receiver,
 				ToId = receiver.Id,
 				Content = content
 			};
 
-			context.Users.Attach(sender);
-			context.Users.Attach(receiver);
+			context.TrackEntity(sender);
+			context.TrackEntity(receiver);
 
 			await context.FriendRequests.AddAsync(friendRequest);
 
@@ -33,8 +31,10 @@ public static class FriendRequestManager
 			await transaction.CommitAsync();
 			return true;
 		}
-		catch
+		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
 			return false;
 		}
@@ -46,8 +46,7 @@ public static class FriendRequestManager
 		using var context = new AppDbContext();
 
 		var friendRequest = await context.FriendRequests
-			.Include(f => f.From)
-			.Include(f => f.To)
+			.AsNoTracking()
 			.FirstOrDefaultAsync(f => f.FromId == sender.Id && f.ToId == receiver.Id);
 
 		return friendRequest != null;
@@ -60,6 +59,9 @@ public static class FriendRequestManager
 
 		try
 		{
+			context.TrackEntity(friendRequest);
+			context.TrackEntity(friendRequest.To);
+
 			context.Users.Update(friendRequest.From);
 			context.Users.Update(friendRequest.To);
 
@@ -79,8 +81,10 @@ public static class FriendRequestManager
 			await transaction.CommitAsync();
 			return true;
 		}
-		catch
+		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
 			return false;
 		}
@@ -93,19 +97,20 @@ public static class FriendRequestManager
 
 		try
 		{
-			context.FriendRequests.Attach(friendRequest);
-			context.Users.Attach(friendRequest.To);
+			context.TrackEntity(friendRequest);
+			context.TrackEntity(friendRequest.To);
 
 			context.FriendRequests.Remove(friendRequest);
-
 			friendRequest.To.FriendRequests.Remove(friendRequest);
 
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();
 			return true;
 		}
-		catch
+		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
 			return false;
 		}

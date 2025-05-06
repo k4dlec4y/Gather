@@ -5,27 +5,88 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:local="clr-namespace:WPF.Views"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	Title="Event details"
+	Title="Event Details"
 	Width="800"
 	Height="600"
 	WindowStartupLocation="CenterScreen"
 	mc:Ignorable="d">
-	<Grid Margin="20">
+
+	<ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
 		<StackPanel>
+			<!--  Event Image  -->
 			<Image
 				Height="300"
 				Margin="0,0,0,20"
 				Source="{Binding Event.ImageName}"
 				Stretch="Fill" />
+
+			<!--  Name  -->
 			<TextBlock
 				Margin="0,0,0,10"
 				FontSize="30"
 				FontWeight="Bold"
 				Text="{Binding Event.Name}" />
+
+			<!--  Organizer  -->
 			<TextBlock
-				FontSize="18"
+				FontSize="16"
+				FontWeight="Bold"
+				Text="Organized by:" />
+			<TextBlock
+				Margin="0,0,0,10"
+				FontSize="16"
+				Text="{Binding Event.Organizer.Username}" />
+
+			<!--  Date and Location  -->
+			<TextBlock FontSize="16" Text="{Binding Event.Date, StringFormat='Date: {0:dd MMM yyyy HH:mm}'}" />
+			<TextBlock
+				Margin="0,0,0,10"
+				FontSize="16"
+				Text="{Binding Event.Location, StringFormat='Location: {0}'}" />
+
+			<!--  Categories  -->
+			<TextBlock
+				FontSize="16"
+				FontWeight="Bold"
+				Text="Categories:" />
+			<ItemsControl ItemsSource="{Binding Event.Categories}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock
+							Margin="0,0,0,2"
+							FontSize="14"
+							Text="{Binding ., StringFormat='- {0}'}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+
+			<!--  Description  -->
+			<TextBlock
+				Margin="0,20,0,5"
+				FontSize="16"
+				FontWeight="Bold"
+				Text="Description:" />
+			<TextBlock
+				Margin="0,0,0,20"
+				FontSize="14"
 				Text="{Binding Event.Description}"
 				TextWrapping="Wrap" />
+
+			<!--  Friends attending  -->
+			<TextBlock
+				FontSize="16"
+				FontWeight="Bold"
+				Text="Your friends attending:" />
+			<ItemsControl ItemsSource="{Binding FriendsAttending}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock
+							Margin="0,0,0,2"
+							FontSize="14"
+							Text="{Binding Username}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
 		</StackPanel>
-	</Grid>
+	</ScrollViewer>
 </Window>

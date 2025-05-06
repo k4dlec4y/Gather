@@ -9,11 +9,11 @@ public class FriendRequest
 	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	public int Id { get; set; }
 
-	public required int FromId { get; set; }
-	public required User From { get; set; }
+	public int FromId { get; set; }
+	public User From { get; set; }
 
-	public required int ToId { get; set; }
-	public required User To { get; set; }
+	public int ToId { get; set; }
+	public User To { get; set; }
 
-	public required string Content { get; set; }
+	public string Content { get; set; }
 }

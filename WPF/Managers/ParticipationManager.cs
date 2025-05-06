@@ -25,7 +25,6 @@ public static class ParticipationManager
 				Debug.WriteLine("Event not found.");
 				return false;
 			}
-				
 
 			if (!dbEvent.Participants.Contains(dbUser))
 			{
@@ -35,13 +34,12 @@ public static class ParticipationManager
 				return true;
 			}
 
-			Debug.WriteLine("halo.");
 			return false;
 		}
 		catch (Exception ex)
 		{
 			await transaction.RollbackAsync();
-			Debug.WriteLine($"Participation change failed: {ex.Message}");
+			Debug.WriteLine($"{ex.Message}");
 			return false;
 		}
 	}
@@ -71,7 +69,7 @@ public static class ParticipationManager
 		catch (Exception ex)
 		{
 			await transaction.RollbackAsync();
-			Debug.WriteLine($"Participation change failed: {ex.Message}");
+			Debug.WriteLine($"{ex.Message}");
 			return false;
 		}
 	}

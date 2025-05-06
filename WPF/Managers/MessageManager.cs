@@ -1,4 +1,6 @@
-﻿using WPF.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using WPF.Data;
 using WPF.Models;
 
 namespace WPF.Managers;
@@ -12,17 +14,22 @@ public static class MessageManager
 
 		try
 		{
-			var message = new Message
+			var dbSender = await context.Users.FirstOrDefaultAsync(u => u.Id == sender.Id);
+			var dbReceiver = await context.Users
+				.Include(u => u.Invites)
+				.FirstOrDefaultAsync(u => u.Id == receiver.Id);
+
+			if (dbSender == null || dbReceiver == null)
 			{
-				From = sender,
-				FromId = sender.Id,
-				To = receiver,
-				ToId = receiver.Id,
+				return false;
+			}
+
+				var message = new Message
+			{
+				FromId = dbSender.Id,
+				ToId = dbReceiver.Id,
 				Content = content
 			};
-
-			context.Users.Attach(sender);
-			context.Users.Attach(receiver);
 
 			await context.Messages.AddAsync(message);
 
@@ -32,9 +39,11 @@ public static class MessageManager
 			await transaction.CommitAsync();
 			return true;
 		}
-		catch
+		catch (Exception ex)
 		{
 			await transaction.RollbackAsync();
+			Debug.WriteLine($"{ex.Message}");
+			Debug.WriteLine($"{ex.InnerException?.Message}");
 			return false;
 		}
 	}
@@ -46,10 +55,14 @@ public static class MessageManager
 
 		try
 		{
-			context.Messages.Attach(message);
-			context.Users.Attach(message.To);
+			var dbMessage = await context.Messages.FirstOrDefaultAsync(m => m.Id == message.Id);
 
-			context.Messages.Remove(message);
+			if (dbMessage == null)
+			{
+				return false;
+			}
+
+			context.Messages.Remove(dbMessage);
 
 			message.To.Inbox.Remove(message);
 
@@ -57,9 +70,11 @@ public static class MessageManager
 			await transaction.CommitAsync();
 			return true;
 		}
-		catch
+		catch (Exception ex)
 		{
 			await transaction.RollbackAsync();
+			Debug.WriteLine($"{ex.Message}");
+			Debug.WriteLine($"{ex.InnerException?.Message}");
 			return false;
 		}
 	}

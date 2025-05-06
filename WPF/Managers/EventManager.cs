@@ -12,6 +12,7 @@ public static class EventManager
 	{
 		using var context = new AppDbContext();
 		return new ObservableCollection<Event>(context.Events
+			.AsNoTracking()
 			.Include(e => e.Organizer)
 			.Include(e => e.Participants)
 			.ToList());
@@ -21,13 +22,13 @@ public static class EventManager
 	{
 		using var context = new AppDbContext();
 		var events = context.Events
+			.AsNoTracking()
 			.Include(e => e.Organizer)
 			.Include(e => e.Participants)
 			.ToList();
 
 		foreach (var ev in events)
 		{
-			Debug.WriteLine($"Event: {ev.Name}, {ev.Participants.Any(p => p.Id == user.Id)},  Participants: {string.Join(", ", ev.Participants.Select(p => p.Username))}");
 			ev.IsCurrentUserParticipating = ev.Participants.Any(p => p.Id == user.Id);
 		}
 
@@ -38,6 +39,7 @@ public static class EventManager
 	{
 		using var context = new AppDbContext();
 		var events = context.Events
+			.AsNoTracking()
 			.Include(e => e.Organizer)
 			.Include(e => e.Participants)
 			.Where(e => e.Participants.Any(p => p.Id == user.Id))
@@ -54,7 +56,9 @@ public static class EventManager
 	public static async Task<bool> ContainsEvent(Event e)
 	{
 		using var context = new AppDbContext();
-		return await context.Events.ContainsAsync(e);
+		return await context.Events
+			.AsNoTracking()
+			.AnyAsync(ev => ev.Id == e.Id);
 	}
 
 	public static async Task<bool> CreateEvent(Event e)
@@ -83,6 +87,7 @@ public static class EventManager
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try
 		{
+			context.TrackEntity(e);
 			context.Events.Remove(e);
 
 			await context.SaveChangesAsync();

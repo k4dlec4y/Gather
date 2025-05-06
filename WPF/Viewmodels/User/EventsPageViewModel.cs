@@ -29,21 +29,13 @@ public partial class EventsPageViewModel : ObservableObject
 		FilterEvents();
 	}
 
-	private void UpdateParticipationStatus()
-	{
-		foreach (var @event in Events)
-		{
-			@event.IsCurrentUserParticipating = @event.Participants.Contains(MainVM.CurrentUser);
-		}
-		OnPropertyChanged(nameof(Events));
-	}
-
 	[RelayCommand]
 	public void SelectEvent()
 	{
 		if (SelectedEvent != null)
 		{
-			var detailWindow = new Views.EventDetailsView(SelectedEvent);
+			Debug.WriteLine($"Friends: {string.Join(", ", MainVM.CurrentUser.Friends)}");
+			var detailWindow = new Views.EventDetailsView(SelectedEvent, MainVM.CurrentUser.Friends);
 			detailWindow.Show();
 		}
 		SelectedEvent = null;
@@ -56,7 +48,6 @@ public partial class EventsPageViewModel : ObservableObject
 			.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
 				.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
 			.ToList();
-		Debug.WriteLine("HA:PDASDDASDAS");
 		Events = new ObservableCollection<Event>(filtered);
 		OnPropertyChanged(nameof(Events));
 	}
@@ -72,12 +63,13 @@ public partial class EventsPageViewModel : ObservableObject
 		{
 			await ParticipationManager.AddParticipation(@event, MainVM.CurrentUser);
 		}
-		var filtered = (IsParticipatingOnly ? EventManager.GetEventsUserAttend(MainVM.CurrentUser) : EventManager.GetEvents(MainVM.CurrentUser))
-			.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
-				.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
-			.ToList();
+		FilterEvents();
+	}
 
-		Events = new ObservableCollection<Event>(filtered);
-		OnPropertyChanged(nameof(Events));
+	[RelayCommand]
+	public void SendInvite(Event @event)
+	{
+		var window = new Views.UserV.SendInviteView(MainVM, @event);
+		window.Show();
 	}
 }

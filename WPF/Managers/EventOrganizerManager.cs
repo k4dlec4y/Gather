@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using WPF.Data;
 using WPF.Models;
 
@@ -11,6 +12,7 @@ public static class EventOrganizerManager
 		using (var db = new AppDbContext())
 		{
 			return db.EventOrganizers
+				.AsNoTracking()
 				.Include(eo => eo.Events)
 					.ThenInclude(e => e.Participants)
 				.ToList();
@@ -22,6 +24,7 @@ public static class EventOrganizerManager
 		using (var db = new AppDbContext())
 		{
 			return await db.EventOrganizers
+				.AsNoTracking()
 				.Include(eo => eo.Events)
 					.ThenInclude(e => e.Participants)
 				.FirstOrDefaultAsync(eo => eo.Id == id);
@@ -33,6 +36,7 @@ public static class EventOrganizerManager
 		using (var db = new AppDbContext())
 		{
 			return await db.EventOrganizers
+				.AsNoTracking()
 				.Include(eo => eo.Events)
 					.ThenInclude(e => e.Participants)
 				.FirstOrDefaultAsync(eo => eo.Username == username);
@@ -49,8 +53,10 @@ public static class EventOrganizerManager
 			await db.SaveChangesAsync();
 			await transaction.CommitAsync();
 		}
-		catch
+		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
 		}
 	}
@@ -66,8 +72,10 @@ public static class EventOrganizerManager
 			await transaction.CommitAsync();
 			return true;
 		}
-		catch
+		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
 			return false;
 		}
@@ -85,8 +93,10 @@ public static class EventOrganizerManager
 			await transaction.CommitAsync();
 			return true;
 		}
-		catch
+		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
 			return false;
 		}

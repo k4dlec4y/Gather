@@ -10,13 +10,13 @@ namespace WPF.Models
 		public int Id { get; set; }
 
 		public int EventId;
-		public required Event Event { get; set; }
+		public Event Event { get; set; }
 
 		public int FromId { get; set; }
-		public required User From { get; set; }
+		public User From { get; set; }
 
 		public int ToId { get; set; }
-		public required User To { get; set; }
+		public User To { get; set; }
 
 		public required string Content { get; set; }
 	}

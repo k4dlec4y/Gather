@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using WPF.Data;
 using WPF.Models;
 
@@ -11,8 +12,10 @@ public static class UserManager
 	{
 		using var context = new AppDbContext();
 		return new ObservableCollection<User>(await context.Users
+			.AsNoTracking()
 			.Include(u => u.EventsToAttend)
 			.Include(u => u.Friends)
+				.ThenInclude(f => f.EventsToAttend)
 			.Include(u => u.Inbox)
 				.ThenInclude(m => m.From)
 			.Include(u => u.Invites)
@@ -29,9 +32,11 @@ public static class UserManager
 	public static async Task<User?> GetUser(string username)
 	{
 		using var context = new AppDbContext();
-		var user = await context.Users
+		return await context.Users
+			.AsNoTracking()
 			.Include(u => u.EventsToAttend)
 			.Include(u => u.Friends)
+				.ThenInclude(f => f.EventsToAttend)
 			.Include(u => u.Inbox)
 				.ThenInclude(m => m.From)
 			.Include(u => u.Invites)
@@ -41,17 +46,14 @@ public static class UserManager
 			.Include(u => u.FriendRequests)
 				.ThenInclude(f => f.From)
 			.FirstOrDefaultAsync(u => u.Username == username);
-
-		return user;
 	}
 
 	public static async Task<bool> ContainsUser(string username)
 	{
 		using var context = new AppDbContext();
-		var user = await context.Users
-			.FirstOrDefaultAsync(u => u.Username == username);
-
-		return user != null;
+		return await context.Users
+			.AsNoTracking()
+			.AnyAsync(u => u.Username == username);
 	}
 
 	public static async Task AddUser(User user)
@@ -72,7 +74,7 @@ public static class UserManager
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try
 		{
-			context.Users.Attach(user);
+			context.Attach(user);
 
 			// Remove friendships
 			var friendships = context.Users
@@ -122,8 +124,10 @@ public static class UserManager
 			await transaction.CommitAsync();
 			return true;
 		}
-		catch
+		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
 			return false;
 		}
@@ -140,14 +144,17 @@ public static class UserManager
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try
 		{
+			context.Attach(user);
 			context.Users.Update(user);
 
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();
 			return true;
 		}
-		catch
+		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
 			return false;
 		}
