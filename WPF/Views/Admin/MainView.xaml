@@ -8,39 +8,121 @@
 	Title="MainView"
 	Width="1600"
 	Height="800"
+	Background="#FF1E1E2F"
 	WindowStartupLocation="CenterScreen"
 	mc:Ignorable="d">
 
-	<Grid x:Name="Grid">
+	<Window.Resources>
+		<Style TargetType="TextBlock">
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="Margin" Value="0,5,0,5" />
+		</Style>
+
+		<Style x:Key="CustomTextBoxStyle" TargetType="TextBox">
+			<Setter Property="Background" Value="#FF2A2A3D" />
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="BorderBrush" Value="#FF00FFFF" />
+			<Setter Property="BorderThickness" Value="2" />
+			<Setter Property="Height" Value="30" />
+			<Setter Property="Margin" Value="0,0,0,15" />
+			<Setter Property="Padding" Value="5" />
+			<Setter Property="FontSize" Value="16" />
+			<Setter Property="FocusVisualStyle" Value="{x:Null}" />
+			<Style.Triggers>
+				<Trigger Property="IsFocused" Value="True">
+					<Setter Property="BorderBrush" Value="#FFFF00FF" />
+					<Setter Property="Effect">
+						<Setter.Value>
+							<DropShadowEffect
+								BlurRadius="15"
+								ShadowDepth="0"
+								Color="#FFFF00FF" />
+						</Setter.Value>
+					</Setter>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+
+		<!--  Button Style with Hover Effects  -->
+		<Style TargetType="Button">
+			<Setter Property="Background" Value="#FF00FFFF" />
+			<Setter Property="Foreground" Value="#FF1E1E2F" />
+			<Setter Property="FontSize" Value="16" />
+			<Setter Property="FontWeight" Value="Bold" />
+			<Setter Property="Margin" Value="10,5" />
+			<Setter Property="Padding" Value="10,5" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+			<Setter Property="Cursor" Value="Hand" />
+			<Setter Property="Effect">
+				<Setter.Value>
+					<DropShadowEffect
+						BlurRadius="8"
+						Opacity="0.6"
+						ShadowDepth="0"
+						Color="#FF00FFFF" />
+				</Setter.Value>
+			</Setter>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="Background" Value="#FFFF00FF" />
+					<Setter Property="Effect">
+						<Setter.Value>
+							<DropShadowEffect
+								BlurRadius="15"
+								ShadowDepth="0"
+								Color="#FFFF00FF" />
+						</Setter.Value>
+					</Setter>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+	</Window.Resources>
+
+	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="200" />
+			<ColumnDefinition Width="220" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 
-		<StackPanel Grid.Column="0" Background="Pink">
+		<StackPanel Grid.Column="0" Background="#FF000000">
+			<TextBlock
+				Margin="0,20,0,20"
+				HorizontalAlignment="Center"
+				FontSize="28"
+				FontWeight="Bold"
+				Text="GATHER">
+				<TextBlock.Foreground>
+					<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+						<GradientStop Offset="0.0" Color="#FFFF00FF" />
+						<GradientStop Offset="1.0" Color="#FF00FFFF" />
+					</LinearGradientBrush>
+				</TextBlock.Foreground>
+				<TextBlock.Effect>
+					<DropShadowEffect
+						BlurRadius="15"
+						Opacity="0.8"
+						ShadowDepth="0"
+						Color="#FFFF00FF" />
+				</TextBlock.Effect>
+			</TextBlock>
+
 			<Button
 				x:Name="Events"
-				Margin="10"
-				Background="Aquamarine"
-				BorderBrush="Aquamarine"
 				Command="{Binding EventsCommand}"
-				Content="Events"
-				FontSize="18"
-				Foreground="White" />
+				Content="Events" />
+
 			<Button
-				Margin="10,0,10,10"
-				Background="Aquamarine"
-				BorderBrush="Aquamarine"
+				x:Name="Requests"
 				Command="{Binding RequestsCommand}"
-				Content="Requests"
-				FontSize="18"
-				Foreground="White" />
+				Content="Requests" />
 		</StackPanel>
 
+		<!--  Main Content  -->
 		<Frame
 			x:Name="MainFrame"
 			Grid.Column="1"
-			Background="Aquamarine"
+			Background="#FF000000"
 			Content="{Binding CurrentPage}"
 			NavigationUIVisibility="Hidden" />
 	</Grid>
