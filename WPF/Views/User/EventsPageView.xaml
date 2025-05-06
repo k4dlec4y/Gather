@@ -110,9 +110,8 @@
 			x:Name="EventList"
 			Grid.Row="1"
 			Margin="10"
-			Background="#FF1E1E2F"
-			BorderBrush="#FF7FFFD4"
-			BorderThickness="1"
+			Background="#FF0a0a0a"
+			BorderThickness="0"
 			ItemsSource="{Binding Events}"
 			ScrollViewer.VerticalScrollBarVisibility="Visible"
 			SelectedItem="{Binding SelectedEvent, Mode=TwoWay}">
@@ -128,7 +127,7 @@
 					<Border
 						Margin="5"
 						Padding="10"
-						Background="#FF1E1E2F"
+						Background="#FF0a0a0a"
 						Cursor="Hand">
 						<Grid Margin="5">
 							<Grid.ColumnDefinitions>
