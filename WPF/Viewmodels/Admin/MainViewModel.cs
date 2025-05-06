@@ -26,5 +26,11 @@ public partial class MainViewModel : ObservableObject
 	{
 		CurrentPage = new RequestsPageView();
 	}
+
+	[RelayCommand]
+	public void Settings()
+	{
+		CurrentPage = new SettingsPageView(this);
+	}
 }
 
