@@ -8,7 +8,56 @@
 	Title="InboxPageView"
 	d:DesignHeight="800"
 	d:DesignWidth="1450"
+	Background="#FF0a0a0a"
 	mc:Ignorable="d">
+
+	<Page.Resources>
+		<Style TargetType="TextBlock">
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="Margin" Value="0,5,0,5" />
+		</Style>
+
+		<Style TargetType="Button">
+			<Setter Property="Background" Value="#FF7FFFD4" />
+			<Setter Property="Foreground" Value="#FF1E1E2F" />
+			<Setter Property="FontSize" Value="16" />
+			<Setter Property="FontWeight" Value="Bold" />
+			<Setter Property="Margin" Value="10,5" />
+			<Setter Property="Padding" Value="10,5" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+			<Setter Property="Cursor" Value="Hand" />
+			<Setter Property="Effect">
+				<Setter.Value>
+					<DropShadowEffect
+						BlurRadius="8"
+						Opacity="0.6"
+						ShadowDepth="0"
+						Color="#FF7FFFD4" />
+				</Setter.Value>
+			</Setter>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="Background" Value="#FF66E6B8" />
+					<Setter Property="Effect">
+						<Setter.Value>
+							<DropShadowEffect
+								BlurRadius="15"
+								ShadowDepth="0"
+								Color="#FF7FFFD4" />
+						</Setter.Value>
+					</Setter>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+
+		<Style TargetType="ListBox">
+			<Setter Property="Background" Value="#FF0a0a0a" />
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="BorderThickness" Value="0" />
+			<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+		</Style>
+	</Page.Resources>
 
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -23,16 +72,18 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
+
 		<TextBlock
 			Grid.Row="0"
 			Grid.Column="0"
-			Margin="10,10,0,5"
+			Margin="10,10,10,5"
+			FontSize="20"
 			FontWeight="Bold"
 			Text="Received messages:" />
 		<ListBox
 			Grid.Row="1"
 			Grid.Column="0"
-			Width="1450"
+			HorizontalContentAlignment="Stretch"
 			BorderThickness="0"
 			ItemsSource="{Binding MainVM.CurrentUser.Inbox}"
 			ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -40,35 +91,36 @@
 				<DataTemplate>
 					<Border
 						Padding="5"
-						BorderBrush="LightGray"
+						BorderBrush="#FF7FFFD4"
 						BorderThickness="0,0,0,1">
+
 						<Grid>
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="200" />
+								<ColumnDefinition Width="Auto" />
 								<ColumnDefinition Width="*" />
 								<ColumnDefinition Width="Auto" />
-								<ColumnDefinition Width="100" />
+								<ColumnDefinition Width="20" />
 							</Grid.ColumnDefinitions>
 
 							<TextBlock
 								Grid.Column="0"
 								Margin="5,0,0,0"
-								HorizontalAlignment="Left"
 								VerticalAlignment="Center"
-								FontSize="18"
+								FontSize="16"
+								FontWeight="SemiBold"
 								Text="{Binding From.Username, StringFormat='From: {0}'}" />
 
 							<TextBlock
 								Grid.Column="1"
-								Margin="5,0,0,0"
-								HorizontalAlignment="Center"
+								Margin="10,0,10,0"
 								VerticalAlignment="Center"
 								FontSize="14"
-								Text="{Binding Content}" />
+								Text="{Binding Content}"
+								TextWrapping="Wrap" />
 
 							<Button
-								Grid.Column="2"
-								Width="100"
+								Grid.Column="3"
 								Margin="5,0,0,0"
 								Padding="10,5"
 								Command="{Binding DataContext.DeleteMessageCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
@@ -83,13 +135,14 @@
 		<TextBlock
 			Grid.Row="2"
 			Grid.Column="0"
-			Margin="10,10,0,5"
+			Margin="10,10,10,5"
+			FontSize="20"
 			FontWeight="Bold"
 			Text="Received invites:" />
 		<ListBox
 			Grid.Row="3"
 			Grid.Column="0"
-			Width="1450"
+			HorizontalContentAlignment="Stretch"
 			BorderThickness="0"
 			ItemsSource="{Binding MainVM.CurrentUser.Invites}"
 			ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -97,11 +150,12 @@
 				<DataTemplate>
 					<Border
 						Padding="5"
-						BorderBrush="LightGray"
+						BorderBrush="#FF7FFFD4"
 						BorderThickness="0,0,0,1">
 						<Grid>
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="200" />
+								<ColumnDefinition Width="Auto" />
 								<ColumnDefinition Width="*" />
 								<ColumnDefinition Width="Auto" />
 								<ColumnDefinition Width="20" />
@@ -110,21 +164,20 @@
 							<TextBlock
 								Grid.Column="0"
 								Margin="5,0,0,0"
-								HorizontalAlignment="Left"
 								VerticalAlignment="Center"
-								FontSize="18"
+								FontSize="16"
+								FontWeight="SemiBold"
 								Text="{Binding From.Username, StringFormat='From: {0}'}" />
 							<TextBlock
 								Grid.Column="1"
-								Margin="5,0,0,0"
-								HorizontalAlignment="Center"
+								Margin="10,0,10,0"
 								VerticalAlignment="Center"
 								FontSize="14"
-								Text="{Binding Content}" />
+								Text="{Binding Content}"
+								TextWrapping="Wrap" />
 
 							<StackPanel
-								Grid.Column="2"
-								Grid.ColumnSpan="2"
+								Grid.Column="3"
 								HorizontalAlignment="Right"
 								VerticalAlignment="Center"
 								Orientation="Horizontal">
@@ -151,13 +204,14 @@
 		<TextBlock
 			Grid.Row="4"
 			Grid.Column="0"
-			Margin="10,10,0,5"
+			Margin="10,10,10,5"
+			FontSize="20"
 			FontWeight="Bold"
 			Text="Received friend requests:" />
 		<ListBox
 			Grid.Row="5"
 			Grid.Column="0"
-			Width="1450"
+			HorizontalContentAlignment="Stretch"
 			BorderThickness="0"
 			ItemsSource="{Binding MainVM.CurrentUser.FriendRequests}"
 			ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -165,11 +219,12 @@
 				<DataTemplate>
 					<Border
 						Padding="5"
-						BorderBrush="LightGray"
+						BorderBrush="#FF7FFFD4"
 						BorderThickness="0,0,0,1">
 						<Grid>
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="200" />
+								<ColumnDefinition Width="Auto" />
 								<ColumnDefinition Width="*" />
 								<ColumnDefinition Width="Auto" />
 								<ColumnDefinition Width="20" />
@@ -178,22 +233,21 @@
 							<TextBlock
 								Grid.Column="0"
 								Margin="5,0,0,0"
-								HorizontalAlignment="Left"
 								VerticalAlignment="Center"
-								FontSize="18"
+								FontSize="16"
+								FontWeight="SemiBold"
 								Text="{Binding From.Username, StringFormat='From: {0}'}" />
 
 							<TextBlock
 								Grid.Column="1"
-								Margin="5,0,0,0"
-								HorizontalAlignment="Center"
+								Margin="10,0,10,0"
 								VerticalAlignment="Center"
 								FontSize="14"
-								Text="{Binding Content}" />
+								Text="{Binding Content}"
+								TextWrapping="Wrap" />
 
 							<StackPanel
-								Grid.Column="2"
-								Grid.ColumnSpan="2"
+								Grid.Column="3"
 								HorizontalAlignment="Right"
 								VerticalAlignment="Center"
 								Orientation="Horizontal">

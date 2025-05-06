@@ -110,6 +110,7 @@
 			x:Name="EventList"
 			Grid.Row="1"
 			Margin="10"
+			HorizontalContentAlignment="Stretch"
 			Background="#FF0a0a0a"
 			BorderThickness="0"
 			ItemsSource="{Binding Events}"

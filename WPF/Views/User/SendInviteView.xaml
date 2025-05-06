@@ -10,21 +10,41 @@
 	Title="Send Invite"
 	Width="300"
 	Height="400"
+	Background="#FF000000"
 	mc:Ignorable="d">
+
+	<Window.Resources>
+		<!--  Global TextBlock Style  -->
+		<Style TargetType="TextBlock">
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="FontFamily" Value="Segoe UI" />
+		</Style>
+
+		<!--  Border Style for List Items  -->
+		<Style TargetType="Border">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="Gray" />
+			<Setter Property="BorderThickness" Value="0,0,0,1" />
+			<Setter Property="Padding" Value="5" />
+		</Style>
+
+		<!--  ListBox Style  -->
+		<Style TargetType="ListBox">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+		</Style>
+	</Window.Resources>
 
 	<ListBox
 		Margin="10"
+		HorizontalContentAlignment="Stretch"
 		ItemsSource="{Binding Friends}"
 		SelectedItem="{Binding SelectedFriend, Mode=TwoWay}">
 
 		<ListBox.ItemTemplate>
 			<DataTemplate>
-				<Border
-					Padding="5"
-					Background="Transparent"
-					BorderBrush="Gray"
-					BorderThickness="0,0,0,1">
-					<TextBlock Text="{Binding Username}" />
+				<Border>
+					<TextBlock Foreground="White" Text="{Binding Username}" />
 					<i:Interaction.Triggers>
 						<i:EventTrigger EventName="MouseLeftButtonUp">
 							<i:InvokeCommandAction Command="{Binding DataContext.SendCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" />

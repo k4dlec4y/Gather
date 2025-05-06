@@ -87,6 +87,7 @@
 		<ListBox
 			x:Name="EventList"
 			Margin="10"
+			HorizontalContentAlignment="Stretch"
 			Background="#FF0a0a0a"
 			BorderThickness="0"
 			ItemsSource="{Binding MyEvents}"

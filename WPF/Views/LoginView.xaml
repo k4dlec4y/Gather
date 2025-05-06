@@ -209,7 +209,10 @@
 		<PasswordBox PasswordChanged="PasswordBox_PasswordChanged" />
 
 		<TextBlock Text="ROLE" />
-		<ComboBox ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole, Mode=TwoWay}" />
+		<ComboBox
+			HorizontalContentAlignment="Stretch"
+			ItemsSource="{Binding Roles}"
+			SelectedItem="{Binding SelectedRole, Mode=TwoWay}" />
 
 		<Button
 			Margin="0,20,0,10"

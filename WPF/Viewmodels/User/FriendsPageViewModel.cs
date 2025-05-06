@@ -59,6 +59,10 @@ public partial class FriendsPageViewModel : ObservableObject
 	[RelayCommand]
 	public async Task RemoveFriend(User friend)
 	{
-		await FriendshipManager.DeleteFriendship(MainVM.CurrentUser, friend);
+		if (await FriendshipManager.DeleteFriendship(MainVM.CurrentUser, friend))
+		{
+			MainVM.CurrentUser.Friends.Remove(friend);
+			OnPropertyChanged(nameof(MainVM.CurrentUser.Friends));
+		}
 	}
 }

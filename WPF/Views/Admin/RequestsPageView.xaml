@@ -74,6 +74,7 @@
 		<ListBox
 			Grid.Row="1"
 			Margin="10"
+			HorizontalContentAlignment="Stretch"
 			Background="#FF1E1E2F"
 			BorderBrush="#FF7FFFD4"
 			BorderThickness="1"
