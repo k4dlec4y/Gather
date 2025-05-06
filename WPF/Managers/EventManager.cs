@@ -53,6 +53,19 @@ public static class EventManager
 		return new ObservableCollection<Event>(events);
 	}
 
+	public static ObservableCollection<Event> GetEventsOrganizerOrganize(EventOrganizer eventOrganizer)
+	{
+		using var context = new AppDbContext();
+		var events = context.Events
+			.AsNoTracking()
+			.Include(e => e.Organizer)
+			.Include(e => e.Participants)
+			.Where(e => e.Organizer.Id == eventOrganizer.Id)
+			.ToList();
+
+		return new ObservableCollection<Event>(events);
+	}
+
 	public static async Task<bool> ContainsEvent(Event e)
 	{
 		using var context = new AppDbContext();

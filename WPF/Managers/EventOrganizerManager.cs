@@ -87,8 +87,19 @@ public static class EventOrganizerManager
 		using var transaction = await db.Database.BeginTransactionAsync();
 		try
 		{
-			db.EventOrganizers.Remove(eventOrganizer);
-			db.Events.RemoveRange(eventOrganizer.Events);
+			var organizerInDb = await db.EventOrganizers
+			.Include(o => o.Events)
+			.FirstOrDefaultAsync(o => o.Id == eventOrganizer.Id);
+
+			if (organizerInDb == null)
+			{
+				Debug.WriteLine("Event organizer not found.");
+				return false;
+			}
+
+			db.Events.RemoveRange(organizerInDb.Events);
+
+			db.EventOrganizers.Remove(organizerInDb);
 			await db.SaveChangesAsync();
 			await transaction.CommitAsync();
 			return true;

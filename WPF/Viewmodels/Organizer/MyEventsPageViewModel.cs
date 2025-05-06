@@ -24,7 +24,7 @@ public partial class MyEventsPageViewModel : ObservableObject
 	public MyEventsPageViewModel(MainViewModel mainVM)
 	{
 		MainVM = mainVM;
-		MyEvents = new ObservableCollection<Event>(mainVM.EventOrganizer.Events);
+		MyEvents = Managers.EventManager.GetEventsOrganizerOrganize(MainVM.EventOrganizer);
 	}
 
 	[RelayCommand]
@@ -41,7 +41,7 @@ public partial class MyEventsPageViewModel : ObservableObject
 	[RelayCommand]
 	public void FilterEvents()
 	{
-		var filtered = MainVM.EventOrganizer.Events
+		var filtered = Managers.EventManager.GetEventsOrganizerOrganize(MainVM.EventOrganizer)
 			.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
 				.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
 			.ToList();
@@ -54,7 +54,6 @@ public partial class MyEventsPageViewModel : ObservableObject
 	public void CreateEvent()
 	{
 		var window = new Views.Organizer.CreateEventWindowView(MainVM.EventOrganizer, MyEvents);
-
 		window.Show();
 	}
 
