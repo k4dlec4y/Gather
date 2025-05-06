@@ -9,7 +9,86 @@
 	Title="Create New Event"
 	Width="800"
 	Height="450"
+	Background="#FF000000"
 	mc:Ignorable="d">
+
+	<Window.Resources>
+		<!--  TextBlock  -->
+		<Style TargetType="TextBlock">
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="Margin" Value="0,5,0,5" />
+		</Style>
+
+		<!--  Label  -->
+		<Style TargetType="Label">
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="FontWeight" Value="SemiBold" />
+			<Setter Property="Margin" Value="10,5" />
+		</Style>
+
+		<!--  TextBox  -->
+		<Style TargetType="TextBox">
+			<Setter Property="Background" Value="#FF1E1E2F" />
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="BorderBrush" Value="#FF7FFFD4" />
+			<Setter Property="Margin" Value="10" />
+			<Setter Property="Padding" Value="5" />
+			<Setter Property="FontSize" Value="14" />
+		</Style>
+
+		<!--  Button  -->
+		<Style TargetType="Button">
+			<Setter Property="Background" Value="#FF7FFFD4" />
+			<Setter Property="Foreground" Value="#FF1E1E2F" />
+			<Setter Property="FontSize" Value="16" />
+			<Setter Property="FontWeight" Value="Bold" />
+			<Setter Property="Margin" Value="10,5" />
+			<Setter Property="Padding" Value="10,5" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+			<Setter Property="Cursor" Value="Hand" />
+			<Setter Property="Effect">
+				<Setter.Value>
+					<DropShadowEffect
+						BlurRadius="8"
+						Opacity="0.6"
+						ShadowDepth="0"
+						Color="#FF7FFFD4" />
+				</Setter.Value>
+			</Setter>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="Background" Value="#FF66E6B8" />
+					<Setter Property="Effect">
+						<Setter.Value>
+							<DropShadowEffect
+								BlurRadius="15"
+								ShadowDepth="0"
+								Color="#FF7FFFD4" />
+						</Setter.Value>
+					</Setter>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+
+		<!--  CheckBox  -->
+		<Style TargetType="CheckBox">
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="Margin" Value="10" />
+			<Setter Property="FontSize" Value="14" />
+		</Style>
+
+		<!--  DateTimePicker from Xceed Toolkit  -->
+		<Style TargetType="xctk:DateTimePicker">
+			<Setter Property="Background" Value="#FF1E1E2F" />
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="BorderBrush" Value="#FF7FFFD4" />
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="Margin" Value="10" />
+		</Style>
+	</Window.Resources>
+
 	<Grid Margin="10">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -26,40 +105,32 @@
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 
-		<Label
+		<TextBlock
 			Grid.Row="0"
 			Grid.Column="0"
-			Margin="0,0,5,5"
-			Content="Event Name:" />
+			Text="Event Name:" />
 		<TextBox
 			Grid.Row="0"
 			Grid.Column="1"
-			Margin="0,0,0,5"
 			Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
 
-		<Label
+		<TextBlock
 			Grid.Row="1"
 			Grid.Column="0"
-			Margin="0,0,5,5"
-			Content="Description:" />
+			Text="Description:" />
 		<TextBox
 			Grid.Row="1"
 			Grid.Column="1"
 			Height="60"
-			Margin="0,0,0,5"
 			AcceptsReturn="True"
 			Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
 			TextWrapping="Wrap" />
 
-		<Label
+		<TextBlock
 			Grid.Row="2"
 			Grid.Column="0"
-			Margin="0,0,5,5"
-			Content="Image Path:" />
-		<Grid
-			Grid.Row="2"
-			Grid.Column="1"
-			Margin="0,0,0,5">
+			Text="Image Path:" />
+		<Grid Grid.Row="2" Grid.Column="1">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="Auto" />
@@ -67,46 +138,39 @@
 			<TextBox Grid.Column="0" Text="{Binding ImageName, UpdateSourceTrigger=PropertyChanged}" />
 			<Button
 				Grid.Column="1"
-				Width="75"
-				Margin="5,0,0,0"
+				Width="Auto"
 				Command="{Binding BrowseImageCommand}"
 				Content="Browse..." />
 		</Grid>
 
-		<Label
+		<TextBlock
 			Grid.Row="3"
 			Grid.Column="0"
-			Margin="0,0,5,5"
-			Content="Date:" />
+			Text="Date:" />
 		<xctk:DateTimePicker
 			Grid.Row="3"
 			Grid.Column="1"
-			Margin="0,0,0,5"
 			Format="FullDateTime"
 			TimeFormatString="hh:mm tt"
 			TimeWatermark="Select time"
 			Value="{Binding Date}" />
 
-		<Label
+		<TextBlock
 			Grid.Row="4"
 			Grid.Column="0"
-			Margin="0,0,5,5"
-			Content="Location:" />
+			Text="Location:" />
 		<TextBox
 			Grid.Row="4"
 			Grid.Column="1"
-			Margin="0,0,0,5"
 			Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" />
 
-		<Label
+		<TextBlock
 			Grid.Row="5"
 			Grid.Column="0"
-			Margin="0,0,5,5"
-			Content="Categories (comma-separated):" />
+			Text="Categories (comma-separated):" />
 		<TextBox
 			Grid.Row="5"
 			Grid.Column="1"
-			Margin="0,0,0,5"
 			Text="{Binding CategoriesInput, UpdateSourceTrigger=PropertyChanged}" />
 
 		<StackPanel
