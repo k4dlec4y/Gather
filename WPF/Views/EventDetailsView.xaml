@@ -90,7 +90,7 @@
 				FontWeight="Bold"
 				Foreground="#FF7FFFD4"
 				Text="Your friends attending:" />
-			<ItemsControl ItemsSource="{Binding FriendsAttending}">
+			<ItemsControl Margin="0,0,0,20" ItemsSource="{Binding FriendsAttending}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<TextBlock
@@ -101,6 +101,18 @@
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>
+
+			<TextBlock
+				FontSize="16"
+				FontWeight="Bold"
+				Foreground="#FF7FFFD4"
+				Text="Weather forecast for the event date:" />
+			<TextBlock
+				Margin="0,0,0,20"
+				FontSize="14"
+				Foreground="White"
+				Text="{Binding WeatherInfo}"
+				TextWrapping="Wrap" />
 		</StackPanel>
 	</ScrollViewer>
 </Window>

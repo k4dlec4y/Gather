@@ -34,7 +34,6 @@ public partial class EventsPageViewModel : ObservableObject
 	{
 		if (SelectedEvent != null)
 		{
-			Debug.WriteLine($"Friends: {string.Join(", ", MainVM.CurrentUser.Friends)}");
 			var detailWindow = new Views.EventDetailsView(SelectedEvent, MainVM.CurrentUser.Friends);
 			detailWindow.Show();
 		}
