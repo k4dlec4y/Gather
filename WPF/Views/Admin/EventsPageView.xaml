@@ -112,7 +112,7 @@
 								Height="300"
 								Margin="0,0,10,0"
 								Source="{Binding GetImageSource}"
-								Stretch="UniformToFill" />
+								Stretch="Fill" />
 							<StackPanel>
 								<TextBlock
 									FontSize="24"

@@ -133,6 +133,7 @@
 									<RowDefinition Height="Auto" />
 									<RowDefinition Height="Auto" />
 									<RowDefinition Height="Auto" />
+									<RowDefinition Height="Auto" />
 								</Grid.RowDefinitions>
 
 								<TextBlock
@@ -166,6 +167,15 @@
 
 								<Button
 									Grid.Row="4"
+									Width="auto"
+									Margin="5,10,0,0"
+									Command="{Binding DataContext.EditEventCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+									CommandParameter="{Binding}"
+									Content="Edit" />
+
+								<Button
+									Grid.Row="5"
+									Width="auto"
 									Margin="5,10,0,0"
 									Command="{Binding DataContext.DeleteEventCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
 									CommandParameter="{Binding}"

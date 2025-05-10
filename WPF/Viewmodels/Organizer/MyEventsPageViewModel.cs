@@ -56,6 +56,13 @@ public partial class MyEventsPageViewModel : ObservableObject
 	}
 
 	[RelayCommand]
+	public void EditEvent(Event e)
+	{
+		var window = new Views.Organizer.EditEventWindowView(e, MainVM);
+		window.Show();
+	}
+
+	[RelayCommand]
 	public async Task DeleteEvent(Event e)
 	{
 		if (e == null) return;

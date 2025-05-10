@@ -94,6 +94,34 @@ public static class EventManager
 		}
 	}
 
+	public static async Task<bool> UpdateEvent(Event e)
+	{
+		using var context = new AppDbContext();
+		using var transaction = await context.Database.BeginTransactionAsync();
+		try
+		{
+			var existingEvent = await context.Events.FindAsync(e.Id);
+			if (existingEvent == null)
+			{
+				Debug.WriteLine("Event not found.");
+				return false;
+			}
+
+			context.Entry(existingEvent).CurrentValues.SetValues(e);
+
+			await context.SaveChangesAsync();
+			await transaction.CommitAsync();
+			return true;
+		}
+		catch (Exception ex)
+		{
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
+			await transaction.RollbackAsync();
+			return false;
+		}
+	}
+
 	public static async Task<bool> RemoveEvent(Event e)
 	{
 		using var context = new AppDbContext();

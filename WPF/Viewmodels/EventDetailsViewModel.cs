@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
 using WPF.Models;
 
 namespace WPF.Viewmodels;
@@ -17,7 +15,6 @@ public partial class EventDetailsViewModel : ObservableObject
     {
 		Event = @event;
 		FriendsAttending = new ObservableCollection<User>(friends.Where(friend => friend.EventsToAttend.Any(e => e.Id == @event.Id)));
-		Debug.WriteLine($"Friends: {string.Join(", ", FriendsAttending.Select(f => f.Username))}");
 		OnPropertyChanged(nameof(FriendsAttending));
 	}
 }

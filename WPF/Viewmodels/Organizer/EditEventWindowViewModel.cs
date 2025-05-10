@@ -8,11 +8,11 @@ using WPF.Models;
 
 namespace WPF.Viewmodels.Organizer;
 
-public partial class CreateEventWindowViewModel : ObservableObject
+public partial class EditEventWindowViewModel : ObservableObject
 {
-	private EventOrganizer _eventOrganizer;
-	private ObservableCollection<Event> _myEvents;
+	private Event _event;
 	private byte[] _imageData;
+	private MainViewModel _mainVM;
 
 	[ObservableProperty]
 	private string _name = "";
@@ -32,15 +32,21 @@ public partial class CreateEventWindowViewModel : ObservableObject
 	[ObservableProperty]
 	private string _categoriesInput = "";
 
-	public CreateEventWindowViewModel(EventOrganizer eventOrganizer, ObservableCollection<Event> myEvents)
+	public EditEventWindowViewModel(Event @event, MainViewModel mainVM)
 	{
-		_eventOrganizer = eventOrganizer;
-		_myEvents = myEvents;
-		Date = DateTime.Now;
+		_event = @event;
+		Name = @event.Name;
+		Description = @event.Description;
+		Date = @event.Date;
+		Location = @event.Location;
+		CategoriesInput = string.Join(", ", @event.Categories);
+		_imageData = @event.ImageData;
+
+		_mainVM = mainVM;
 	}
 
 	[RelayCommand]
-	public async Task Create()
+	public async Task Edit()
 	{
 		if (string.IsNullOrEmpty(Name))
 		{
@@ -81,24 +87,20 @@ public partial class CreateEventWindowViewModel : ObservableObject
 				.ToList()
 		);
 
-		var newEvent = new Event(
-			Name,
-			Description,
-			Date,
-			Location,
-			_imageData,
-			_eventOrganizer.Id,
-			categories
-		);
+		_event.Name = Name;
+		_event.Description = Description;
+		_event.Date = Date;
+		_event.ImageData = _imageData;
+		_event.Location = Location;
+		_event.Categories = categories;
 
-		if (await Managers.EventManager.CreateEvent(newEvent))
+		if (await Managers.EventManager.UpdateEvent(_event))
 		{
-			newEvent.Organizer = _eventOrganizer;
-			_myEvents.Add(newEvent);
-			MessageBox.Show("Event successfully created");
+			_mainVM.CurrentPage = new Views.Organizer.MyEventsPageView(_mainVM);
+			MessageBox.Show("Event successfully updated");
 			return;
 		}
-		MessageBox.Show("There was an error while creating the event. Please try again");
+		MessageBox.Show("There was an error while updating the event. Please try again");
 	}
 
 	[RelayCommand]
