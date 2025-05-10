@@ -63,9 +63,7 @@ public class Event
 		Categories = categories;
 	}
 
-	protected Event() // for entity framework
-	{
-	}
+	protected Event() { }  // for entity framework
 
 	public async Task<bool> AddParticipant(User participant)
 	{

@@ -59,7 +59,6 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<!--  Reload Button  -->
 		<StackPanel
 			Grid.Row="0"
 			Margin="10"
@@ -70,7 +69,6 @@
 				Content="Reload Requests" />
 		</StackPanel>
 
-		<!--  Requests List  -->
 		<ListBox
 			Grid.Row="1"
 			Margin="10"

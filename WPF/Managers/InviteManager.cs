@@ -66,10 +66,11 @@ public static class InviteManager
 		try
 		{
 			var dbInvite = await context.Invites
+				.AsNoTracking()
+				.Include(i => i.From)
 				.Include(i => i.To)
 				.Include(i => i.Event)
-				.ThenInclude(e => e.Participants)
-				.AsNoTracking()
+					.ThenInclude(e => e.Participants)
 				.FirstOrDefaultAsync(i => i.Id == invite.Id);
 
 			if (dbInvite == null)
@@ -118,8 +119,11 @@ public static class InviteManager
 		try
 		{
 			var dbInvite = await context.Invites
-				.Include(i => i.To)
 				.AsNoTracking()
+				.Include(i => i.From)
+				.Include(i => i.To)
+				.Include(i => i.Event)
+					.ThenInclude(e => e.Participants)
 				.FirstOrDefaultAsync(i => i.Id == invite.Id);
 
 			if (dbInvite == null)

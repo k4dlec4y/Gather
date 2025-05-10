@@ -73,7 +73,7 @@ public partial class EditEventWindowViewModel : ObservableObject
 			MessageBox.Show("Please, enter categories");
 			return;
 		}
-		if (string.IsNullOrEmpty(ImageName))
+		if (ImageName == null)  // if ImageName is empty, image won't change
 		{
 			MessageBox.Show("Please, select an image");
 			return;

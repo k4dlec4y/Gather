@@ -12,7 +12,6 @@
 	mc:Ignorable="d">
 
 	<Page.Resources>
-		<!--  Shared styles  -->
 		<Style TargetType="TextBlock">
 			<Setter Property="Foreground" Value="White" />
 			<Setter Property="FontSize" Value="14" />

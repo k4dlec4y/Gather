@@ -25,5 +25,5 @@ public class User
 		PasswordHash = hash;
 	}
 
-	protected User() { }
+	protected User() { }  // for entity framework
 }

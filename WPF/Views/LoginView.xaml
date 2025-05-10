@@ -120,7 +120,6 @@
 				</Setter.Value>
 			</Setter>
 
-			<!--  ItemContainerStyle for dropdown items  -->
 			<Setter Property="ItemContainerStyle">
 				<Setter.Value>
 					<Style TargetType="ComboBoxItem">

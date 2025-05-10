@@ -8,7 +8,8 @@ namespace WPF.Viewmodels.Admin;
 
 public partial class EventsPageViewModel : ObservableObject
 {
-	public ObservableCollection<Event> Events { get; private set; } = Managers.EventManager.GetEvents();
+	public ObservableCollection<Event> Events { get; private set; } =
+		Managers.EventManager.GetEvents();
 
 	[ObservableProperty]
 	private Event? _selectedEvent;

@@ -141,13 +141,13 @@ public class AppDbContext : DbContext
 			.HasOne(m => m.From)
 			.WithMany()
 			.HasForeignKey(m => m.FromId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.NoAction);
 
 		modelBuilder.Entity<Message>()
 			.HasOne(m => m.To)
 			.WithMany(u => u.Inbox)
 			.HasForeignKey(m => m.ToId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.NoAction);
 
 		// FriendRequest
 		modelBuilder.Entity<FriendRequest>()
@@ -157,13 +157,13 @@ public class AppDbContext : DbContext
 			.HasOne(f => f.From)
 			.WithMany()
 			.HasForeignKey(f => f.FromId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.NoAction);
 
 		modelBuilder.Entity<FriendRequest>()
 			.HasOne(f => f.To)
 			.WithMany(u => u.FriendRequests)
 			.HasForeignKey(f => f.ToId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.NoAction);
 
 		// Invite
 		modelBuilder.Entity<Invite>()
@@ -173,13 +173,13 @@ public class AppDbContext : DbContext
 			.HasOne(i => i.From)
 			.WithMany()
 			.HasForeignKey(i => i.FromId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.NoAction);
 
 		modelBuilder.Entity<Invite>()
 			.HasOne(i => i.To)
 			.WithMany(u => u.Invites)
 			.HasForeignKey(i => i.ToId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.NoAction);
 
 		modelBuilder.Entity<Invite>()
 			.HasOne(i => i.Event)

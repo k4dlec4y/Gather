@@ -1,19 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Collections.ObjectModel;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WPF.Models
+namespace WPF.Models;
+
+public class EventOrganizer
 {
-	public class EventOrganizer
-	{
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int Id { get; set; }
+	[Key]
+	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+	public int Id { get; set; }
 
-		public required string Username { get; set; }
-		public required byte[] PasswordHash { get; set; }
-		public required string Info { get; set; }
+	public required string Username { get; set; }
+	public required byte[] PasswordHash { get; set; }
+	public required string Info { get; set; }
 
-		public ICollection<Event> Events { get; set; } = new List<Event>();
-	}
+	public ICollection<Event> Events { get; set; } = new List<Event>();
 }

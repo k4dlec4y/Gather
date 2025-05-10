@@ -14,13 +14,11 @@
 	mc:Ignorable="d">
 
 	<Window.Resources>
-		<!--  Global TextBlock Style  -->
 		<Style TargetType="TextBlock">
 			<Setter Property="Foreground" Value="White" />
 			<Setter Property="FontFamily" Value="Segoe UI" />
 		</Style>
 
-		<!--  Border Style for List Items  -->
 		<Style TargetType="Border">
 			<Setter Property="Background" Value="Transparent" />
 			<Setter Property="BorderBrush" Value="Gray" />
@@ -28,7 +26,6 @@
 			<Setter Property="Padding" Value="5" />
 		</Style>
 
-		<!--  ListBox Style  -->
 		<Style TargetType="ListBox">
 			<Setter Property="Background" Value="Transparent" />
 			<Setter Property="BorderBrush" Value="Transparent" />

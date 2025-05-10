@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using WPF.Managers;
 using WPF.Models;
 
@@ -43,7 +42,9 @@ public partial class EventsPageViewModel : ObservableObject
 	[RelayCommand]
 	public void FilterEvents()
 	{
-		var filtered = (IsParticipatingOnly ? EventManager.GetEventsUserAttend(MainVM.CurrentUser) : EventManager.GetEvents(MainVM.CurrentUser))
+		var filtered = (IsParticipatingOnly ? 
+			EventManager.GetEventsUserAttend(MainVM.CurrentUser) : 
+			EventManager.GetEvents(MainVM.CurrentUser))
 			.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
 				.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
 			.ToList();

@@ -85,7 +85,6 @@
 				Content="Add Friend" />
 		</StackPanel>
 
-		<!--  Friends List  -->
 		<ListBox
 			Grid.Row="1"
 			Margin="10"
