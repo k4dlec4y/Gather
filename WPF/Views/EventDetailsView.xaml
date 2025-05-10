@@ -106,7 +106,7 @@
 				FontSize="16"
 				FontWeight="Bold"
 				Foreground="#FF7FFFD4"
-				Text="Weather forecast for the event date:" />
+				Text="Weather forecast for the event's date and location:" />
 			<TextBlock
 				Margin="0,0,0,20"
 				FontSize="14"
