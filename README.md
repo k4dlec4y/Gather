@@ -46,10 +46,12 @@ Gather is a social application designed to help users discover, join, and organi
   - If location is unrecognized, weather is not displayed.
 
 ## Notes & Future Fixes
-- A user account can only be deleted **after manually removing all friends** (current limitation).  
 - Deleting a user account also removes their organizer profile (if applicable).
 
-### Key Additions:
+## Future Fixes
+- A user account can only be deleted **after manually removing all friends** (current limitation).  
+
+## Improvements planned for the future:
 - **Future Security** – Password salting for better protection.  
 - **Friend Discovery** – A new tab to find and connect with users.  
 - **Database Improvements** – Better structure for performance.  
