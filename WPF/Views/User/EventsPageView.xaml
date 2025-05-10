@@ -63,6 +63,7 @@
 
 		<Style TargetType="CheckBox">
 			<Setter Property="Foreground" Value="White" />
+			<Setter Property="BorderThickness" Value="0" />
 			<Setter Property="Margin" Value="10" />
 			<Setter Property="FontSize" Value="14" />
 		</Style>
@@ -91,7 +92,7 @@
 			<Button
 				x:Name="SearchButton"
 				Grid.Column="1"
-				Height="30"
+				Height="auto"
 				VerticalAlignment="Center"
 				Command="{Binding FilterEventsCommand}"
 				Content="Search" />
@@ -100,12 +101,12 @@
 				x:Name="EventsToParticipate"
 				Grid.Column="2"
 				VerticalAlignment="Center"
+				VerticalContentAlignment="Center"
 				Command="{Binding FilterEventsCommand}"
 				Content="Events I participate in"
 				IsChecked="{Binding IsParticipatingOnly, Mode=TwoWay}" />
 		</Grid>
 
-		<!--  EVENT LIST  -->
 		<ListBox
 			x:Name="EventList"
 			Grid.Row="1"
@@ -141,7 +142,7 @@
 								Width="400"
 								Height="300"
 								Margin="0,0,10,0"
-								Source="{Binding ImagePath}"
+								Source="{Binding GetImageSource}"
 								Stretch="Fill" />
 
 							<Grid Grid.Column="1">
@@ -161,16 +162,17 @@
 									Foreground="White"
 									Text="{Binding Name}" />
 
-								<!--  PARTICIPATION CONTROLS  -->
 								<Grid Grid.Row="1" Margin="5">
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition Width="Auto" />
-										<ColumnDefinition Width="*" />
+										<ColumnDefinition Width="Auto" />
 									</Grid.ColumnDefinitions>
 
 									<CheckBox
 										Name="Participate"
 										Grid.Column="0"
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center"
 										Foreground="White"
 										IsChecked="{Binding IsCurrentUserParticipating, Mode=TwoWay}"
 										IsEnabled="False" />
@@ -178,6 +180,7 @@
 									<Button
 										Name="ChangeParticipation"
 										Grid.Column="1"
+										Width="Auto"
 										Command="{Binding DataContext.ParticipateCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
 										CommandParameter="{Binding}"
 										Content="Change Participation" />
@@ -186,7 +189,9 @@
 								<Button
 									Name="SendInvite"
 									Grid.Row="2"
+									Width="Auto"
 									Margin="5"
+									HorizontalAlignment="Left"
 									Command="{Binding DataContext.SendInviteCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
 									CommandParameter="{Binding}"
 									Content="Send Invite" />

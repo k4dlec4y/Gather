@@ -15,7 +15,6 @@ public partial class EventDetailsViewModel : ObservableObject
 
 	public EventDetailsViewModel(Event @event, ObservableCollection<User> friends)
     {
-        @event.ImageName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", @event.ImageName);
 		Event = @event;
 		FriendsAttending = new ObservableCollection<User>(friends.Where(friend => friend.EventsToAttend.Any(e => e.Id == @event.Id)));
 		Debug.WriteLine($"Friends: {string.Join(", ", FriendsAttending.Select(f => f.Username))}");

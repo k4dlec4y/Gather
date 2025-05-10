@@ -89,7 +89,11 @@ public class AppDbContext : DbContext
 			.HasForeignKey(e => e.OrganizerId);
 
 		modelBuilder.Entity<Event>()
-		.Ignore(e => e.IsCurrentUserParticipating);
+			.Property(e => e.ImageData)
+			.HasColumnType("varbinary(max)");
+
+		modelBuilder.Entity<Event>()
+			.Ignore(e => e.IsCurrentUserParticipating);
 
 		// Event Participants
 		modelBuilder.Entity<Event>()

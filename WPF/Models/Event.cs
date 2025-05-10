@@ -1,7 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Windows.Media;
 using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace WPF.Models;
 
@@ -15,12 +17,21 @@ public class Event
 	public string Description { get; set; } = string.Empty;
 	public DateTime Date { get; set; }
 	public string Location { get; set; } = string.Empty;
-	public string ImageName { get; set; } = string.Empty;
-	public string ImagePath
+	public byte[] ImageData { get; set; }
+	public ImageSource GetImageSource
 	{
 		get
 		{
-			return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", ImageName);
+			var bitmap = new BitmapImage();
+			using (var stream = new MemoryStream(ImageData))
+			{
+				bitmap.BeginInit();
+				bitmap.CacheOption = BitmapCacheOption.OnLoad;
+				bitmap.StreamSource = stream;
+				bitmap.EndInit();
+				bitmap.Freeze();
+			}
+			return bitmap;
 		}
 	}
 
@@ -32,6 +43,27 @@ public class Event
 
 	[NotMapped]
 	public bool IsCurrentUserParticipating { get; set; }
+
+	public Event(
+		string name,
+		string description,
+		DateTime date,
+		string location,
+		byte[] imageData,
+		int organizerId,
+		ObservableCollection<string> categories
+	)
+	{
+		Name = name;
+		Description = description;
+		Date = date;
+		Location = location;
+		ImageData = imageData;
+		OrganizerId = organizerId;
+		Categories = categories;
+	}
+
+	protected Event() { } // for entity framework
 
 	public async Task<bool> AddParticipant(User participant)
 	{

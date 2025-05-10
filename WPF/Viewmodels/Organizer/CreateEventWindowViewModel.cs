@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Win32;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using WPF.Models;
@@ -12,8 +12,8 @@ namespace WPF.Viewmodels.Organizer;
 public partial class CreateEventWindowViewModel : ObservableObject
 {
 	private EventOrganizer _eventOrganizer;
-	private readonly string _dataFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
 	private ObservableCollection<Event> _myEvents;
+	private byte[] _imageData;
 
 	[ObservableProperty]
 	private string _name = "";
@@ -36,8 +36,8 @@ public partial class CreateEventWindowViewModel : ObservableObject
 	public CreateEventWindowViewModel(EventOrganizer eventOrganizer, ObservableCollection<Event> myEvents)
 	{
 		_eventOrganizer = eventOrganizer;
-		Date = DateTime.Now;
 		_myEvents = myEvents;
+		Date = DateTime.Now;
 	}
 
 	[RelayCommand]
@@ -51,11 +51,6 @@ public partial class CreateEventWindowViewModel : ObservableObject
 		if (Description.IsNullOrEmpty())
 		{
 			MessageBox.Show("Please, enter the description of the event");
-			return;
-		}
-		if (ImageName.IsNullOrEmpty())
-		{
-			MessageBox.Show("Please, enter the image path");
 			return;
 		}
 		if (Date < DateTime.Today)
@@ -73,62 +68,59 @@ public partial class CreateEventWindowViewModel : ObservableObject
 			MessageBox.Show("Please, enter categories");
 			return;
 		}
-
-		var categories = CategoriesInput.Trim().Split(',')
-			.Select(c => c.Trim())
-			.Where(c => !string.IsNullOrEmpty(c))
-			.ToList();
-
-		var newEvent = new Event
+		if (string.IsNullOrEmpty(ImageName))
 		{
-			Name = Name,
-			Description = Description,
-			ImageName = Path.GetFileName(ImageName),
-			Date = Date,
-			Location = Location,
-			OrganizerId = _eventOrganizer.Id,
-			Categories = new ObservableCollection<string>(categories)
-		};
+			MessageBox.Show("Please, select an image");
+			return;
+		}
+
+		var categories = new ObservableCollection<string>
+		(
+			CategoriesInput.Trim().Split(',')
+				.Select(c => c.Trim())
+				.Where(c => !string.IsNullOrEmpty(c))
+				.ToList()
+		);
+
+		var newEvent = new Event(
+			Name,
+			Description,
+			Date,
+			Location,
+			_imageData,
+			_eventOrganizer.Id,
+			categories
+		);
 
 		if (await Managers.EventManager.CreateEvent(newEvent))
 		{
 			MessageBox.Show("Event successfully created");
+			newEvent.Organizer = _eventOrganizer;
 			_myEvents.Add(newEvent);
 			return;
 		}
-		MessageBox.Show("There was an error while creating the event. Please try again later");
+		MessageBox.Show("There was an error while creating the event. Please try again");
 	}
 
 	[RelayCommand]
 	public void BrowseImage()
 	{
-		var openFileDialog = new Microsoft.Win32.OpenFileDialog
+		var openFileDialog = new OpenFileDialog
 		{
 			Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png"
 		};
 
 		if (openFileDialog.ShowDialog() == true)
 		{
-			string sourcePath = openFileDialog.FileName;
-			string fileName = Path.GetFileName(sourcePath);
-			string destinationPath = Path.Combine(_dataFolderPath, fileName);
-
 			try
 			{
-				if (File.Exists(destinationPath))
-				{
-					throw new IOException($"File {fileName} already exists in the destination folder.");
-				}
-
-				File.Copy(sourcePath, destinationPath);
-				ImageName = fileName;
+				ImageName = openFileDialog.FileName;
+				_imageData = File.ReadAllBytes(ImageName);
 			}
-			catch (Exception ex)
+			catch
 			{
-				MessageBox.Show($"Error copying image: {ex.Message}",
-					"Error",
-					MessageBoxButton.OK,
-					MessageBoxImage.Error);
+				MessageBox.Show("Error while loading the image. Please try again");
+				return;
 			}
 		}
 	}

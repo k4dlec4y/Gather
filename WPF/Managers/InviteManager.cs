@@ -98,8 +98,6 @@ public static class InviteManager
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();
 
-			
-
 			return "";
 		}
 		catch (Exception ex)

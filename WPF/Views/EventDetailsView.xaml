@@ -13,19 +13,16 @@
 	mc:Ignorable="d">
 
 	<Window.Resources>
-		<!--  Global TextBlock Style  -->
 		<Style TargetType="TextBlock">
 			<Setter Property="Foreground" Value="White" />
 			<Setter Property="FontFamily" Value="Segoe UI" />
 		</Style>
 
-		<!--  Image Style  -->
 		<Style TargetType="Image">
 			<Setter Property="Stretch" Value="Fill" />
 			<Setter Property="Margin" Value="0,0,0,20" />
 		</Style>
 
-		<!--  ItemsControl Style  -->
 		<Style TargetType="ItemsControl">
 			<Setter Property="Margin" Value="0,0,0,10" />
 		</Style>
@@ -33,10 +30,8 @@
 
 	<ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
 		<StackPanel>
-			<!--  Event Image  -->
-			<Image Height="300" Source="{Binding Event.ImageName}" />
+			<Image Height="300" Source="{Binding Event.GetImageSource}" />
 
-			<!--  Event Name  -->
 			<TextBlock
 				Margin="0,0,0,10"
 				FontSize="30"
@@ -44,7 +39,6 @@
 				Foreground="#FFFF00FF"
 				Text="{Binding Event.Name}" />
 
-			<!--  Organizer  -->
 			<TextBlock
 				FontSize="16"
 				FontWeight="Bold"
@@ -53,16 +47,15 @@
 			<TextBlock
 				Margin="0,0,0,10"
 				FontSize="16"
+				Foreground="White"
 				Text="{Binding Event.Organizer.Username}" />
 
-			<!--  Date and Location  -->
 			<TextBlock FontSize="16" Text="{Binding Event.Date, StringFormat='Date: {0:dd MMM yyyy HH:mm}'}" />
 			<TextBlock
 				Margin="0,0,0,10"
 				FontSize="16"
 				Text="{Binding Event.Location, StringFormat='Location: {0}'}" />
 
-			<!--  Categories  -->
 			<TextBlock
 				FontSize="16"
 				FontWeight="Bold"
@@ -80,7 +73,6 @@
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>
 
-			<!--  Description  -->
 			<TextBlock
 				Margin="0,5"
 				FontSize="16"
@@ -93,7 +85,6 @@
 				Text="{Binding Event.Description}"
 				TextWrapping="Wrap" />
 
-			<!--  Friends Attending  -->
 			<TextBlock
 				FontSize="16"
 				FontWeight="Bold"

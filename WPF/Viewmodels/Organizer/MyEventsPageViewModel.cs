@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows;
-using WPF.Managers;
 using WPF.Models;
 
 namespace WPF.Viewmodels.Organizer;
