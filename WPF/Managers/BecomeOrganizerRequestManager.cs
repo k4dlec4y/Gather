@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using WPF.Data;
@@ -38,12 +37,14 @@ public static class BecomeOrganizerRequestManager
 		try
 		{
 			await context.BecomeOrganizerRequests.AddAsync(bor);
+
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();
 			return true;
 		}
 		catch (Exception ex)
 		{
+			Debug.WriteLine(ex.Message);
 			Debug.WriteLine(ex.InnerException?.Message);
 			await transaction.RollbackAsync();
 			return false;
@@ -56,14 +57,16 @@ public static class BecomeOrganizerRequestManager
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try
 		{
+			context.BecomeOrganizerRequests.Attach(bor);
 			context.BecomeOrganizerRequests.Remove(bor);
-			await context.Messages
-				.AddAsync(new Message
-				{
-					FromId = 1,
-					ToId = bor.User.Id,
-					Content = "You have been rejected as an event organizer.",
-				});
+
+			await context.Messages.AddAsync(new Message
+			{
+				FromId = 1,
+				ToId = bor.User.Id,
+				Content = "You have been rejected as an event organizer.",
+			});
+
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();
 			return true;
@@ -90,14 +93,16 @@ public static class BecomeOrganizerRequestManager
 				Info = bor.RequestText
 			};
 			await context.EventOrganizers.AddAsync(eo);
+
+			context.BecomeOrganizerRequests.Attach(bor);
 			context.BecomeOrganizerRequests.Remove(bor);
-			await context.Messages
-				.AddAsync(new Message
-				{
-					FromId = 1,
-					ToId = bor.User.Id,
-					Content = "You have been accepted as an event organizer.",
-				});
+
+			await context.Messages.AddAsync(new Message
+			{
+				FromId = 1,
+				ToId = bor.User.Id,
+				Content = "You have been accepted as an event organizer.",
+			});
 
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();

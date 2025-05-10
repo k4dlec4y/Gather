@@ -34,5 +34,6 @@ public partial class RequestsPageViewModel : ObservableObject
 	private void ReloadRequests()
 	{
 		BecomeOrganizerRequests = Managers.BecomeOrganizerRequestManager.GetRequests();
+		OnPropertyChanged(nameof(BecomeOrganizerRequests));
 	}
 }

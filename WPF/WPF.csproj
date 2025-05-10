@@ -9,16 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\event_image.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Data\event_image.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />

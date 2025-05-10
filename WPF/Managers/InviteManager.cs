@@ -19,11 +19,14 @@ public static class InviteManager
 				i.EventId == @event.Id))
 				return "You have already sent an equivalent invite!";
 
-			var dbSender = await context.Users.FirstOrDefaultAsync(u => u.Id == sender.Id);
+			var dbSender = await context.Users
+				.FirstOrDefaultAsync(u => u.Id == sender.Id);
 			var dbReceiver = await context.Users
 				.Include(u => u.Invites)
 				.FirstOrDefaultAsync(u => u.Id == receiver.Id);
-			var dbEvent = await context.Events.FirstOrDefaultAsync(e => e.Id == @event.Id);
+			var dbEvent = await context.Events
+				.Include(e => e.Participants)
+				.FirstOrDefaultAsync(e => e.Id == @event.Id);
 
 			if (dbSender == null || dbReceiver == null || dbEvent == null)
 				return "One or more required entities could not be found.";
@@ -45,13 +48,13 @@ public static class InviteManager
 
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();
-			return "";
+			return "";  // success
 		}
 		catch (Exception ex)
 		{
 			await transaction.RollbackAsync();
-			Debug.WriteLine($"{ex.Message}");
-			Debug.WriteLine($"{ex.InnerException?.Message}");
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			return ex.InnerException == null ? ex.Message : ex.InnerException.Message;
 		}
 	}
@@ -97,14 +100,13 @@ public static class InviteManager
 
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();
-
-			return "";
+			return "";  // success
 		}
 		catch (Exception ex)
 		{
 			await transaction.RollbackAsync();
-			Debug.WriteLine($"AcceptInvite - {ex.Message}");
-			Debug.WriteLine($"AcceptInvite - {ex.InnerException?.Message}");
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			return ex.InnerException == null ? ex.Message : ex.InnerException.Message;
 		}
 	}
@@ -121,7 +123,7 @@ public static class InviteManager
 				.FirstOrDefaultAsync(i => i.Id == invite.Id);
 
 			if (dbInvite == null)
-				return "Could not find ivnite in the database";
+				return "Could not find invite in the database";
 
 			context.Invites.Attach(dbInvite);
 			context.Users.Attach(dbInvite.To);
@@ -140,13 +142,13 @@ public static class InviteManager
 
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();
-			return "";
+			return "";  // success
 		}
 		catch (Exception ex)
 		{
 			await transaction.RollbackAsync();
-			Debug.WriteLine($"DeleteInvite - {ex.Message}");
-			Debug.WriteLine($"DeleteInvite - {ex.InnerException?.Message}");
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			return ex.InnerException == null ? ex.Message : ex.InnerException.Message;
 		}
 	}

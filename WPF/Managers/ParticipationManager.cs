@@ -11,14 +11,14 @@ public static class ParticipationManager
 	{
 		using var context = new AppDbContext();
 		using var transaction = await context.Database.BeginTransactionAsync();
-
 		try
 		{
 			var dbEvent = await context.Events
 				.Include(e => e.Participants)
 				.FirstOrDefaultAsync(e => e.Id == @event.Id);
 
-			var dbUser = await context.Users.FindAsync(user.Id);
+			var dbUser = await context.Users
+				.FindAsync(user.Id);
 
 			if (dbEvent == null || dbUser == null)
 			{
@@ -26,20 +26,22 @@ public static class ParticipationManager
 				return false;
 			}
 
-			if (!dbEvent.Participants.Contains(dbUser))
+			if (dbEvent.Participants.Contains(dbUser))
 			{
-				dbEvent.Participants.Add(dbUser);
-				await context.SaveChangesAsync();
-				await transaction.CommitAsync();
-				return true;
+				return false;
+				
 			}
+			dbEvent.Participants.Add(dbUser);
 
-			return false;
+			await context.SaveChangesAsync();
+			await transaction.CommitAsync();
+			return true;
 		}
 		catch (Exception ex)
 		{
 			await transaction.RollbackAsync();
-			Debug.WriteLine($"{ex.Message}");
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			return false;
 		}
 	}
@@ -48,7 +50,6 @@ public static class ParticipationManager
 	{
 		using var context = new AppDbContext();
 		using var transaction = await context.Database.BeginTransactionAsync();
-
 		try
 		{
 			var dbEvent = await context.Events
@@ -69,7 +70,8 @@ public static class ParticipationManager
 		catch (Exception ex)
 		{
 			await transaction.RollbackAsync();
-			Debug.WriteLine($"{ex.Message}");
+			Debug.WriteLine(ex.Message);
+			Debug.WriteLine(ex.InnerException?.Message);
 			return false;
 		}
 	}

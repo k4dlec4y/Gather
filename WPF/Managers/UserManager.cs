@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Runtime.Intrinsics.X86;
 using WPF.Data;
 using WPF.Models;
 
@@ -15,7 +16,7 @@ public static class UserManager
 			.AsNoTracking()
 			.Include(u => u.EventsToAttend)
 			.Include(u => u.Friends)
-				.ThenInclude(f => f.EventsToAttend)
+				.ThenInclude(f => f.EventsToAttend).AsNoTracking()
 			.Include(u => u.Inbox)
 				.ThenInclude(m => m.From)
 			.Include(u => u.Invites)
@@ -36,7 +37,7 @@ public static class UserManager
 			.AsNoTracking()
 			.Include(u => u.EventsToAttend)
 			.Include(u => u.Friends)
-				.ThenInclude(f => f.EventsToAttend)
+				.ThenInclude(f => f.EventsToAttend).AsNoTracking()
 			.Include(u => u.Inbox)
 				.ThenInclude(m => m.From)
 			.Include(u => u.Invites)
@@ -74,33 +75,29 @@ public static class UserManager
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try
 		{
-			context.Attach(user);
+			// remove friendships
+			var friendships = context.Friendships
+				.Where(fs =>
+				fs.Friend1Id == user.Id || fs.Friend2Id == user.Id
+			);
+			context.Friendships.RemoveRange(friendships);
 
-			// Remove friendships
-			var friendships = context.Users
-				.Where(u => u.Friends.Contains(user));
-
-			foreach (var friend in friendships)
-			{
-				friend.Friends.Remove(user);
-			}
-
-			// Remove friend requests
+			// remove friend requests
 			var friendRequests = context.FriendRequests
 				.Where(fr => fr.FromId == user.Id || fr.ToId == user.Id);
 			context.FriendRequests.RemoveRange(friendRequests);
 
-			// Remove invites
+			// remove invites
 			var invites = context.Invites
 				.Where(i => i.FromId == user.Id || i.ToId == user.Id);
 			context.Invites.RemoveRange(invites);
 
-			// Remove messages
+			// remove messages
 			var messages = context.Messages
 				.Where(m => m.FromId == user.Id || m.ToId == user.Id);
 			context.Messages.RemoveRange(messages);
 
-			// Remove participations in events
+			// remove participations in events
 			var events = context.Events
 				.Where(e => e.Participants.Contains(user));
 			foreach (var eventItem in events)
@@ -108,7 +105,7 @@ public static class UserManager
 				eventItem.Participants.Remove(user);
 			}
 
-			// Remove him as organizer of events, if he is one
+			// remove him as organizer of events, if he is one
 			var eo = await context.EventOrganizers
 				.FirstOrDefaultAsync(e => e.Username == user.Username);
 			if (eo != null)
@@ -117,7 +114,7 @@ public static class UserManager
 				context.Events.RemoveRange(eo.Events);
 			}
 
-			// Finally, remove the user
+			// remove the user
 			context.Users.Remove(user);
 
 			await context.SaveChangesAsync();
@@ -126,9 +123,9 @@ public static class UserManager
 		}
 		catch (Exception ex)
 		{
+			await transaction.RollbackAsync();
 			Debug.WriteLine(ex.Message);
 			Debug.WriteLine(ex.InnerException?.Message);
-			await transaction.RollbackAsync();
 			return false;
 		}
 	}
@@ -144,7 +141,7 @@ public static class UserManager
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try
 		{
-			context.Attach(user);
+			context.Users.Attach(user);
 			context.Users.Update(user);
 
 			await context.SaveChangesAsync();
@@ -153,9 +150,9 @@ public static class UserManager
 		}
 		catch (Exception ex)
 		{
+			await transaction.RollbackAsync();
 			Debug.WriteLine(ex.Message);
 			Debug.WriteLine(ex.InnerException?.Message);
-			await transaction.RollbackAsync();
 			return false;
 		}
 	}

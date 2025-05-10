@@ -53,7 +53,8 @@ public static class EventManager
 		return new ObservableCollection<Event>(events);
 	}
 
-	public static ObservableCollection<Event> GetEventsOrganizerOrganize(EventOrganizer eventOrganizer)
+	public static ObservableCollection<Event> GetEventsOrganizerOrganize(
+		EventOrganizer eventOrganizer)
 	{
 		using var context = new AppDbContext();
 		var events = context.Events
@@ -80,7 +81,8 @@ public static class EventManager
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try
 		{
-			context.Events.Add(e);
+			await context.Events.AddAsync(e);
+
 			await context.SaveChangesAsync();
 			await transaction.CommitAsync();
 			return true;
@@ -128,7 +130,7 @@ public static class EventManager
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try
 		{
-			context.TrackEntity(e);
+			context.Events.Attach(e);
 			context.Events.Remove(e);
 
 			await context.SaveChangesAsync();

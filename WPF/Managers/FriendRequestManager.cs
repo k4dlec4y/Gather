@@ -7,7 +7,10 @@ namespace WPF.Managers;
 
 public static class FriendRequestManager
 {
-	public static async Task<bool> SendFriendRequest(User sender, User receiver, string content)
+	public static async Task<bool> SendFriendRequest
+	(
+		User sender, User receiver, string content
+	)
 	{
 		using var context = new AppDbContext();
 		using var transaction = await context.Database.BeginTransactionAsync();
@@ -24,7 +27,6 @@ public static class FriendRequestManager
 			context.TrackEntity(receiver);
 
 			await context.FriendRequests.AddAsync(friendRequest);
-
 			receiver.FriendRequests.Add(friendRequest);
 
 			await context.SaveChangesAsync();
@@ -44,23 +46,19 @@ public static class FriendRequestManager
 	public static async Task<bool> ContainsFriendRequest(User sender, User receiver)
 	{
 		using var context = new AppDbContext();
-
-		var friendRequest = await context.FriendRequests
+		return await context.FriendRequests
 			.AsNoTracking()
-			.FirstOrDefaultAsync(f => f.FromId == sender.Id && f.ToId == receiver.Id);
-
-		return friendRequest != null;
+			.AnyAsync(f => f.FromId == sender.Id && f.ToId == receiver.Id);
 	}
 
 	public static async Task<bool> AcceptFriendRequest(FriendRequest friendRequest)
 	{
 		using var context = new AppDbContext();
 		using var transaction = await context.Database.BeginTransactionAsync();
-
 		try
 		{
-			context.TrackEntity(friendRequest);
-			context.TrackEntity(friendRequest.To);
+			context.Attach(friendRequest);
+			context.Attach(friendRequest.To);
 
 			context.Users.Update(friendRequest.From);
 			context.Users.Update(friendRequest.To);
@@ -94,11 +92,10 @@ public static class FriendRequestManager
 	{
 		using var context = new AppDbContext();
 		using var transaction = await context.Database.BeginTransactionAsync();
-
 		try
 		{
-			context.TrackEntity(friendRequest);
-			context.TrackEntity(friendRequest.To);
+			context.Attach(friendRequest);
+			context.Attach(friendRequest.To);
 
 			context.FriendRequests.Remove(friendRequest);
 			friendRequest.To.FriendRequests.Remove(friendRequest);
