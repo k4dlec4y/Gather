@@ -7,6 +7,6 @@ public partial class MainView : Window
     public MainView()
     {
         InitializeComponent();
-		DataContext = new Viewmodels.Admin.MainViewModel();
+		DataContext = new Viewmodels.Admin.MainViewModel(this);
 	}
 }

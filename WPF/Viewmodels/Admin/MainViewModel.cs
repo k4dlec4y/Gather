@@ -10,9 +10,12 @@ public partial class MainViewModel : ObservableObject
 	[ObservableProperty]
 	private Page _currentPage;
 
-	public MainViewModel()
+	public MainView MainWindow;
+
+	public MainViewModel(MainView mainWindow)
 	{
 		CurrentPage = new EventsPageView();
+		MainWindow = mainWindow;
 	}
 
 	[RelayCommand]

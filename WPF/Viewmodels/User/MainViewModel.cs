@@ -13,10 +13,13 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private Models.User _currentUser;
 
-	public MainViewModel(Models.User user)
+	public MainView MainWindow;
+
+	public MainViewModel(Models.User user, MainView mainWindow)
     {
 		CurrentUser = user;
 		CurrentPage = new EventsPageView(this);
+		MainWindow = mainWindow;
 	}
 
     [RelayCommand]

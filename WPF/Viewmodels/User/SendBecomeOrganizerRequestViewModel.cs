@@ -13,9 +13,7 @@ public partial class SendBecomeOrganizerRequestViewModel : ObservableObject
 	private Window _sendRequestWindow;
 
 	public SendBecomeOrganizerRequestViewModel
-	(
-		Window sendRequestWindow,
-		Models.User user)
+		(Window sendRequestWindow, Models.User user)
 	{
 		_currentUser = user;
 		_sendRequestWindow = sendRequestWindow;

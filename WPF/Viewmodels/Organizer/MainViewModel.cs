@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Controls;
 using WPF.Models;
+using WPF.Views.Organizer;
 
 namespace WPF.Viewmodels.Organizer;
 
@@ -13,21 +14,24 @@ public partial class MainViewModel : ObservableObject
 	[ObservableProperty]
 	Page _currentPage;
 
-	public MainViewModel(EventOrganizer eventOrganizer)
+	public MainView MainWindow;
+
+	public MainViewModel(EventOrganizer eventOrganizer, MainView mainWindow)
 	{
 		EventOrganizer = eventOrganizer;
-		CurrentPage = new Views.Organizer.MyEventsPageView(this);
+		CurrentPage = new MyEventsPageView(this);
+		MainWindow = mainWindow;
 	}
 
 	[RelayCommand]
 	public void MyEvents()
 	{
-		CurrentPage = new Views.Organizer.MyEventsPageView(this);
+		CurrentPage = new MyEventsPageView(this);
 	}
 
 	[RelayCommand]
 	public void Settings()
 	{
-		CurrentPage = new Views.Organizer.SettingsPageView(this);
+		CurrentPage = new SettingsPageView(this);
 	}
 }

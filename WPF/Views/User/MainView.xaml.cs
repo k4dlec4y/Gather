@@ -11,7 +11,7 @@ namespace WPF.Views.UserV
 		public MainView(Models.User user)
         {
             InitializeComponent();
-            DataContext = new Viewmodels.UserVM.MainViewModel(user);
+            DataContext = new Viewmodels.UserVM.MainViewModel(user, this);
 		}
 	}
 }

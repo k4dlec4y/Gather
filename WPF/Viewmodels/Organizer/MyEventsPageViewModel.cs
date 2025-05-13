@@ -31,6 +31,7 @@ public partial class MyEventsPageViewModel : ObservableObject
 		if (SelectedEvent != null)
 		{
 			var detailWindow = new Views.EventDetailsView(SelectedEvent, []);
+			detailWindow.Owner = MainVM.MainWindow;
 			detailWindow.Show();
 		}
 		SelectedEvent = null;
@@ -52,6 +53,7 @@ public partial class MyEventsPageViewModel : ObservableObject
 	public void CreateEvent()
 	{
 		var window = new Views.Organizer.CreateEventWindowView(MainVM.EventOrganizer, MyEvents);
+		window.Owner = MainVM.MainWindow;
 		window.Show();
 	}
 
@@ -59,6 +61,7 @@ public partial class MyEventsPageViewModel : ObservableObject
 	public void EditEvent(Event e)
 	{
 		var window = new Views.Organizer.EditEventWindowView(e, MainVM);
+		window.Owner = MainVM.MainWindow;
 		window.Show();
 	}
 

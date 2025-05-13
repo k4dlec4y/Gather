@@ -34,6 +34,7 @@ public partial class EventsPageViewModel : ObservableObject
 		if (SelectedEvent != null)
 		{
 			var detailWindow = new Views.EventDetailsView(SelectedEvent, MainVM.CurrentUser.Friends);
+			detailWindow.Owner = MainVM.MainWindow;
 			detailWindow.Show();
 		}
 		SelectedEvent = null;
@@ -48,6 +49,7 @@ public partial class EventsPageViewModel : ObservableObject
 			.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
 				.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
 			.ToList();
+
 		Events = new ObservableCollection<Event>(filtered);
 		OnPropertyChanged(nameof(Events));
 	}
@@ -70,6 +72,7 @@ public partial class EventsPageViewModel : ObservableObject
 	public void SendInvite(Event @event)
 	{
 		var window = new Views.UserV.SendInviteView(MainVM, @event);
+		window.Owner = MainVM.MainWindow;
 		window.Show();
 	}
 }
