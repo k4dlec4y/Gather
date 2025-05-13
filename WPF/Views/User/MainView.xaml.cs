@@ -1,17 +1,12 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 
-namespace WPF.Views.UserV
+namespace WPF.Views.UserV;
+
+public partial class MainView : Window
 {
-    /// <summary>
-    /// Interaction logic for MainView.xaml
-    /// </summary>
-    public partial class MainView : Window
+	public MainView(Models.User user)
     {
-		public MainView(Models.User user)
-        {
-            InitializeComponent();
-            DataContext = new Viewmodels.UserVM.MainViewModel(user, this);
-		}
+        InitializeComponent();
+        DataContext = new Viewmodels.UserVM.MainViewModel(user, this);
 	}
 }

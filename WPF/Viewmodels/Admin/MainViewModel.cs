@@ -14,14 +14,14 @@ public partial class MainViewModel : ObservableObject
 
 	public MainViewModel(MainView mainWindow)
 	{
-		CurrentPage = new EventsPageView();
+		CurrentPage = new EventsPageView(this);
 		MainWindow = mainWindow;
 	}
 
 	[RelayCommand]
 	public void Events()
 	{
-		CurrentPage = new EventsPageView();
+		CurrentPage = new EventsPageView(this);
 	}
 
 	[RelayCommand]

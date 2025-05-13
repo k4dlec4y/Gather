@@ -11,6 +11,13 @@ public partial class EventsPageViewModel : ObservableObject
 	public ObservableCollection<Event> Events { get; private set; } =
 		Managers.EventManager.GetEvents();
 
+	private MainViewModel _mainVM;
+
+	public EventsPageViewModel(MainViewModel main)
+	{
+		_mainVM = main;
+	}
+
 	[ObservableProperty]
 	private Event? _selectedEvent;
 
@@ -23,6 +30,7 @@ public partial class EventsPageViewModel : ObservableObject
 		if (SelectedEvent != null)
 		{
 			var detailWindow = new Views.EventDetailsView(SelectedEvent, []);
+			detailWindow.Owner = _mainVM.MainWindow;
 			detailWindow.Show();
 		}
 		SelectedEvent = null;
