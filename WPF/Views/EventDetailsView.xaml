@@ -1,0 +1,118 @@
+﻿<Window
+	x:Class="WPF.Views.EventDetailsView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:local="clr-namespace:WPF.Views"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	Title="Event Details"
+	Width="800"
+	Height="800"
+	Background="#FF000000"
+	WindowStartupLocation="CenterScreen"
+	mc:Ignorable="d">
+
+	<Window.Resources>
+		<Style TargetType="TextBlock">
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="FontFamily" Value="Segoe UI" />
+		</Style>
+
+		<Style TargetType="Image">
+			<Setter Property="Stretch" Value="Fill" />
+			<Setter Property="Margin" Value="0,0,0,20" />
+		</Style>
+
+		<Style TargetType="ItemsControl">
+			<Setter Property="Margin" Value="0,0,0,10" />
+		</Style>
+	</Window.Resources>
+
+	<ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
+		<StackPanel>
+			<Image Height="300" Source="{Binding Event.GetImageSource}" />
+
+			<TextBlock
+				Margin="0,0,0,10"
+				FontSize="30"
+				FontWeight="Bold"
+				Foreground="#FFFF00FF"
+				Text="{Binding Event.Name}" />
+
+			<TextBlock
+				FontSize="16"
+				FontWeight="Bold"
+				Foreground="#FF7FFFD4"
+				Text="Organized by:" />
+			<TextBlock
+				Margin="0,0,0,10"
+				FontSize="16"
+				Foreground="White"
+				Text="{Binding Event.Organizer.Username}" />
+
+			<TextBlock FontSize="16" Text="{Binding Event.Date, StringFormat='Date: {0:dd MMM yyyy HH:mm}'}" />
+			<TextBlock
+				Margin="0,0,0,10"
+				FontSize="16"
+				Text="{Binding Event.Location, StringFormat='Location: {0}'}" />
+
+			<TextBlock
+				FontSize="16"
+				FontWeight="Bold"
+				Foreground="#FF7FFFD4"
+				Text="Categories:" />
+			<ItemsControl Height="Auto" ItemsSource="{Binding Event.Categories}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock
+							Margin="0,0,0,2"
+							FontSize="14"
+							Foreground="White"
+							Text="{Binding ., StringFormat='- {0}'}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+
+			<TextBlock
+				Margin="0,5"
+				FontSize="16"
+				FontWeight="Bold"
+				Foreground="#FF7FFFD4"
+				Text="Description:" />
+			<TextBlock
+				Margin="0,0,0,20"
+				FontSize="14"
+				Text="{Binding Event.Description}"
+				TextWrapping="Wrap" />
+
+			<TextBlock
+				FontSize="16"
+				FontWeight="Bold"
+				Foreground="#FF7FFFD4"
+				Text="Your friends attending:" />
+			<ItemsControl Margin="0,0,0,20" ItemsSource="{Binding FriendsAttending}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock
+							Margin="0,0,0,2"
+							FontSize="14"
+							Foreground="White"
+							Text="{Binding Username}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+
+			<TextBlock
+				FontSize="16"
+				FontWeight="Bold"
+				Foreground="#FF7FFFD4"
+				Text="Weather forecast for the event's date and location:" />
+			<TextBlock
+				Margin="0,0,0,20"
+				FontSize="14"
+				Foreground="White"
+				Text="{Binding WeatherInfo}"
+				TextWrapping="Wrap" />
+		</StackPanel>
+	</ScrollViewer>
+</Window>
