@@ -3,11 +3,14 @@ using CommunityToolkit.Mvvm.Input;
 using System.Windows;
 using WPF.Managers;
 using WPF.Models;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.UserVM;
 
-public partial class FriendsPageViewModel : ObservableObject
+internal partial class FriendsPageViewModel : ObservableObject
 {
+	private IDialogService _dialogService { get; init; }
+
 	[ObservableProperty]
 	private string _newFriendUsername;
 
@@ -17,9 +20,10 @@ public partial class FriendsPageViewModel : ObservableObject
 	[ObservableProperty]
 	private MainViewModel _mainVM;
 
-	public FriendsPageViewModel(MainViewModel main)
+	public FriendsPageViewModel(MainViewModel main, IDialogService dialogService)
 	{
 		MainVM = main;
+		_dialogService = dialogService;
 	}
 
 	[RelayCommand]
@@ -29,22 +33,22 @@ public partial class FriendsPageViewModel : ObservableObject
 
 		if(NewFriendUsername == MainVM.CurrentUser.Username)
 		{
-			MessageBox.Show("You cannot add yourself as a friend");
+			_dialogService.ShowError("You cannot add yourself as a friend");
 			return;
 		}
 		if (to == null)
 		{
-			MessageBox.Show("This user doesnt exist");
+			_dialogService.ShowError("This user doesnt exist");
 			return;
 		}
 		if (MainVM.CurrentUser.Friends.Select(f => f.Username).Contains(to.Username))
 		{
-			MessageBox.Show($"You are already in friendship with {to.Username}");
+			_dialogService.ShowError($"You are already in friendship with {to.Username}");
 			return;
 		}
 		if (await FriendRequestManager.ContainsFriendRequest(MainVM.CurrentUser, to))
 		{
-			MessageBox.Show($"You have already sent a friend request to {to.Username}");
+			_dialogService.ShowError($"You have already sent a friend request to {to.Username}");
 			return;
 		}
 
@@ -53,7 +57,7 @@ public partial class FriendsPageViewModel : ObservableObject
 			to,
 			$"{MainVM.CurrentUser.Username} has sent you a friend request!");
 
-		MessageBox.Show(sent ? $"Friend request sent" : "Please, try again");	
+		_dialogService.ShowMessage(sent ? $"Friend request sent" : "Please, try again");	
 	}
 
 	[RelayCommand]

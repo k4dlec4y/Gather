@@ -4,11 +4,14 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 using WPF.Models;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.UserVM;
 
-public partial class SendInviteViewModel : ObservableObject
+internal partial class SendInviteViewModel : ObservableObject
 {
+	private IDialogService _dialogService { get; init; }
+
 	MainViewModel _mainVM;
 	Event _event;
 
@@ -18,11 +21,12 @@ public partial class SendInviteViewModel : ObservableObject
 	[ObservableProperty]
 	User? _selectedFriend = null;
 
-	public SendInviteViewModel(MainViewModel mainVM, Event @event)
+	public SendInviteViewModel(MainViewModel mainVM, Event @event, IDialogService dialogService)
 	{
 		_mainVM = mainVM;
 		Friends = mainVM.CurrentUser.Friends;
 		_event = @event;
+		_dialogService = dialogService;
 	}
 
 	[RelayCommand]
@@ -30,8 +34,7 @@ public partial class SendInviteViewModel : ObservableObject
 	{
 		if (SelectedFriend == null)
 		{
-			MessageBox.Show("No friend selected");
-			Debug.WriteLine("No friend selected");
+			_dialogService.ShowError("No friend selected");
 			return;
 		}
 
@@ -44,6 +47,6 @@ public partial class SendInviteViewModel : ObservableObject
 
 		//SelectedFriend = null;
 
-		MessageBox.Show(response.Equals("") ? "Invite sent successfully!" : response);
+		_dialogService.ShowMessage(response.Equals("") ? "Invite sent successfully!" : response);
 	}
 }

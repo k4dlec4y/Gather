@@ -1,17 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.UserVM;
 
-public partial class SettingsPageViewModel : ObservableObject
+internal partial class SettingsPageViewModel : ObservableObject
 {
+    private IDialogService _dialogService { get; init; }
+
     [ObservableProperty]
     private MainViewModel _mainVM;
 
-    public SettingsPageViewModel(MainViewModel main)
+    public SettingsPageViewModel(MainViewModel main, IDialogService dialogService)
     {
         MainVM = main;
+        _dialogService = dialogService;	
     }
 
     [RelayCommand]
@@ -40,7 +44,7 @@ public partial class SettingsPageViewModel : ObservableObject
 		bool success = await Managers.UserManager.RemoveUser(MainVM.CurrentUser);
 		if (!success)
 		{
-			MessageBox.Show("Please, try again");
+			_dialogService.ShowError("Please, try again");
 			return;
 		}
 		foreach (Window window in Application.Current.Windows)

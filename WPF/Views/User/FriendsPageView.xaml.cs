@@ -1,8 +1,5 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using WPF.Models;
+﻿using System.Windows.Controls;
 using WPF.Viewmodels.UserVM;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace WPF.Views.UserV
 {
@@ -11,7 +8,7 @@ namespace WPF.Views.UserV
         public FriendsPageView(MainViewModel main)
         {
 			InitializeComponent();
-			DataContext = new FriendsPageViewModel(main);
+			DataContext = new FriendsPageViewModel(main, new Services.Implementations.WpfDialogService());
 		}
     }
 }

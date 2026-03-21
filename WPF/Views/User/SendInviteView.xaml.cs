@@ -9,6 +9,6 @@ public partial class SendInviteView : Window
     public SendInviteView(MainViewModel mainVM, Event @event)
     {
         InitializeComponent();
-        DataContext = new SendInviteViewModel(mainVM, @event);
+        DataContext = new SendInviteViewModel(mainVM, @event, new Services.Implementations.WpfDialogService());
 	}
 }

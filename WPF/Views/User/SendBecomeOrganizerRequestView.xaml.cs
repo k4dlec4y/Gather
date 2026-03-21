@@ -8,6 +8,6 @@ public partial class SendBecomeOrganizerRequestView : Window
     public SendBecomeOrganizerRequestView(User user)
     {
 		InitializeComponent();
-		DataContext = new Viewmodels.UserVM.SendBecomeOrganizerRequestViewModel(this, user);
+		DataContext = new Viewmodels.UserVM.SendBecomeOrganizerRequestViewModel(this, user, new Services.Implementations.WpfDialogService());
 	}
 }

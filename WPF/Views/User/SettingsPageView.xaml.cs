@@ -23,7 +23,7 @@ namespace WPF.Views.UserV
         public SettingsPageView(Viewmodels.UserVM.MainViewModel main)
         {
             InitializeComponent();
-            DataContext = new Viewmodels.UserVM.SettingsPageViewModel(main); 
+            DataContext = new Viewmodels.UserVM.SettingsPageViewModel(main, new Services.Implementations.WpfDialogService()); 
         }
     }
 }
