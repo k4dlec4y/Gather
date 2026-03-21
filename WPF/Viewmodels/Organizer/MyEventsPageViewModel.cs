@@ -3,11 +3,14 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows;
 using WPF.Models;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Organizer;
 
-public partial class MyEventsPageViewModel : ObservableObject
+internal partial class MyEventsPageViewModel : ObservableObject
 {
+	private IDialogService _dialogService { get; init; }
+
 	public ObservableCollection<Event> MyEvents { get; set; }
 
 	[ObservableProperty]
@@ -19,10 +22,11 @@ public partial class MyEventsPageViewModel : ObservableObject
 	[ObservableProperty]
 	private MainViewModel _mainVM;
 
-	public MyEventsPageViewModel(MainViewModel mainVM)
+	public MyEventsPageViewModel(MainViewModel mainVM, IDialogService dialogService)
 	{
-		MainVM = mainVM;
-		MyEvents = Managers.EventManager.GetEventsOrganizerOrganize(MainVM.EventOrganizer);
+		_mainVM = mainVM;
+		_dialogService = dialogService;
+		MyEvents = Managers.EventManager.GetEventsOrganizerOrganize(_mainVM.EventOrganizer);
 	}
 
 	[RelayCommand]
@@ -80,7 +84,7 @@ public partial class MyEventsPageViewModel : ObservableObject
 		}
 		else
 		{
-			MessageBox.Show("Failed to delete event. Please try again.");
+			_dialogService.ShowError("Failed to delete event. Please try again.");
 		}
 	}
 }

@@ -3,26 +3,25 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows;
 using WPF.Models;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Admin;
 
-public partial class EventsPageViewModel : ObservableObject
+internal partial class EventsPageViewModel : ObservableObject
 {
+	private IDialogService _dialogService { get; init; }
+	[ObservableProperty]
+	private Event? _selectedEvent;
+	[ObservableProperty]
+	private string _searchQuery = "";
+
 	public ObservableCollection<Event> Events { get; private set; } =
 		Managers.EventManager.GetEvents();
 
-	private MainViewModel _mainVM;
-
-	public EventsPageViewModel(MainViewModel main)
+	public EventsPageViewModel(IDialogService dialogService)
 	{
-		_mainVM = main;
+		_dialogService = dialogService;
 	}
-
-	[ObservableProperty]
-	private Event? _selectedEvent;
-
-	[ObservableProperty]
-	private string _searchQuery = "";
 
 	[RelayCommand]
 	public void SelectEvent()
@@ -30,7 +29,7 @@ public partial class EventsPageViewModel : ObservableObject
 		if (SelectedEvent != null)
 		{
 			var detailWindow = new Views.EventDetailsView(SelectedEvent, []);
-			detailWindow.Owner = _mainVM.MainWindow;
+			detailWindow.Owner = Application.Current.MainWindow;
 			detailWindow.Show();
 		}
 		SelectedEvent = null;
@@ -63,7 +62,7 @@ public partial class EventsPageViewModel : ObservableObject
 		}
 		else
 		{
-			MessageBox.Show("Failed to delete event. Please try again.");
+			_dialogService.ShowError("Failed to delete event. Please try again.");
 		}
 	}
 }

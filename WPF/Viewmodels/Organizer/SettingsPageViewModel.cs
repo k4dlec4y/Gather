@@ -1,17 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Organizer;
 
-public partial class SettingsPageViewModel : ObservableObject
+internal partial class SettingsPageViewModel : ObservableObject
 {
+	private IDialogService _dialogService { get; init; }
+
 	[ObservableProperty]
 	private MainViewModel _mainVM;
 
-	public SettingsPageViewModel(MainViewModel mainVM)
+	public SettingsPageViewModel(MainViewModel mainVM, IDialogService dialogService)
 	{
 		MainVM = mainVM;
+		_dialogService = dialogService;
 	}
 
 	[RelayCommand]
@@ -33,7 +37,7 @@ public partial class SettingsPageViewModel : ObservableObject
 		bool success = await Managers.EventOrganizerManager.DeleteEventOrganizer(MainVM.EventOrganizer);
 		if (!success)
 		{
-			MessageBox.Show("Please, try again");
+			_dialogService.ShowError("Please, try again");
 			return;
 		}
 		SignOut();

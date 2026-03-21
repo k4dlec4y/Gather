@@ -9,6 +9,6 @@ public partial class CreateEventWindowView : Window
     public CreateEventWindowView(EventOrganizer eventOrganizer, ObservableCollection<Event> myEvents)
     {
         InitializeComponent();
-        DataContext = new Viewmodels.Organizer.CreateEventWindowViewModel(eventOrganizer, myEvents);
+        DataContext = new Viewmodels.Organizer.CreateEventWindowViewModel(eventOrganizer, myEvents, new Services.Implementations.WpfDialogService());
 	}
 }

@@ -23,7 +23,7 @@ namespace WPF.Views
         public LoginView()
         {
 			InitializeComponent();
-			DataContext = new LoginViewModel();
+			DataContext = new LoginViewModel(new Services.Implementations.WpfDialogService());
 		}
 
 		private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)

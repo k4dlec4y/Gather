@@ -5,37 +5,39 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using WPF.Models;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Organizer;
 
-public partial class CreateEventWindowViewModel : ObservableObject
+internal partial class CreateEventWindowViewModel : ObservableObject
 {
+	private IDialogService _dialogService { get; init; }
+
 	private EventOrganizer _eventOrganizer;
 	private ObservableCollection<Event> _myEvents;
-	private byte[] _imageData;
 
 	[ObservableProperty]
 	private string _name = "";
-
 	[ObservableProperty]
 	private string _description = "";
-
 	[ObservableProperty]
 	private string _imageName = "";
-
+	private byte[] _imageData = Array.Empty<byte>();
 	[ObservableProperty]
 	private DateTime _date;
-
 	[ObservableProperty]
 	private string _location = "";
-
 	[ObservableProperty]
 	private string _categoriesInput = "";
 
-	public CreateEventWindowViewModel(EventOrganizer eventOrganizer, ObservableCollection<Event> myEvents)
-	{
+	public CreateEventWindowViewModel(
+		EventOrganizer eventOrganizer,
+		ObservableCollection<Event> myEvents,
+		IDialogService dialogService
+	) {
 		_eventOrganizer = eventOrganizer;
 		_myEvents = myEvents;
+		_dialogService = dialogService;
 		Date = DateTime.Now;
 	}
 
@@ -44,38 +46,40 @@ public partial class CreateEventWindowViewModel : ObservableObject
 	{
 		if (string.IsNullOrEmpty(Name))
 		{
-			MessageBox.Show("Please, enter the name of the event");
+			_dialogService.ShowMessage("Please, enter the name of the event");
 			return;
 		}
 		if (string.IsNullOrEmpty(Description))
 		{
-			MessageBox.Show("Please, enter the description of the event");
+			_dialogService.ShowMessage("Please, enter the description of the event");
 			return;
 		}
 		if (Date < DateTime.Today)
 		{
-			MessageBox.Show("Please, enter date in the future");
+			_dialogService.ShowMessage("Please, enter date in the future");
 			return;
 		}
 		if (string.IsNullOrEmpty(Location))
 		{
-			MessageBox.Show("Please, enter location");
+			_dialogService.ShowMessage("Please, enter location");
 			return;
 		}
 		if (CategoriesInput == null)
 		{
-			MessageBox.Show("Please, enter categories");
+			_dialogService.ShowMessage("Please, enter categories");
 			return;
 		}
 		if (string.IsNullOrEmpty(ImageName))
 		{
-			MessageBox.Show("Please, select an image");
+			_dialogService.ShowMessage("Please, select an image");
 			return;
 		}
 
 		var categories = new ObservableCollection<string>
 		(
-			CategoriesInput.Trim().Split(',')
+			CategoriesInput
+				.Trim()
+				.Split(',')
 				.Select(c => c.Trim())
 				.Where(c => !string.IsNullOrEmpty(c))
 				.ToList()
@@ -95,10 +99,10 @@ public partial class CreateEventWindowViewModel : ObservableObject
 		{
 			newEvent.Organizer = _eventOrganizer;
 			_myEvents.Add(newEvent);
-			MessageBox.Show("Event successfully created");
+			_dialogService.ShowMessage("Event successfully created");
 			return;
 		}
-		MessageBox.Show("There was an error while creating the event. Please try again");
+		_dialogService.ShowError("There was an error while creating the event. Please try again");
 	}
 
 	[RelayCommand]
@@ -118,7 +122,7 @@ public partial class CreateEventWindowViewModel : ObservableObject
 			}
 			catch
 			{
-				MessageBox.Show("Error while loading the image. Please try again");
+				_dialogService.ShowError("Error while loading the image. Please try again");
 				return;
 			}
 		}

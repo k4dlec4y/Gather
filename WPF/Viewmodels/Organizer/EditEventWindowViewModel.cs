@@ -5,11 +5,14 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using WPF.Models;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Organizer;
 
-public partial class EditEventWindowViewModel : ObservableObject
+internal partial class EditEventWindowViewModel : ObservableObject
 {
+	private IDialogService _dialogService { get; init; }
+
 	private Event _event;
 	private byte[] _imageData;
 	private MainViewModel _mainVM;
@@ -32,8 +35,12 @@ public partial class EditEventWindowViewModel : ObservableObject
 	[ObservableProperty]
 	private string _categoriesInput = "";
 
-	public EditEventWindowViewModel(Event @event, MainViewModel mainVM)
-	{
+	public EditEventWindowViewModel(
+		Event @event,
+		MainViewModel mainVM,
+		IDialogService dialogService
+	) {
+		_dialogService = dialogService;
 		_event = @event;
 		Name = @event.Name;
 		Description = @event.Description;
@@ -50,32 +57,32 @@ public partial class EditEventWindowViewModel : ObservableObject
 	{
 		if (string.IsNullOrEmpty(Name))
 		{
-			MessageBox.Show("Please, enter the name of the event");
+			_dialogService.ShowMessage("Please, enter the name of the event");
 			return;
 		}
 		if (string.IsNullOrEmpty(Description))
 		{
-			MessageBox.Show("Please, enter the description of the event");
+			_dialogService.ShowMessage("Please, enter the description of the event");
 			return;
 		}
 		if (Date < DateTime.Today)
 		{
-			MessageBox.Show("Please, enter date in the future");
+			_dialogService.ShowMessage("Please, enter date in the future");
 			return;
 		}
 		if (string.IsNullOrEmpty(Location))
 		{
-			MessageBox.Show("Please, enter location");
+			_dialogService.ShowMessage("Please, enter location");
 			return;
 		}
 		if (CategoriesInput == null)
 		{
-			MessageBox.Show("Please, enter categories");
+			_dialogService.ShowMessage("Please, enter categories");
 			return;
 		}
 		if (ImageName == null)  // if ImageName is empty, image won't change
 		{
-			MessageBox.Show("Please, select an image");
+			_dialogService.ShowMessage("Please, select an image");
 			return;
 		}
 
@@ -97,10 +104,10 @@ public partial class EditEventWindowViewModel : ObservableObject
 		if (await Managers.EventManager.UpdateEvent(_event))
 		{
 			_mainVM.CurrentPage = new Views.Organizer.MyEventsPageView(_mainVM);
-			MessageBox.Show("Event successfully updated");
+			_dialogService.ShowMessage("Event successfully updated");
 			return;
 		}
-		MessageBox.Show("There was an error while updating the event. Please try again");
+		_dialogService.ShowError("There was an error while updating the event. Please try again");
 	}
 
 	[RelayCommand]
@@ -120,7 +127,7 @@ public partial class EditEventWindowViewModel : ObservableObject
 			}
 			catch
 			{
-				MessageBox.Show("Error while loading the image. Please try again");
+				_dialogService.ShowError("Error while loading the image. Please try again");
 				return;
 			}
 		}

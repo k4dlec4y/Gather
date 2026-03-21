@@ -4,14 +4,16 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
-using System.Windows;
 using WPF.Managers;
 using WPF.Models;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels;
 
-public partial class LoginViewModel : ObservableObject
+internal partial class LoginViewModel : ObservableObject
 {
+	private IDialogService _dialogService { get; init; }
+
 	[ObservableProperty]
 	private string _username = "";
 
@@ -23,11 +25,16 @@ public partial class LoginViewModel : ObservableObject
 
 	public List<string> Roles { get; } = new() { "Basic User", "Organizer" };
 
+	public LoginViewModel(IDialogService dialogService)
+	{
+		_dialogService = dialogService;
+	}
+
 	private byte[] _receivePasswordHash()
 	{
 		if (SecurePassword == null)
 		{
-			MessageBox.Show("Please enter another password");
+			_dialogService.ShowError("Please enter another password");
 			return Array.Empty<byte>();
 		}
 
@@ -35,7 +42,7 @@ public partial class LoginViewModel : ObservableObject
 
 		if (plainPassword == null)
 		{
-			MessageBox.Show("Please enter another password");
+			_dialogService.ShowError("Please enter another password");
 			return Array.Empty<byte>();
 		}
 
@@ -54,7 +61,7 @@ public partial class LoginViewModel : ObservableObject
 	{
 		if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(SelectedRole))
 		{
-			MessageBox.Show("Please enter all fields");
+			_dialogService.ShowError("Please enter all fields");
 			return;
 		}
 
@@ -76,7 +83,7 @@ public partial class LoginViewModel : ObservableObject
 
 			if (user == null || !user.PasswordHash.SequenceEqual(hash))
 			{
-				MessageBox.Show("Invalid username or password");
+				_dialogService.ShowError("Invalid username or password");
 				return;
 			}
 
@@ -92,7 +99,7 @@ public partial class LoginViewModel : ObservableObject
 
 		if (eventOrganizer == null || !eventOrganizer.PasswordHash.SequenceEqual(hash))
 		{
-			MessageBox.Show("Invalid username or password");
+			_dialogService.ShowError("Invalid username or password");
 			return;
 		}
 
@@ -106,19 +113,19 @@ public partial class LoginViewModel : ObservableObject
 	{
 		if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(SelectedRole))
 		{
-			MessageBox.Show("Please enter all fields");
+			_dialogService.ShowError("Please enter all fields");
 			return;
 		}
 
 		if (Username.Length > 30)
 		{
-			MessageBox.Show($"Maximum length has been exceeded by {Username.Length - 30} characters!");
+			_dialogService.ShowError($"Maximum length has been exceeded by {Username.Length - 30} characters!");
 			return;
 		}
 
 		if (!SelectedRole.Equals("Basic User"))
 		{
-			MessageBox.Show("You can register only as basic user");
+			_dialogService.ShowError("You can register only as basic user");
 			return;
 		}
 
@@ -126,7 +133,7 @@ public partial class LoginViewModel : ObservableObject
 
 		if (await UserManager.ContainsUser(Username))
 		{
-			MessageBox.Show("Username already exists");
+			_dialogService.ShowError("Username already exists");
 			return;
 		}
 
