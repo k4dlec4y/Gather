@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WPF.Models;
+using WPF.Config;
 
 namespace WPF.Data;
 
 public class AppDbContext : DbContext
 {
-	private string connectionString =
-		@"server=(localdb)\MSSQLLocalDB; Initial Catalog = AppDb; Integrated Security = True;";
+	private string connectionString = Configuration.databaseConnectionString;
 
 	public DbSet<User> Users { get; set; }
 	public DbSet<FriendRequest> FriendRequests { get; set; }
