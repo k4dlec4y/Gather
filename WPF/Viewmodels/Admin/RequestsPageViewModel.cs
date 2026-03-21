@@ -11,22 +11,22 @@ public partial class RequestsPageViewModel : ObservableObject
 		Managers.BecomeOrganizerRequestManager.GetRequests();
 
 	[RelayCommand]
-	private async Task AcceptRequest(BecomeOrganizerRequest bro)
+	private async Task AcceptRequest(BecomeOrganizerRequest bor)
 	{
-		if (bro != null)
+		if (bor != null)
 		{
-			await Managers.BecomeOrganizerRequestManager.AcceptRequest(bro);
-			BecomeOrganizerRequests.Remove(bro);
+			await Managers.BecomeOrganizerRequestManager.AcceptRequest(bor);
+			BecomeOrganizerRequests.Remove(bor);
 		}
 	}
 
 	[RelayCommand]
-	private async Task RejectRequest(BecomeOrganizerRequest bro)
+	private async Task RejectRequest(BecomeOrganizerRequest bor)
 	{
-		if (bro != null)
+		if (bor != null)
 		{
-			await Managers.BecomeOrganizerRequestManager.RemoveRequest(bro);
-			BecomeOrganizerRequests.Remove(bro);
+			await Managers.BecomeOrganizerRequestManager.RemoveRequest(bor);
+			BecomeOrganizerRequests.Remove(bor);
 		}
 	}
 
