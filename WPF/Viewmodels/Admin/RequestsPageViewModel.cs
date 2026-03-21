@@ -17,6 +17,7 @@ public partial class RequestsPageViewModel : ObservableObject
 		{
 			await Managers.BecomeOrganizerRequestManager.AcceptRequest(bor);
 			BecomeOrganizerRequests.Remove(bor);
+			OnPropertyChanged(nameof(BecomeOrganizerRequests));
 		}
 	}
 
@@ -27,6 +28,7 @@ public partial class RequestsPageViewModel : ObservableObject
 		{
 			await Managers.BecomeOrganizerRequestManager.RemoveRequest(bor);
 			BecomeOrganizerRequests.Remove(bor);
+			OnPropertyChanged(nameof(BecomeOrganizerRequests));
 		}
 	}
 
