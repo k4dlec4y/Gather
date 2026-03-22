@@ -3,11 +3,14 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using WPF.Managers;
 using WPF.Models;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.UserVM;
 
-public partial class EventsPageViewModel : ObservableObject
+internal partial class EventsPageViewModel : ObservableObject
 {
+	private IWindowService _windowService { get; init; }
+
 	public ObservableCollection<Event> Events { get; set; }
 
 	[ObservableProperty]
@@ -22,9 +25,10 @@ public partial class EventsPageViewModel : ObservableObject
 	[ObservableProperty]
 	private MainViewModel _mainVM;
 
-	public EventsPageViewModel(MainViewModel main)
+	public EventsPageViewModel(MainViewModel main, IWindowService windowService)
 	{
 		MainVM = main;
+		_windowService = windowService;
 		FilterEvents();
 	}
 
@@ -32,11 +36,7 @@ public partial class EventsPageViewModel : ObservableObject
 	public void SelectEvent()
 	{
 		if (SelectedEvent != null)
-		{
-			var detailWindow = new Views.EventDetailsView(SelectedEvent, MainVM.CurrentUser.Friends);
-			detailWindow.Owner = MainVM.MainWindow;
-			detailWindow.Show();
-		}
+			_windowService.ShowEventDetails(SelectedEvent, MainVM.CurrentUser.Friends);
 		SelectedEvent = null;
 	}
 
@@ -71,8 +71,6 @@ public partial class EventsPageViewModel : ObservableObject
 	[RelayCommand]
 	public void SendInvite(Event @event)
 	{
-		var window = new Views.UserV.SendInviteView(MainVM, @event);
-		window.Owner = MainVM.MainWindow;
-		window.Show();
+		_windowService.SendEventInvitation(MainVM.CurrentUser, @event);
 	}
 }

@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows;
 using WPF.Models;
 using WPF.Services.Abstractions;
 
@@ -12,6 +11,8 @@ namespace WPF.Viewmodels.Organizer;
 internal partial class CreateEventWindowViewModel : ObservableObject
 {
 	private IDialogService _dialogService { get; init; }
+	private IWindowService _windowService { get; init; }
+	private IFileService _fileService { get; init; }
 
 	private EventOrganizer _eventOrganizer;
 	private ObservableCollection<Event> _myEvents;
@@ -33,11 +34,15 @@ internal partial class CreateEventWindowViewModel : ObservableObject
 	public CreateEventWindowViewModel(
 		EventOrganizer eventOrganizer,
 		ObservableCollection<Event> myEvents,
-		IDialogService dialogService
+		IDialogService dialogService,
+		IWindowService windowService,
+		IFileService fileService
 	) {
 		_eventOrganizer = eventOrganizer;
 		_myEvents = myEvents;
 		_dialogService = dialogService;
+		_windowService = windowService;
+		_fileService = fileService;
 		Date = DateTime.Now;
 	}
 
@@ -108,23 +113,15 @@ internal partial class CreateEventWindowViewModel : ObservableObject
 	[RelayCommand]
 	public void BrowseImage()
 	{
-		var openFileDialog = new OpenFileDialog
+		string filePath = "";
+		if (!_windowService.OpenFileDialog("Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png", out filePath))
 		{
-			Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png"
-		};
-
-		if (openFileDialog.ShowDialog() == true)
+			_dialogService.ShowError("Error while loading the image. Please try again");
+			return;
+		}
+		if (!_fileService.ReadFile(filePath, ref _imageData))
 		{
-			try
-			{
-				ImageName = openFileDialog.FileName;
-				_imageData = File.ReadAllBytes(ImageName);
-			}
-			catch
-			{
-				_dialogService.ShowError("Error while loading the image. Please try again");
-				return;
-			}
+			_dialogService.ShowError("Error while loading the image. Please try again");
 		}
 	}
 }

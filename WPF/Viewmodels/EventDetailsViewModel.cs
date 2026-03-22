@@ -17,7 +17,9 @@ public partial class EventDetailsViewModel : ObservableObject
 	public EventDetailsViewModel(Event @event, ObservableCollection<User> friends)
     {
 		Event = @event;
-		FriendsAttending = new ObservableCollection<User>(friends.Where(friend => friend.EventsToAttend.Any(e => e.Id == @event.Id)));
+		FriendsAttending = new ObservableCollection<User>(
+			friends.Where(friend => friend.EventsToAttend.Any(e => e.Id == @event.Id))
+		);
 		OnPropertyChanged(nameof(FriendsAttending));
 		LoadWeatherInfo();
 	}

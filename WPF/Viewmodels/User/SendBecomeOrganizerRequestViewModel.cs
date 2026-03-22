@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows;
+using WPF.Models;
+using WPF.Managers;
 using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.UserVM;
@@ -12,12 +14,14 @@ internal partial class SendBecomeOrganizerRequestViewModel : ObservableObject
 	[ObservableProperty]
 	private string _requestText = "";
 
-	private Models.User _currentUser;
+	private User _currentUser;
 	private Window _sendRequestWindow;
 
-	public SendBecomeOrganizerRequestViewModel
-		(Window sendRequestWindow, Models.User user, IDialogService dialogService)
-	{
+	public SendBecomeOrganizerRequestViewModel(
+		Window sendRequestWindow,
+		User user,
+		IDialogService dialogService
+	) {
 		_currentUser = user;
 		_sendRequestWindow = sendRequestWindow;
 		_dialogService = dialogService;
@@ -38,20 +42,20 @@ internal partial class SendBecomeOrganizerRequestViewModel : ObservableObject
 			return;
 		}
 
-		if (await Managers.BecomeOrganizerRequestManager.ContainsRequest(_currentUser.Username))
+		if (await BecomeOrganizerRequestManager.ContainsRequest(_currentUser.Username))
 		{
 			_dialogService.ShowError("You already have a pending request!");
 			return;
 		}
 
-		if (await Managers.EventOrganizerManager.GetEventOrganizerByUsername(_currentUser.Username) != null)
+		if (await EventOrganizerManager.GetEventOrganizerByUsername(_currentUser.Username) != null)
 		{
 			_dialogService.ShowError("You are already an organizer!");
 			return;
 		}
 
-		bool success = await Managers.BecomeOrganizerRequestManager.AddRequest(
-			new Models.BecomeOrganizerRequest
+		bool success = await BecomeOrganizerRequestManager.AddRequest(
+			new BecomeOrganizerRequest
 			{
 				UserId = _currentUser.Id,
 				RequestText = RequestText
@@ -61,7 +65,7 @@ internal partial class SendBecomeOrganizerRequestViewModel : ObservableObject
 		if (success)
 		{
 			_dialogService.ShowMessage("Request sent successfully!");
-			_sendRequestWindow.Close();
+			_sendRequestWindow.Close(); // !!!
 		}
 		else
 		{

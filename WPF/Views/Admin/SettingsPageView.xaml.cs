@@ -7,6 +7,6 @@ public partial class SettingsPageView : Page
 	public SettingsPageView(Viewmodels.Admin.MainViewModel mainVM)
 	{
 		InitializeComponent();
-		DataContext = new Viewmodels.Admin.SettingsPageViewModel(mainVM);
+		DataContext = new Viewmodels.Admin.SettingsPageViewModel(new Services.Implementations.WpfWindowService());
 	}
 }

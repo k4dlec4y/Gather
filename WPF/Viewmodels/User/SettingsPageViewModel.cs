@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Windows;
+using WPF.Managers;
 using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.UserVM;
@@ -8,52 +8,42 @@ namespace WPF.Viewmodels.UserVM;
 internal partial class SettingsPageViewModel : ObservableObject
 {
     private IDialogService _dialogService { get; init; }
+	private IWindowService _windowService { get; init; }
 
-    [ObservableProperty]
+	[ObservableProperty]
     private MainViewModel _mainVM;
 
-    public SettingsPageViewModel(MainViewModel main, IDialogService dialogService)
-    {
+    public SettingsPageViewModel(
+		MainViewModel main,
+		IDialogService dialogService,
+		IWindowService windowService
+	) {
         MainVM = main;
-        _dialogService = dialogService;	
-    }
+        _dialogService = dialogService;
+		_windowService = windowService;
+	}
 
     [RelayCommand]
     public void SignOut()
     {
-		foreach (Window window in Application.Current.Windows)
-		{
-			if (window.DataContext == MainVM)
-			{
-				window.Close();
-				break;
-			}
-		}
+		_windowService.CloseAllWindows();
 	}
 
 	[RelayCommand]
 	public void BecomeOrganizer()
 	{
-		Window request = new Views.UserV.SendBecomeOrganizerRequestView(MainVM.CurrentUser);
-		request.Show();
+		_windowService.SendBecomeOrganizerRequest(MainVM.CurrentUser);
 	}
 
 	[RelayCommand]
 	public async Task DeleteAccount()
 	{
-		bool success = await Managers.UserManager.RemoveUser(MainVM.CurrentUser);
+		bool success = await UserManager.RemoveUser(MainVM.CurrentUser);
 		if (!success)
 		{
 			_dialogService.ShowError("Please, try again");
 			return;
 		}
-		foreach (Window window in Application.Current.Windows)
-		{
-			if (window.DataContext == MainVM)
-			{
-				window.Close();
-				break;
-			}
-		}
+		SignOut();
 	}
 }

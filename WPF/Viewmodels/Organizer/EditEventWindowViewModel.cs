@@ -12,6 +12,8 @@ namespace WPF.Viewmodels.Organizer;
 internal partial class EditEventWindowViewModel : ObservableObject
 {
 	private IDialogService _dialogService { get; init; }
+	private IWindowService _windowService { get; init; }
+	private IFileService _fileService { get; init; }
 
 	private Event _event;
 	private byte[] _imageData;
@@ -38,9 +40,13 @@ internal partial class EditEventWindowViewModel : ObservableObject
 	public EditEventWindowViewModel(
 		Event @event,
 		MainViewModel mainVM,
-		IDialogService dialogService
+		IDialogService dialogService,
+		IWindowService windowService,
+		IFileService fileService
 	) {
 		_dialogService = dialogService;
+		_windowService = windowService;
+		_fileService = fileService;
 		_event = @event;
 		Name = @event.Name;
 		Description = @event.Description;
@@ -88,7 +94,9 @@ internal partial class EditEventWindowViewModel : ObservableObject
 
 		var categories = new ObservableCollection<string>
 		(
-			CategoriesInput.Trim().Split(',')
+			CategoriesInput
+				.Trim()
+				.Split(',')
 				.Select(c => c.Trim())
 				.Where(c => !string.IsNullOrEmpty(c))
 				.ToList()
@@ -113,23 +121,15 @@ internal partial class EditEventWindowViewModel : ObservableObject
 	[RelayCommand]
 	public void BrowseImage()
 	{
-		var openFileDialog = new OpenFileDialog
+		string filePath = "";
+		if (!_windowService.OpenFileDialog("Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png", out filePath))
 		{
-			Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png"
-		};
-
-		if (openFileDialog.ShowDialog() == true)
+			_dialogService.ShowError("Error while loading the image. Please try again");
+			return;
+		}
+		if (!_fileService.ReadFile(filePath, ref _imageData))
 		{
-			try
-			{
-				ImageName = openFileDialog.FileName;
-				_imageData = File.ReadAllBytes(ImageName);
-			}
-			catch
-			{
-				_dialogService.ShowError("Error while loading the image. Please try again");
-				return;
-			}
+			_dialogService.ShowError("Error while loading the image. Please try again");
 		}
 	}
 }

@@ -14,7 +14,10 @@ namespace WPF.Views.UserV
 		public EventsPageView(MainViewModel main)
 		{
 			InitializeComponent();
-			DataContext = new EventsPageViewModel(main);
+			DataContext = new EventsPageViewModel(
+				main,
+				new Services.Implementations.WpfWindowService()
+			);
 		}
 	}
 }

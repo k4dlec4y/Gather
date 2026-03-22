@@ -12,7 +12,7 @@ internal partial class SendInviteViewModel : ObservableObject
 {
 	private IDialogService _dialogService { get; init; }
 
-	MainViewModel _mainVM;
+	User _user;
 	Event _event;
 
 	[ObservableProperty]
@@ -21,10 +21,10 @@ internal partial class SendInviteViewModel : ObservableObject
 	[ObservableProperty]
 	User? _selectedFriend = null;
 
-	public SendInviteViewModel(MainViewModel mainVM, Event @event, IDialogService dialogService)
+	public SendInviteViewModel(User user, Event @event, IDialogService dialogService)
 	{
-		_mainVM = mainVM;
-		Friends = mainVM.CurrentUser.Friends;
+		_user = user;
+		Friends = _user.Friends;
 		_event = @event;
 		_dialogService = dialogService;
 	}
@@ -38,15 +38,18 @@ internal partial class SendInviteViewModel : ObservableObject
 			return;
 		}
 
-		string response = await Managers.InviteManager.SendInvite(
-			_mainVM.CurrentUser,
+		string success = await Managers.InviteManager.SendInvite(
+			_user,
 			SelectedFriend,
 			_event,
-			$"{_mainVM.CurrentUser.Username} has invited you to the event {_event.Name}!"
+			$"{_user.Username} has invited you to the event {_event.Name}!"
 		);
 
-		//SelectedFriend = null;
+		// SelectedFriend = null;
 
-		_dialogService.ShowMessage(response.Equals("") ? "Invite sent successfully!" : response);
+		if (success.Equals(""))
+			_dialogService.ShowMessage("Invite sent successfully!");
+		else
+			_dialogService.ShowError(success);
 	}
 }

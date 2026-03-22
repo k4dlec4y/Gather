@@ -13,47 +13,43 @@ namespace WPF.Viewmodels;
 internal partial class LoginViewModel : ObservableObject
 {
 	private IDialogService _dialogService { get; init; }
+	private IWindowService _windowService { get; init; }
 
 	[ObservableProperty]
 	private string _username = "";
 
 	[ObservableProperty]
 	private SecureString _securePassword = new SecureString();
+	private byte[] _passwordHash = Array.Empty<byte>();
 
 	[ObservableProperty]
 	private string _selectedRole = "Basic User";
 
 	public List<string> Roles { get; } = new() { "Basic User", "Organizer" };
 
-	public LoginViewModel(IDialogService dialogService)
-	{
+	public LoginViewModel(
+		IDialogService dialogService,
+		IWindowService windowService
+	) {
 		_dialogService = dialogService;
+		_windowService = windowService;
 	}
 
-	private byte[] _receivePasswordHash()
+	private bool _computePasswordHash()
 	{
 		if (SecurePassword == null)
-		{
-			_dialogService.ShowError("Please enter another password");
-			return Array.Empty<byte>();
-		}
+			return false;
 
 		string? plainPassword = Marshal.PtrToStringUni(Marshal.SecureStringToGlobalAllocUnicode(SecurePassword));
-
 		if (plainPassword == null)
-		{
-			_dialogService.ShowError("Please enter another password");
-			return Array.Empty<byte>();
-		}
+			return false;
 
 		using (SHA256 sha256 = SHA256.Create())
 		{
-			byte[] inputBytes = Encoding.UTF8.GetBytes(plainPassword);
+			_passwordHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(plainPassword));
 			plainPassword = null;
-			byte[] passwordHash = sha256.ComputeHash(inputBytes);
-			inputBytes = Array.Empty<byte>();
-			return passwordHash;
 		}
+		return true;
 	}
 
 	[RelayCommand]
@@ -65,46 +61,39 @@ internal partial class LoginViewModel : ObservableObject
 			return;
 		}
 
-		var hash = _receivePasswordHash();
+		if (!_computePasswordHash())
+		{
+			_dialogService.ShowError("Please enter another password");
+			return;
+		}
 
 		if (SelectedRole.Equals("Basic User"))
 		{
-			if (Username.Equals("admin") && hash.SequenceEqual
-				(
-					Convert.FromHexString("CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB")
-				))
-			{
-				var adminWindow = new Views.Admin.MainView();
-				adminWindow.Show();
+			if (Username.Equals("admin") &&
+				_passwordHash.SequenceEqual(Convert.FromHexString("CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB"))
+			) {
+				_windowService.OpenMainAdminWindow();
 				return;
 			}
 
 			User? user = await UserManager.GetUser(Username);
-
-			if (user == null || !user.PasswordHash.SequenceEqual(hash))
+			if (user == null || !user.PasswordHash.SequenceEqual(_passwordHash))
 			{
 				_dialogService.ShowError("Invalid username or password");
 				return;
 			}
-
-			var windowU = new Views.UserV.MainView(user);
-			windowU.Show();
+			_windowService.OpenMainUserWindow(user);
 			return;
 		}
 
-		// SelectedRole.Equals("Organizer")
-
-		EventOrganizer? eventOrganizer = await EventOrganizerManager
-			.GetEventOrganizerByUsername(Username);
-
-		if (eventOrganizer == null || !eventOrganizer.PasswordHash.SequenceEqual(hash))
+		EventOrganizer? eventOrganizer = await EventOrganizerManager.GetEventOrganizerByUsername(Username);
+		if (eventOrganizer == null || !eventOrganizer.PasswordHash.SequenceEqual(_passwordHash))
 		{
 			_dialogService.ShowError("Invalid username or password");
 			return;
 		}
 
-		var windowO = new Views.Organizer.MainView(eventOrganizer);
-		windowO.Show();
+		_windowService.OpenMainOrganizerWindow(eventOrganizer);
 		return;
 	}
 
@@ -119,7 +108,7 @@ internal partial class LoginViewModel : ObservableObject
 
 		if (Username.Length > 30)
 		{
-			_dialogService.ShowError($"Maximum length has been exceeded by {Username.Length - 30} characters!");
+			_dialogService.ShowError($"Maximum username size has been exceeded by {Username.Length - 30} characters!");
 			return;
 		}
 
@@ -129,7 +118,11 @@ internal partial class LoginViewModel : ObservableObject
 			return;
 		}
 
-		var hash = _receivePasswordHash();
+		if (!_computePasswordHash())
+		{
+			_dialogService.ShowError("Please enter another password");
+			return;
+		}
 
 		if (await UserManager.ContainsUser(Username))
 		{
@@ -137,11 +130,9 @@ internal partial class LoginViewModel : ObservableObject
 			return;
 		}
 
-		User user = new User(Username, hash);
-
+		User user = new User(Username, _passwordHash);
 		await UserManager.AddUser(user);
 
-		var window = new Views.UserV.MainView(user);
-		window.Show();
+		_windowService.OpenMainUserWindow(user);
 	}
 }

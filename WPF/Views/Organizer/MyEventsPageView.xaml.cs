@@ -7,6 +7,10 @@ public partial class MyEventsPageView : Page
     public MyEventsPageView(Viewmodels.Organizer.MainViewModel mainVM)
     {
         InitializeComponent();
-        DataContext = new Viewmodels.Organizer.MyEventsPageViewModel(mainVM, new Services.Implementations.WpfDialogService());
+        DataContext = new Viewmodels.Organizer.MyEventsPageViewModel(
+            mainVM,
+            new Services.Implementations.WpfDialogService(),
+			new Services.Implementations.WpfWindowService()
+		);
 	}
 }

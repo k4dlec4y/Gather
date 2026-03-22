@@ -12,10 +12,10 @@ internal partial class FriendsPageViewModel : ObservableObject
 	private IDialogService _dialogService { get; init; }
 
 	[ObservableProperty]
-	private string _newFriendUsername;
+	private string _newFriendUsername = "";
 
 	[ObservableProperty]
-	private string _selectedUser;
+	private string _selectedUser = "";
 
 	[ObservableProperty]
 	private MainViewModel _mainVM;

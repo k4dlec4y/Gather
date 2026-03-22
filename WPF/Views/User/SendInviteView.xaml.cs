@@ -6,9 +6,9 @@ namespace WPF.Views.UserV;
 
 public partial class SendInviteView : Window
 {
-    public SendInviteView(MainViewModel mainVM, Event @event)
+    public SendInviteView(User user, Event @event)
     {
         InitializeComponent();
-        DataContext = new SendInviteViewModel(mainVM, @event, new Services.Implementations.WpfDialogService());
+        DataContext = new SendInviteViewModel(user, @event, new Services.Implementations.WpfDialogService());
 	}
 }

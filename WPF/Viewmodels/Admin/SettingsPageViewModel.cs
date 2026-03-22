@@ -1,29 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Windows;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Admin;
 
-public partial class SettingsPageViewModel : ObservableObject
+internal partial class SettingsPageViewModel : ObservableObject
 {
-	[ObservableProperty]
-	private MainViewModel _mainVM;
+	private IWindowService _windowService { get; init; }
 
-	public SettingsPageViewModel(MainViewModel mainVM)
+	public SettingsPageViewModel(IWindowService windowService)
 	{
-		MainVM = mainVM;
+		_windowService = windowService;
 	}
 
 	[RelayCommand]
 	public void SignOut()
 	{
-		foreach (Window window in Application.Current.Windows)
-		{
-			if (window.DataContext == MainVM)
-			{
-				window.Close();
-				break;
-			}
-		}
+		_windowService.CloseAllWindows();
 	}
 }

@@ -10,6 +10,8 @@ namespace WPF.Viewmodels.Admin;
 internal partial class EventsPageViewModel : ObservableObject
 {
 	private IDialogService _dialogService { get; init; }
+	private IWindowService _windowService { get; init; }
+
 	[ObservableProperty]
 	private Event? _selectedEvent;
 	[ObservableProperty]
@@ -18,20 +20,19 @@ internal partial class EventsPageViewModel : ObservableObject
 	public ObservableCollection<Event> Events { get; private set; } =
 		Managers.EventManager.GetEvents();
 
-	public EventsPageViewModel(IDialogService dialogService)
-	{
+	public EventsPageViewModel(
+		IDialogService dialogService,
+		IWindowService windowService
+	) {
 		_dialogService = dialogService;
+		_windowService = windowService;
 	}
 
 	[RelayCommand]
 	public void SelectEvent()
 	{
 		if (SelectedEvent != null)
-		{
-			var detailWindow = new Views.EventDetailsView(SelectedEvent, []);
-			detailWindow.Owner = Application.Current.MainWindow;
-			detailWindow.Show();
-		}
+			_windowService.ShowEventDetails(SelectedEvent, []);
 		SelectedEvent = null;
 	}
 
@@ -39,8 +40,11 @@ internal partial class EventsPageViewModel : ObservableObject
 	public void FilterEvents()
 	{
 		var filtered = Managers.EventManager.GetEvents()
-			.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
-				.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
+			.Where(e => (e.Name +
+						 e.Location +
+						 e.Description +
+						 string.Join(" ", e.Categories.ToList())
+						).Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
 			.ToList();
 
 		Events = new ObservableCollection<Event>(filtered);
@@ -50,15 +54,16 @@ internal partial class EventsPageViewModel : ObservableObject
 	[RelayCommand]
 	public async Task DeleteEvent(Event e)
 	{
-		if (e == null) return;
+		if (e == null)
+			return;
 
 		if (await Managers.EventManager.RemoveEvent(e))
 		{
 			Events.Remove(e);
+			OnPropertyChanged(nameof(Events));
+
 			if (SelectedEvent == e)
-			{
 				SelectedEvent = null;
-			}
 		}
 		else
 		{

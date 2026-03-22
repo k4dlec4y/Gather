@@ -9,6 +9,12 @@ public partial class EditEventWindowView : Window
     public EditEventWindowView(Event @event, MainViewModel mainVM)
     {
         InitializeComponent();
-        DataContext = new EditEventWindowViewModel(@event, mainVM, new Services.Implementations.WpfDialogService());
+        DataContext = new EditEventWindowViewModel(
+            @event,
+            mainVM,
+            new Services.Implementations.WpfDialogService(),
+			new Services.Implementations.WpfWindowService(),
+            new Services.Implementations.DefaultFileService()
+		);
     }
 }

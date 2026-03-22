@@ -10,6 +10,7 @@ namespace WPF.Viewmodels.Organizer;
 internal partial class MyEventsPageViewModel : ObservableObject
 {
 	private IDialogService _dialogService { get; init; }
+	private IWindowService _windowService { get; init; }
 
 	public ObservableCollection<Event> MyEvents { get; set; }
 
@@ -22,10 +23,15 @@ internal partial class MyEventsPageViewModel : ObservableObject
 	[ObservableProperty]
 	private MainViewModel _mainVM;
 
-	public MyEventsPageViewModel(MainViewModel mainVM, IDialogService dialogService)
-	{
+	public MyEventsPageViewModel(
+		MainViewModel mainVM,
+		IDialogService dialogService,
+		IWindowService windowService
+	) {
 		_mainVM = mainVM;
 		_dialogService = dialogService;
+		_windowService = windowService;
+
 		MyEvents = Managers.EventManager.GetEventsOrganizerOrganize(_mainVM.EventOrganizer);
 	}
 
@@ -33,11 +39,7 @@ internal partial class MyEventsPageViewModel : ObservableObject
 	public void SelectEvent()
 	{
 		if (SelectedEvent != null)
-		{
-			var detailWindow = new Views.EventDetailsView(SelectedEvent, []);
-			detailWindow.Owner = MainVM.MainWindow;
-			detailWindow.Show();
-		}
+			_windowService.ShowEventDetails(SelectedEvent, []);
 		SelectedEvent = null;
 	}
 
@@ -56,9 +58,7 @@ internal partial class MyEventsPageViewModel : ObservableObject
 	[RelayCommand]
 	public void CreateEvent()
 	{
-		var window = new Views.Organizer.CreateEventWindowView(MainVM.EventOrganizer, MyEvents);
-		window.Owner = MainVM.MainWindow;
-		window.Show();
+		_windowService.CreateEvent(MainVM.EventOrganizer, MyEvents, MainVM);
 	}
 
 	[RelayCommand]

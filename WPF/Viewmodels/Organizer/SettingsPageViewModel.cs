@@ -8,27 +8,25 @@ namespace WPF.Viewmodels.Organizer;
 internal partial class SettingsPageViewModel : ObservableObject
 {
 	private IDialogService _dialogService { get; init; }
+	private IWindowService _windowService { get; init; }
 
 	[ObservableProperty]
 	private MainViewModel _mainVM;
 
-	public SettingsPageViewModel(MainViewModel mainVM, IDialogService dialogService)
-	{
+	public SettingsPageViewModel(
+		MainViewModel mainVM,
+		IDialogService dialogService,
+		IWindowService windowService
+	) {
 		MainVM = mainVM;
 		_dialogService = dialogService;
+		_windowService = windowService;
 	}
 
 	[RelayCommand]
 	public void SignOut()
 	{
-		foreach (Window window in Application.Current.Windows)
-		{
-			if (window.DataContext == MainVM)
-			{
-				window.Close();
-				break;
-			}
-		}
+		_windowService.CloseAllWindows();
 	}
 
 	[RelayCommand]
