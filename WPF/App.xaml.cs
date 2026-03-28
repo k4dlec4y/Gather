@@ -21,18 +21,18 @@ public partial class App : Application
 		services.AddSingleton<IUserIdentityService, UserIdentityService>();
 		services.AddSingleton<IOrganizerIdentityService, OrganizerIdentityService>();
 
-		services.AddSingleton<Viewmodels.Admin.MainViewModel>();
+		services.AddTransient<Viewmodels.Admin.MainViewModel>();
 		services.AddTransient<Viewmodels.Admin.EventsPageViewModel>();
 		services.AddTransient<Viewmodels.Admin.RequestsPageViewModel>();
 		services.AddTransient<Viewmodels.Admin.SettingsPageViewModel>();
 
-		services.AddSingleton<Viewmodels.Organizer.MainViewModel>();
+		services.AddTransient<Viewmodels.Organizer.MainViewModel>();
 		services.AddTransient<Viewmodels.Organizer.MyEventsPageViewModel>();
 		services.AddTransient<Viewmodels.Organizer.CreateEventWindowViewModel>();
 		services.AddTransient<Viewmodels.Organizer.EditEventWindowViewModel>();
 		services.AddTransient<Viewmodels.Organizer.SettingsPageViewModel>();
 
-		services.AddSingleton<Viewmodels.User.MainViewModel>();
+		services.AddTransient<Viewmodels.User.MainViewModel>();
 		services.AddTransient<Viewmodels.User.EventsPageViewModel>();
 		services.AddTransient<Viewmodels.User.FriendsPageViewModel>();
 		services.AddTransient<Viewmodels.User.InboxPageViewModel>();
