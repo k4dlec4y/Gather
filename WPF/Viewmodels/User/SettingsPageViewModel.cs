@@ -26,9 +26,10 @@ internal partial class SettingsPageViewModel : ObservableObject
 	[RelayCommand]
 	public void SignOut()
 	{
-		_windowService.CreateLoginWindow();
 		_windowService.CloseMainWindow("User MainView");
-		_userIdentityService.Logout();
+		// these two will be called MainViewModel.SignOut() when the main window is closed
+		// _windowService.CreateLoginWindow();
+		// _userIdentityService.Logout();
 	}
 
 	[RelayCommand]
