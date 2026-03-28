@@ -1,16 +1,14 @@
-﻿using System.Windows.Controls;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Windows.Controls;
+using WPF.Services.Implementations;
 
 namespace WPF.Views.Organizer;
 
-public partial class SettingsPageView : Page
+public partial class SettingsPageView : UserControl
 {
-    public SettingsPageView(Viewmodels.Organizer.MainViewModel mainVM)
+    public SettingsPageView()
     {
         InitializeComponent();
-		DataContext = new Viewmodels.Organizer.SettingsPageViewModel(
-            mainVM,
-            new Services.Implementations.WpfDialogService(),
-			new Services.Implementations.WpfWindowService()
-		);
+		DataContext = App.Current.Services.GetService<Viewmodels.Organizer.SettingsPageViewModel>();
 	}
 }

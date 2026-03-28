@@ -1,44 +1,46 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Diagnostics;
 using WPF.Managers;
 using WPF.Services.Abstractions;
 
-namespace WPF.Viewmodels.UserVM;
+namespace WPF.Viewmodels.User;
 
 internal partial class SettingsPageViewModel : ObservableObject
 {
-    private IDialogService _dialogService { get; init; }
+	private IUserIdentityService _userIdentityService { get; init; }
+	private IDialogService _dialogService { get; init; }
 	private IWindowService _windowService { get; init; }
 
-	[ObservableProperty]
-    private MainViewModel _mainVM;
-
     public SettingsPageViewModel(
-		MainViewModel main,
+		IUserIdentityService userIdentityService,
 		IDialogService dialogService,
 		IWindowService windowService
 	) {
-        MainVM = main;
-        _dialogService = dialogService;
+		Debug.Assert(userIdentityService.CurrentUser != null, "User should not be null!");
+		_userIdentityService = userIdentityService;
+		_dialogService = dialogService;
 		_windowService = windowService;
 	}
 
     [RelayCommand]
     public void SignOut()
     {
-		_windowService.CloseAllWindows();
+		_windowService.CloseMainWindow("User MainView");
+		_userIdentityService.Logout();
+		_windowService.ShowLoginWindow();
 	}
 
 	[RelayCommand]
 	public void BecomeOrganizer()
 	{
-		_windowService.SendBecomeOrganizerRequest(MainVM.CurrentUser);
+		_windowService.SendBecomeOrganizerRequest();
 	}
 
 	[RelayCommand]
 	public async Task DeleteAccount()
 	{
-		bool success = await UserManager.RemoveUser(MainVM.CurrentUser);
+		bool success = await UserManager.RemoveUser(_userIdentityService.CurrentUser);
 		if (!success)
 		{
 			_dialogService.ShowError("Please, try again");

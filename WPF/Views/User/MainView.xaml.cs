@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using WPF.Services.Abstractions;
 
 namespace WPF.Views.UserV;
 
@@ -7,6 +9,7 @@ public partial class MainView : Window
 	public MainView(Models.User user)
     {
         InitializeComponent();
-        DataContext = new Viewmodels.UserVM.MainViewModel(user, this);
+        App.Current.Services.GetRequiredService<IUserIdentityService>().Login(user);
+		DataContext = App.Current.Services.GetRequiredService<Viewmodels.User.MainViewModel>();
 	}
 }

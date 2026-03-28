@@ -3,17 +3,20 @@ using CommunityToolkit.Mvvm.Input;
 using WPF.Models;
 using WPF.Managers;
 using System.Diagnostics;
+using WPF.Services.Abstractions;
 
-namespace WPF.Viewmodels.UserVM;
+namespace WPF.Viewmodels.User;
 
-public partial class InboxPageViewModel : ObservableObject
+internal partial class InboxPageViewModel : ObservableObject
 {
 	[ObservableProperty]
-	private MainViewModel _mainVM;
+	public Models.User _currentUser;
 
-	public InboxPageViewModel(MainViewModel main)
-	{
-		MainVM = main;
+	public InboxPageViewModel(
+		IUserIdentityService userIdentityService
+	) {
+		Debug.Assert(userIdentityService.CurrentUser != null, "CurrentUser should not be null when initializing InboxPageViewModel.");
+		_currentUser = userIdentityService.CurrentUser;
 	}
 
 	[RelayCommand]

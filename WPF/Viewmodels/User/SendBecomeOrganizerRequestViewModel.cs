@@ -4,26 +4,24 @@ using System.Windows;
 using WPF.Models;
 using WPF.Managers;
 using WPF.Services.Abstractions;
+using System.Diagnostics;
 
-namespace WPF.Viewmodels.UserVM;
+namespace WPF.Viewmodels.User;
 
 internal partial class SendBecomeOrganizerRequestViewModel : ObservableObject
 {
+	private IUserIdentityService _userIdentityService { get; init; }
 	private IDialogService _dialogService { get; init; }
 
 	[ObservableProperty]
 	private string _requestText = "";
 
-	private User _currentUser;
-	private Window _sendRequestWindow;
-
 	public SendBecomeOrganizerRequestViewModel(
-		Window sendRequestWindow,
-		User user,
+		IUserIdentityService userIdentityService,
 		IDialogService dialogService
 	) {
-		_currentUser = user;
-		_sendRequestWindow = sendRequestWindow;
+		Debug.Assert(userIdentityService.CurrentUser != null, "User cannot be null");
+		_userIdentityService = userIdentityService;
 		_dialogService = dialogService;
 	}
 
@@ -42,13 +40,14 @@ internal partial class SendBecomeOrganizerRequestViewModel : ObservableObject
 			return;
 		}
 
-		if (await BecomeOrganizerRequestManager.ContainsRequest(_currentUser.Username))
+		string username = _userIdentityService.CurrentUser!.Username;
+		if (await BecomeOrganizerRequestManager.ContainsRequest(username))
 		{
 			_dialogService.ShowError("You already have a pending request!");
 			return;
 		}
 
-		if (await EventOrganizerManager.GetEventOrganizerByUsername(_currentUser.Username) != null)
+		if (await EventOrganizerManager.GetEventOrganizerByUsername(username) != null)
 		{
 			_dialogService.ShowError("You are already an organizer!");
 			return;
@@ -57,7 +56,7 @@ internal partial class SendBecomeOrganizerRequestViewModel : ObservableObject
 		bool success = await BecomeOrganizerRequestManager.AddRequest(
 			new BecomeOrganizerRequest
 			{
-				UserId = _currentUser.Id,
+				UserId = _userIdentityService.CurrentUser!.Id,
 				RequestText = RequestText
 			}
 		);
@@ -65,7 +64,6 @@ internal partial class SendBecomeOrganizerRequestViewModel : ObservableObject
 		if (success)
 		{
 			_dialogService.ShowMessage("Request sent successfully!");
-			_sendRequestWindow.Close(); // !!!
 		}
 		else
 		{

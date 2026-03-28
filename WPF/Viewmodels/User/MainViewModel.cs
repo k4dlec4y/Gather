@@ -1,48 +1,56 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Windows.Controls;
-using WPF.Views.UserV;
+using System.Diagnostics;
+using WPF.Services.Abstractions;
 
-namespace WPF.Viewmodels.UserVM;
+namespace WPF.Viewmodels.User;
 
-public partial class MainViewModel : ObservableObject
+internal partial class MainViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private Page _currentPage;
+	public IUserIdentityService UserIdentityService { get; init; }
+	public INavigationService Navigation { get; init; }
+	private IWindowService _windowService { get; init; }
 
-    [ObservableProperty]
-    private Models.User _currentUser;
-
-	public MainView MainWindow;
-
-	public MainViewModel(Models.User user, MainView mainWindow)
-    {
-		CurrentUser = user;
-		CurrentPage = new EventsPageView(this);
-		MainWindow = mainWindow;
+	public MainViewModel(
+		IUserIdentityService userIdentityService,
+		INavigationService navigation,
+		IWindowService windowService
+	) {
+		Debug.Assert(userIdentityService.CurrentUser != null, "User cannot be null");
+		UserIdentityService = userIdentityService;
+		Navigation = navigation;
+		_windowService = windowService;
+		Events();
 	}
 
     [RelayCommand]
     public void Events()
     {
-		CurrentPage = new EventsPageView(this);
+		Navigation.NavigateTo<EventsPageViewModel>();
 	}
 
 	[RelayCommand]
 	public void Friends()
     {
-		CurrentPage = new FriendsPageView(this);
+		Navigation.NavigateTo<FriendsPageViewModel>();
 	}
 
 	[RelayCommand]
 	public void Inbox()
 	{
-		CurrentPage = new InboxPageView(this);
+		Navigation.NavigateTo<InboxPageViewModel>();
 	}
 
 	[RelayCommand]
 	public void Settings()
     {
-		CurrentPage = new SettingsPageView(this);
+		Navigation.NavigateTo<SettingsPageViewModel>();
+	}
+
+	[RelayCommand]
+	public void SignOut()
+	{
+		UserIdentityService.Logout();
+		_windowService.ShowLoginWindow();
 	}
 }

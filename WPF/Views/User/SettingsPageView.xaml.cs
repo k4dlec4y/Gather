@@ -1,33 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Controls;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace WPF.Views.UserV
+namespace WPF.Views.UserV;
+
+public partial class SettingsPageView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for SettingsPageView.xaml
-    /// </summary>
-    public partial class SettingsPageView : Page
+    public SettingsPageView()
     {
-        public SettingsPageView(Viewmodels.UserVM.MainViewModel main)
-        {
-            InitializeComponent();
-            DataContext = new Viewmodels.UserVM.SettingsPageViewModel(
-                main,
-                new Services.Implementations.WpfDialogService(),
-				new Services.Implementations.WpfWindowService()
-            ); 
-        }
+        InitializeComponent();
+        DataContext = App.Current.Services.GetService<Viewmodels.User.SettingsPageViewModel>(); 
     }
 }

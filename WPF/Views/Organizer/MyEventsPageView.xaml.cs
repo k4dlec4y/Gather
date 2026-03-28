@@ -1,16 +1,15 @@
-﻿using System.Windows.Controls;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Windows.Controls;
+using WPF.Services.Implementations;
 
 namespace WPF.Views.Organizer;
 
-public partial class MyEventsPageView : Page
+public partial class MyEventsPageView : UserControl
 {
-    public MyEventsPageView(Viewmodels.Organizer.MainViewModel mainVM)
+    public MyEventsPageView()
     {
         InitializeComponent();
-        DataContext = new Viewmodels.Organizer.MyEventsPageViewModel(
-            mainVM,
-            new Services.Implementations.WpfDialogService(),
-			new Services.Implementations.WpfWindowService()
+        DataContext = App.Current.Services.GetService<Viewmodels.Organizer.MyEventsPageViewModel>(
 		);
 	}
 }

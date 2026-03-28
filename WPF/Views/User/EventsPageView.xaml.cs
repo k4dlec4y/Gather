@@ -1,23 +1,14 @@
-﻿using System.Windows;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Controls;
-using WPF.Models;
-using WPF.Viewmodels.UserVM;
-using Microsoft.Extensions.DependencyInjection;
+using WPF.Viewmodels.User;
 
-namespace WPF.Views.UserV
+namespace WPF.Views.UserV;
+
+public partial class EventsPageView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for EventsPageView.xaml
-    /// </summary>
-    public partial class EventsPageView : Page
-    {
-		public EventsPageView(MainViewModel main)
-		{
-			InitializeComponent();
-			DataContext = new EventsPageViewModel(
-				main,
-				new Services.Implementations.WpfWindowService()
-			);
-		}
+	public EventsPageView()
+	{
+		InitializeComponent();
+		DataContext = App.Current.Services.GetService<EventsPageViewModel>();
 	}
 }

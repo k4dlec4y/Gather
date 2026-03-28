@@ -176,6 +176,13 @@
 			</Style.Triggers>
 		</Style>
 	</Window.Resources>
+
+	<i:Interaction.Triggers>
+		<i:EventTrigger EventName="Closing">
+			<i:InvokeCommandAction Command="{Binding ExitCommand}" />
+		</i:EventTrigger>
+	</i:Interaction.Triggers>
+
 	<StackPanel
 		Width="300"
 		HorizontalAlignment="Center"

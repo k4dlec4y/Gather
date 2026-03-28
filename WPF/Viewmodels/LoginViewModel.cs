@@ -72,11 +72,11 @@ internal partial class LoginViewModel : ObservableObject
 			if (Username.Equals("admin") &&
 				_passwordHash.SequenceEqual(Convert.FromHexString("CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB"))
 			) {
-				_windowService.OpenMainAdminWindow();
+				_windowService.OpenMainAdminWindow(new Models.User("admin", Array.Empty<byte>()));
 				return;
 			}
 
-			User? user = await UserManager.GetUser(Username);
+			Models.User? user = await UserManager.GetUser(Username);
 			if (user == null || !user.PasswordHash.SequenceEqual(_passwordHash))
 			{
 				_dialogService.ShowError("Invalid username or password");
@@ -130,9 +130,15 @@ internal partial class LoginViewModel : ObservableObject
 			return;
 		}
 
-		User user = new User(Username, _passwordHash);
+		Models.User user = new Models.User(Username, _passwordHash);
 		await UserManager.AddUser(user);
 
 		_windowService.OpenMainUserWindow(user);
+	}
+
+	[RelayCommand]
+	public void Exit()
+	{
+		_windowService.CloseAllWindows();
 	}
 }

@@ -1,12 +1,14 @@
 ﻿using System.Windows.Controls;
+using WPF.Viewmodels.Admin;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WPF.Views.Admin;
 
-public partial class SettingsPageView : Page
+public partial class SettingsPageView : UserControl
 {
-	public SettingsPageView(Viewmodels.Admin.MainViewModel mainVM)
+	public SettingsPageView()
 	{
 		InitializeComponent();
-		DataContext = new Viewmodels.Admin.SettingsPageViewModel(new Services.Implementations.WpfWindowService());
+		DataContext = App.Current.Services.GetService<SettingsPageViewModel>();
 	}
 }

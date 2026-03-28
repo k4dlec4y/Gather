@@ -1,14 +1,14 @@
 ﻿using System.Windows.Controls;
-using WPF.Viewmodels.UserVM;
+using WPF.Viewmodels.User;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace WPF.Views.UserV
+namespace WPF.Views.UserV;
+
+public partial class InboxPageView : UserControl
 {
-    public partial class InboxPageView : Page
+    public InboxPageView()
     {
-        public InboxPageView(MainViewModel main)
-        {
-            InitializeComponent();
-            DataContext = new InboxPageViewModel(main);
-		}
-    }
+        InitializeComponent();
+        DataContext = App.Current.Services.GetService<InboxPageViewModel>();
+	}
 }

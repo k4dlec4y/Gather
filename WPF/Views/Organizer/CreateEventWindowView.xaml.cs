@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Collections.ObjectModel;
 using System.Windows;
 using WPF.Models;
 
@@ -6,15 +7,9 @@ namespace WPF.Views.Organizer;
 
 public partial class CreateEventWindowView : Window
 {
-    public CreateEventWindowView(EventOrganizer eventOrganizer, ObservableCollection<Event> myEvents)
+    public CreateEventWindowView()
     {
         InitializeComponent();
-        DataContext = new Viewmodels.Organizer.CreateEventWindowViewModel(
-            eventOrganizer,
-            myEvents,
-            new Services.Implementations.WpfDialogService(),
-			new Services.Implementations.WpfWindowService(),
-			new Services.Implementations.DefaultFileService()
-		);
-	}
+        DataContext = App.Current.Services.GetRequiredService<Viewmodels.Organizer.CreateEventWindowViewModel>();
+    }
 }

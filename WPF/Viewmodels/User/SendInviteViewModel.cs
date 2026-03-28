@@ -6,25 +6,29 @@ using System.Windows;
 using WPF.Models;
 using WPF.Services.Abstractions;
 
-namespace WPF.Viewmodels.UserVM;
+namespace WPF.Viewmodels.User;
 
 internal partial class SendInviteViewModel : ObservableObject
 {
+	private IUserIdentityService _userIdentityService { get; init; }
 	private IDialogService _dialogService { get; init; }
 
-	User _user;
 	Event _event;
 
 	[ObservableProperty]
-	ObservableCollection<User> _friends;
+	ObservableCollection<Models.User> _friends;
 
 	[ObservableProperty]
-	User? _selectedFriend = null;
+	Models.User? _selectedFriend = null;
 
-	public SendInviteViewModel(User user, Event @event, IDialogService dialogService)
-	{
-		_user = user;
-		Friends = _user.Friends;
+	public SendInviteViewModel(
+		IUserIdentityService userIdentityService,
+		IDialogService dialogService,
+		Event @event
+	) {
+		Debug.Assert(userIdentityService.CurrentUser != null, "User should not be null!");
+		_userIdentityService = userIdentityService;
+		Friends = _userIdentityService.CurrentUser!.Friends;
 		_event = @event;
 		_dialogService = dialogService;
 	}
@@ -39,10 +43,10 @@ internal partial class SendInviteViewModel : ObservableObject
 		}
 
 		string success = await Managers.InviteManager.SendInvite(
-			_user,
+			_userIdentityService.CurrentUser!,
 			SelectedFriend,
 			_event,
-			$"{_user.Username} has invited you to the event {_event.Name}!"
+			$"{_userIdentityService.CurrentUser!.Username} has invited you to the event {_event.Name}!"
 		);
 
 		// SelectedFriend = null;

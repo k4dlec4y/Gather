@@ -1,9 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows;
 using WPF.Models;
 using WPF.Services.Abstractions;
 
@@ -14,10 +11,10 @@ internal partial class EditEventWindowViewModel : ObservableObject
 	private IDialogService _dialogService { get; init; }
 	private IWindowService _windowService { get; init; }
 	private IFileService _fileService { get; init; }
+	private INavigationService _navigationService { get; init; }
 
 	private Event _event;
 	private byte[] _imageData;
-	private MainViewModel _mainVM;
 
 	[ObservableProperty]
 	private string _name = "";
@@ -39,14 +36,16 @@ internal partial class EditEventWindowViewModel : ObservableObject
 
 	public EditEventWindowViewModel(
 		Event @event,
-		MainViewModel mainVM,
 		IDialogService dialogService,
 		IWindowService windowService,
-		IFileService fileService
+		IFileService fileService,
+		INavigationService navigationService
 	) {
 		_dialogService = dialogService;
 		_windowService = windowService;
 		_fileService = fileService;
+		_navigationService = navigationService;
+
 		_event = @event;
 		Name = @event.Name;
 		Description = @event.Description;
@@ -54,8 +53,6 @@ internal partial class EditEventWindowViewModel : ObservableObject
 		Location = @event.Location;
 		CategoriesInput = string.Join(", ", @event.Categories);
 		_imageData = @event.ImageData;
-
-		_mainVM = mainVM;
 	}
 
 	[RelayCommand]
@@ -111,7 +108,7 @@ internal partial class EditEventWindowViewModel : ObservableObject
 
 		if (await Managers.EventManager.UpdateEvent(_event))
 		{
-			_mainVM.CurrentPage = new Views.Organizer.MyEventsPageView(_mainVM);
+			_navigationService.NavigateTo<MyEventsPageViewModel>();
 			_dialogService.ShowMessage("Event successfully updated");
 			return;
 		}

@@ -5,7 +5,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:local="clr-namespace:WPF.Views.UserV"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	Title="SendBecomeOrganizerRequest"
+	Title="User SendBecomeOrganizerRequestView"
 	Width="800"
 	Height="460"
 	Background="#FF0a0a0a"

@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.Windows;
+using System.Diagnostics;
+using WPF.Managers;
 using WPF.Models;
 using WPF.Services.Abstractions;
 
@@ -14,39 +15,39 @@ internal partial class MyEventsPageViewModel : ObservableObject
 
 	public ObservableCollection<Event> MyEvents { get; set; }
 
+	private EventOrganizer _currentEventOrganizer {get; init; }
+
 	[ObservableProperty]
 	private Event? _selectedEvent;
 
 	[ObservableProperty]
 	private string _searchQuery = "";
 
-	[ObservableProperty]
-	private MainViewModel _mainVM;
-
 	public MyEventsPageViewModel(
-		MainViewModel mainVM,
+		IOrganizerIdentityService organizerIdentityService,
 		IDialogService dialogService,
 		IWindowService windowService
 	) {
-		_mainVM = mainVM;
+		Debug.Assert(organizerIdentityService.CurrentEventOrganizer != null, "CurrentEventOrganizer should not be null when initializing MyEventsPageViewModel");
+		_currentEventOrganizer = organizerIdentityService.CurrentEventOrganizer!;
+		MyEvents = _currentEventOrganizer.Events;
+
 		_dialogService = dialogService;
 		_windowService = windowService;
-
-		MyEvents = Managers.EventManager.GetEventsOrganizerOrganize(_mainVM.EventOrganizer);
 	}
 
 	[RelayCommand]
 	public void SelectEvent()
 	{
 		if (SelectedEvent != null)
-			_windowService.ShowEventDetails(SelectedEvent, []);
+			_windowService.ShowEventDetails(SelectedEvent, new ObservableCollection<Models.User>());
 		SelectedEvent = null;
 	}
 
 	[RelayCommand]
 	public void FilterEvents()
 	{
-		var filtered = Managers.EventManager.GetEventsOrganizerOrganize(MainVM.EventOrganizer)
+		var filtered = EventManager.GetEventsOrganizerOrganize(_currentEventOrganizer)
 			.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
 				.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
 			.ToList();
@@ -58,15 +59,13 @@ internal partial class MyEventsPageViewModel : ObservableObject
 	[RelayCommand]
 	public void CreateEvent()
 	{
-		_windowService.CreateEvent(MainVM.EventOrganizer, MyEvents, MainVM);
+		_windowService.CreateEvent();
 	}
 
 	[RelayCommand]
 	public void EditEvent(Event e)
 	{
-		var window = new Views.Organizer.EditEventWindowView(e, MainVM);
-		window.Owner = MainVM.MainWindow;
-		window.Show();
+		_windowService.EditEvent(e);
 	}
 
 	[RelayCommand]
@@ -74,7 +73,7 @@ internal partial class MyEventsPageViewModel : ObservableObject
 	{
 		if (e == null) return;
 
-		if (await Managers.EventManager.RemoveEvent(e))
+		if (await EventManager.RemoveEvent(e))
 		{
 			MyEvents.Remove(e);
 			if (SelectedEvent == e)

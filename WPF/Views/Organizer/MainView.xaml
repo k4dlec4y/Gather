@@ -3,9 +3,11 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:local="clr-namespace:WPF.Views.Organizer"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	Title="MainView"
+	xmlns:views="clr-namespace:WPF.Views.Organizer"
+	xmlns:vm="clr-namespace:WPF.Viewmodels.Organizer"
+	Title="Organizer MainView"
 	Width="1600"
 	Height="800"
 	Background="#FF000000"
@@ -13,6 +15,14 @@
 	mc:Ignorable="d">
 
 	<Window.Resources>
+		<DataTemplate DataType="{x:Type vm:MyEventsPageViewModel}">
+			<views:MyEventsPageView />
+		</DataTemplate>
+
+		<DataTemplate DataType="{x:Type vm:SettingsPageViewModel}">
+			<views:SettingsPageView />
+		</DataTemplate>
+
 		<Style TargetType="TextBlock">
 			<Setter Property="Foreground" Value="White" />
 			<Setter Property="FontSize" Value="14" />
@@ -62,6 +72,12 @@
 			</Style.Triggers>
 		</Style>
 	</Window.Resources>
+
+	<i:Interaction.Triggers>
+		<i:EventTrigger EventName="Closing">
+			<i:InvokeCommandAction Command="{Binding SignOutCommand}" />
+		</i:EventTrigger>
+	</i:Interaction.Triggers>
 
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -121,17 +137,15 @@
 					HorizontalAlignment="Stretch"
 					FontSize="16"
 					Foreground="#FFFF00FF"
-					Text="{Binding EventOrganizer.Username, StringFormat=logged in as {0}}"
+					Text="{Binding OrganizerIdentityService.CurrentEventOrganizer.Username, StringFormat=logged in as {0}}"
 					TextAlignment="Center"
 					TextWrapping="Wrap" />
 			</Label>
 		</Grid>
 
-		<Frame
-			x:Name="MainFrame"
+		<ContentControl
 			Grid.Column="1"
 			Background="#FF0a0a0a"
-			Content="{Binding CurrentPage}"
-			NavigationUIVisibility="Hidden" />
+			Content="{Binding Navigation.CurrentPage}" />
 	</Grid>
 </Window>

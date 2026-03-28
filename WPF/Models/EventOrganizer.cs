@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WPF.Models;
@@ -13,5 +15,5 @@ public class EventOrganizer
 	public required byte[] PasswordHash { get; set; }
 	public required string Info { get; set; }
 
-	public ICollection<Event> Events { get; set; } = new List<Event>();
+	public ObservableCollection<Event> Events { get; set; } = new ();
 }

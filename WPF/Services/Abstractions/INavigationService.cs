@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-/**
- * Purpose: Handling physical desktop windows.
+namespace WPF.Services.Abstractions;
 
-Methods: OpenOrganizerWindow(), CloseMainWindow(), Minimize().
-
-Used by: Only ViewModels that manage application lifecycle or launch external, standalone windows.
- * */
-
-namespace WPF.Services.Abstractions
+internal interface INavigationService
 {
-	internal interface INavigationService
-	{
-	}
+	void NavigateTo<T>() where T : ObservableObject;
 }

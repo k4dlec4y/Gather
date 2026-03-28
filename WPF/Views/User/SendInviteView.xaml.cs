@@ -1,14 +1,15 @@
 ﻿using System.Windows;
 using WPF.Models;
-using WPF.Viewmodels.UserVM;
+using WPF.Viewmodels.User;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WPF.Views.UserV;
 
 public partial class SendInviteView : Window
 {
-    public SendInviteView(User user, Event @event)
+    public SendInviteView(Event @event)
     {
         InitializeComponent();
-        DataContext = new SendInviteViewModel(user, @event, new Services.Implementations.WpfDialogService());
+        DataContext = ActivatorUtilities.CreateInstance<SendInviteViewModel>(App.Current.Services, @event);
 	}
 }

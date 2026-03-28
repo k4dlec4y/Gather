@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.Windows;
 using WPF.Models;
+using WPF.Managers;
 using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Admin;
@@ -13,12 +13,12 @@ internal partial class EventsPageViewModel : ObservableObject
 	private IWindowService _windowService { get; init; }
 
 	[ObservableProperty]
-	private Event? _selectedEvent;
+	private Event? _selectedEvent = null;
 	[ObservableProperty]
 	private string _searchQuery = "";
 
 	public ObservableCollection<Event> Events { get; private set; } =
-		Managers.EventManager.GetEvents();
+		EventManager.GetEvents();
 
 	public EventsPageViewModel(
 		IDialogService dialogService,
@@ -32,14 +32,14 @@ internal partial class EventsPageViewModel : ObservableObject
 	public void SelectEvent()
 	{
 		if (SelectedEvent != null)
-			_windowService.ShowEventDetails(SelectedEvent, []);
+			_windowService.ShowEventDetails(SelectedEvent, new ObservableCollection<Models.User>());
 		SelectedEvent = null;
 	}
 
 	[RelayCommand]
 	public void FilterEvents()
 	{
-		var filtered = Managers.EventManager.GetEvents()
+		var filtered = EventManager.GetEvents()
 			.Where(e => (e.Name +
 						 e.Location +
 						 e.Description +
@@ -57,11 +57,9 @@ internal partial class EventsPageViewModel : ObservableObject
 		if (e == null)
 			return;
 
-		if (await Managers.EventManager.RemoveEvent(e))
+		if (await EventManager.RemoveEvent(e))
 		{
 			Events.Remove(e);
-			OnPropertyChanged(nameof(Events));
-
 			if (SelectedEvent == e)
 				SelectedEvent = null;
 		}

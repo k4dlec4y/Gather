@@ -1,24 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Windows;
 using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Organizer;
 
 internal partial class SettingsPageViewModel : ObservableObject
 {
+	private IOrganizerIdentityService _organizerIdentityService { get; init; }
 	private IDialogService _dialogService { get; init; }
 	private IWindowService _windowService { get; init; }
 
-	[ObservableProperty]
-	private MainViewModel _mainVM;
-
 	public SettingsPageViewModel(
-		MainViewModel mainVM,
+		IOrganizerIdentityService organizerIdentityService,
 		IDialogService dialogService,
 		IWindowService windowService
 	) {
-		MainVM = mainVM;
+		_organizerIdentityService = organizerIdentityService;
 		_dialogService = dialogService;
 		_windowService = windowService;
 	}
@@ -26,13 +23,15 @@ internal partial class SettingsPageViewModel : ObservableObject
 	[RelayCommand]
 	public void SignOut()
 	{
-		_windowService.CloseAllWindows();
+		_windowService.CloseMainWindow("Organizer MainView");
+		_organizerIdentityService.Logout();
+		_windowService.ShowLoginWindow();
 	}
 
 	[RelayCommand]
 	public async Task DeleteAccount()
 	{
-		bool success = await Managers.EventOrganizerManager.DeleteEventOrganizer(MainVM.EventOrganizer);
+		bool success = await Managers.EventOrganizerManager.DeleteEventOrganizer(_organizerIdentityService.CurrentEventOrganizer);
 		if (!success)
 		{
 			_dialogService.ShowError("Please, try again");

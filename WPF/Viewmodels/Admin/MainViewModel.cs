@@ -1,39 +1,48 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Windows.Controls;
-using WPF.Views.Admin;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Admin;
 
-public partial class MainViewModel : ObservableObject
+internal partial class MainViewModel : ObservableObject
 {
-	[ObservableProperty]
-	private Page _currentPage;
+	public INavigationService Navigation { get; init; }
+	private IWindowService _windowService { get; init; }
+	private IUserIdentityService _userIdentityService { get; init; }
 
-	public MainView MainWindow;
-
-	public MainViewModel(MainView mainWindow)
-	{
-		CurrentPage = new EventsPageView(this);
-		MainWindow = mainWindow;
+	public MainViewModel(
+			IWindowService windowService,
+			IUserIdentityService userIdentityService,
+			INavigationService navigation
+	) {
+		_windowService = windowService;
+		_userIdentityService = userIdentityService;
+		Navigation = navigation;
+		Events();
 	}
 
 	[RelayCommand]
 	public void Events()
 	{
-		CurrentPage = new EventsPageView(this);
+		Navigation.NavigateTo<EventsPageViewModel>();
 	}
 
 	[RelayCommand]
 	public void Requests()
 	{
-		CurrentPage = new RequestsPageView();
+		Navigation.NavigateTo<RequestsPageViewModel>();
 	}
 
 	[RelayCommand]
 	public void Settings()
 	{
-		CurrentPage = new SettingsPageView(this);
+		Navigation.NavigateTo<SettingsPageViewModel>();
+	}
+
+	[RelayCommand]
+	public void SignOut()
+	{
+		_userIdentityService.Logout();
+		_windowService.ShowLoginWindow();
 	}
 }
-

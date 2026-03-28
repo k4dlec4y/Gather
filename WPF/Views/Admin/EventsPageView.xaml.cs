@@ -4,9 +4,9 @@ using WPF.Viewmodels.Admin;
 
 namespace WPF.Views.Admin;
 
-public partial class EventsPageView : Page
+public partial class EventsPageView : UserControl
 {
-    public EventsPageView(MainViewModel mainVM)
+    public EventsPageView()
     {
         InitializeComponent();
 		DataContext = App.Current.Services.GetService<EventsPageViewModel>();

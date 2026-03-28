@@ -1,4 +1,4 @@
-﻿<Page
+﻿<UserControl
 	x:Class="WPF.Views.UserV.FriendsPageView"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,13 +6,12 @@
 	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:local="clr-namespace:WPF.Views.UserV"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	Title="FriendsPageView"
 	d:DesignHeight="800"
 	d:DesignWidth="1400"
 	Background="#FF0a0a0a"
 	mc:Ignorable="d">
 
-	<Page.Resources>
+	<UserControl.Resources>
 		<Style TargetType="TextBlock">
 			<Setter Property="Foreground" Value="White" />
 			<Setter Property="FontSize" Value="14" />
@@ -60,7 +59,7 @@
 			<Setter Property="Padding" Value="5" />
 			<Setter Property="FontSize" Value="14" />
 		</Style>
-	</Page.Resources>
+	</UserControl.Resources>
 
 	<Grid Background="#FF0a0a0a">
 		<Grid.RowDefinitions>
@@ -92,7 +91,7 @@
 			Background="#FF0a0a0a"
 			BorderThickness="0"
 			Foreground="White"
-			ItemsSource="{Binding MainVM.CurrentUser.Friends}"
+			ItemsSource="{Binding CurrentUser.Friends}"
 			ScrollViewer.VerticalScrollBarVisibility="Auto"
 			SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
 			<ListBox.ItemTemplate>
@@ -127,4 +126,4 @@
 			</ListBox.ItemTemplate>
 		</ListBox>
 	</Grid>
-</Page>
+</UserControl>

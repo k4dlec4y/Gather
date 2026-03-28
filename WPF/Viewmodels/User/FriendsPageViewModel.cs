@@ -1,15 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Windows;
+using System.Diagnostics;
 using WPF.Managers;
-using WPF.Models;
 using WPF.Services.Abstractions;
 
-namespace WPF.Viewmodels.UserVM;
+namespace WPF.Viewmodels.User;
 
 internal partial class FriendsPageViewModel : ObservableObject
 {
 	private IDialogService _dialogService { get; init; }
+
+	[ObservableProperty]
+	private Models.User _currentUser;
 
 	[ObservableProperty]
 	private string _newFriendUsername = "";
@@ -17,21 +19,21 @@ internal partial class FriendsPageViewModel : ObservableObject
 	[ObservableProperty]
 	private string _selectedUser = "";
 
-	[ObservableProperty]
-	private MainViewModel _mainVM;
-
-	public FriendsPageViewModel(MainViewModel main, IDialogService dialogService)
-	{
-		MainVM = main;
+	public FriendsPageViewModel(
+		IUserIdentityService userIdentityService,
+		IDialogService dialogService
+	) {
+		Debug.Assert(userIdentityService.CurrentUser != null, "CurrentUser should not be null when initializing FriendsPageViewModel");
+		CurrentUser = userIdentityService.CurrentUser;
 		_dialogService = dialogService;
 	}
 
 	[RelayCommand]
 	public async Task AddFriend()
 	{
-		User? to = await UserManager.GetUser(NewFriendUsername);
+		Models.User? to = await UserManager.GetUser(NewFriendUsername);
 
-		if(NewFriendUsername == MainVM.CurrentUser.Username)
+		if(NewFriendUsername == CurrentUser.Username)
 		{
 			_dialogService.ShowError("You cannot add yourself as a friend");
 			return;
@@ -41,32 +43,31 @@ internal partial class FriendsPageViewModel : ObservableObject
 			_dialogService.ShowError("This user doesnt exist");
 			return;
 		}
-		if (MainVM.CurrentUser.Friends.Select(f => f.Username).Contains(to.Username))
+		if (CurrentUser.Friends.Select(f => f.Username).Contains(to.Username))
 		{
 			_dialogService.ShowError($"You are already in friendship with {to.Username}");
 			return;
 		}
-		if (await FriendRequestManager.ContainsFriendRequest(MainVM.CurrentUser, to))
+		if (await FriendRequestManager.ContainsFriendRequest(CurrentUser, to))
 		{
 			_dialogService.ShowError($"You have already sent a friend request to {to.Username}");
 			return;
 		}
 
 		bool sent = await FriendRequestManager.SendFriendRequest(
-			MainVM.CurrentUser,
+			CurrentUser,
 			to,
-			$"{MainVM.CurrentUser.Username} has sent you a friend request!");
+			$"{CurrentUser.Username} has sent you a friend request!");
 
 		_dialogService.ShowMessage(sent ? $"Friend request sent" : "Please, try again");	
 	}
 
 	[RelayCommand]
-	public async Task RemoveFriend(User friend)
+	public async Task RemoveFriend(Models.User friend)
 	{
-		if (await FriendshipManager.DeleteFriendship(MainVM.CurrentUser, friend))
+		if (await FriendshipManager.DeleteFriendship(CurrentUser, friend))
 		{
-			MainVM.CurrentUser.Friends.Remove(friend);
-			OnPropertyChanged(nameof(MainVM.CurrentUser.Friends));
+			CurrentUser.Friends.Remove(friend);
 		}
 	}
 }

@@ -1,20 +1,22 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using WPF.Managers;
 using WPF.Models;
 using WPF.Services.Abstractions;
 
-namespace WPF.Viewmodels.UserVM;
+namespace WPF.Viewmodels.User;
 
 internal partial class EventsPageViewModel : ObservableObject
 {
 	private IWindowService _windowService { get; init; }
+	private Models.User _currentUser { get; init; }
 
-	public ObservableCollection<Event> Events { get; set; }
+	public ObservableCollection<Event> Events { get; set; } = new();
 
 	[ObservableProperty]
-	private Event? _selectedEvent;
+	private Event? _selectedEvent = null;
 
 	[ObservableProperty]
 	private string _searchQuery = "";
@@ -22,12 +24,12 @@ internal partial class EventsPageViewModel : ObservableObject
 	[ObservableProperty]
 	private bool _isParticipatingOnly = false;
 
-	[ObservableProperty]
-	private MainViewModel _mainVM;
-
-	public EventsPageViewModel(MainViewModel main, IWindowService windowService)
-	{
-		MainVM = main;
+	public EventsPageViewModel(
+		IUserIdentityService userIdentityService,
+		IWindowService windowService
+	) {
+		Debug.Assert(userIdentityService.CurrentUser != null, "CurrentUser should not be null when initializing EventsPageViewModel");
+		_currentUser = userIdentityService.CurrentUser;
 		_windowService = windowService;
 		FilterEvents();
 	}
@@ -36,7 +38,7 @@ internal partial class EventsPageViewModel : ObservableObject
 	public void SelectEvent()
 	{
 		if (SelectedEvent != null)
-			_windowService.ShowEventDetails(SelectedEvent, MainVM.CurrentUser.Friends);
+			_windowService.ShowEventDetails(SelectedEvent, _currentUser.Friends);
 		SelectedEvent = null;
 	}
 
@@ -44,8 +46,8 @@ internal partial class EventsPageViewModel : ObservableObject
 	public void FilterEvents()
 	{
 		var filtered = (IsParticipatingOnly ? 
-			EventManager.GetEventsUserAttend(MainVM.CurrentUser) : 
-			EventManager.GetEvents(MainVM.CurrentUser))
+			EventManager.GetEventsUserAttend(_currentUser) : 
+			EventManager.GetEvents(_currentUser))
 			.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
 				.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
 			.ToList();
@@ -59,11 +61,11 @@ internal partial class EventsPageViewModel : ObservableObject
 	{
 		if (@event.IsCurrentUserParticipating)
 		{
-			await ParticipationManager.RemoveParticipation(@event, MainVM.CurrentUser);
+			await ParticipationManager.RemoveParticipation(@event, _currentUser);
 		}
 		else
 		{
-			await ParticipationManager.AddParticipation(@event, MainVM.CurrentUser);
+			await ParticipationManager.AddParticipation(@event, _currentUser);
 		}
 		FilterEvents();
 	}
@@ -71,6 +73,6 @@ internal partial class EventsPageViewModel : ObservableObject
 	[RelayCommand]
 	public void SendInvite(Event @event)
 	{
-		_windowService.SendEventInvitation(MainVM.CurrentUser, @event);
+		_windowService.SendEventInvitation(@event);
 	}
 }

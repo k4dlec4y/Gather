@@ -6,7 +6,7 @@
 	xmlns:local="clr-namespace:WPF.Views.Organizer"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-	Title="Edit Event"
+	Title="Organizer EditEventView"
 	Width="800"
 	Height="450"
 	Background="#FF000000"

@@ -1,14 +1,14 @@
 ﻿using System.Windows.Controls;
-using WPF.Viewmodels.UserVM;
+using WPF.Viewmodels.User;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace WPF.Views.UserV
+namespace WPF.Views.UserV;
+
+public partial class FriendsPageView : UserControl
 {
-    public partial class FriendsPageView : Page
+    public FriendsPageView()
     {
-        public FriendsPageView(MainViewModel main)
-        {
 			InitializeComponent();
-			DataContext = new FriendsPageViewModel(main, new Services.Implementations.WpfDialogService());
+			DataContext = App.Current.Services.GetService<FriendsPageViewModel>();
 		}
-    }
 }

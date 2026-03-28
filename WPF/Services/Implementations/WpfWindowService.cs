@@ -1,23 +1,43 @@
 ﻿using Microsoft.Win32;
-using System.Collections.ObjectModel;
 using System.Windows;
 using WPF.Models;
 using WPF.Services.Abstractions;
-using WPF.Viewmodels.Organizer;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace WPF.Services.Implementations;
 
 internal class WpfWindowService : IWindowService
 {
-	public void CloseAllWindows()
+	private Window _getLoginWindow()
+	{
+		var loginWindow = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.Title.Equals("Login"));
+		Debug.Assert(loginWindow != null, "Login window should not be null when getting it!");
+		return loginWindow;
+	}
+
+	public void ShowLoginWindow()
+	{
+		var loginWindow = _getLoginWindow();
+		loginWindow.Show();
+		App.Current.MainWindow = loginWindow;
+	}
+
+	public void CloseMainWindow(string name)
 	{
 		foreach (Window window in Application.Current.Windows)
 		{
-			if (window == null || window.Name.Equals("Login"))
-				continue;
-
-			window.Close();
+			if (window != null && window.Title.Equals(name))
+			{
+				window.Close();
+				break;
+			}
 		}
+	}
+
+	public void CloseAllWindows()
+	{
+		Application.Current.Shutdown();
 	}
 
 	public bool OpenFileDialog(string filter, out string filePath)
@@ -38,30 +58,33 @@ internal class WpfWindowService : IWindowService
 	public void OpenMainUserWindow(User user)
 	{
 		var mainUserWindow = new Views.UserV.MainView(user);
-		mainUserWindow.Owner = Application.Current.MainWindow;
+		mainUserWindow.Owner = null;
 		Application.Current.MainWindow = mainUserWindow;
+		_getLoginWindow().Hide();
 		mainUserWindow.Show();
 	}
 
 	public void OpenMainOrganizerWindow(EventOrganizer organizer)
 	{
 		var mainOrganizerWindow = new Views.Organizer.MainView(organizer);
-		mainOrganizerWindow.Owner = Application.Current.MainWindow;
+		mainOrganizerWindow.Owner = null;
 		Application.Current.MainWindow = mainOrganizerWindow;
+		_getLoginWindow().Hide();
 		mainOrganizerWindow.Show();
 	}
 
-	public void OpenMainAdminWindow()
+	public void OpenMainAdminWindow(User admin)
 	{
-		var mainAdminWindow = new Views.Admin.MainView();
-		mainAdminWindow.Owner = Application.Current.MainWindow;
+		var mainAdminWindow = new Views.Admin.MainView(admin);
+		mainAdminWindow.Owner = null;
 		Application.Current.MainWindow = mainAdminWindow;
+		_getLoginWindow().Hide();
 		mainAdminWindow.Show();
 	}
 
-	public void CreateEvent(EventOrganizer eventOrganizer, ObservableCollection<Event> myEvents, MainViewModel MainVM)
+	public void CreateEvent()
 	{
-		var window = new Views.Organizer.CreateEventWindowView(eventOrganizer, myEvents);
+		var window = new Views.Organizer.CreateEventWindowView();
 		window.Owner = Application.Current.MainWindow;
 		window.Show();
 	}
@@ -73,23 +96,23 @@ internal class WpfWindowService : IWindowService
 		detailWindow.Show();
 	}
 
-	public void EditEvent(Event selectedEvent, MainViewModel MainVM)
+	public void EditEvent(Event selectedEvent)
 	{
-		var editWindow = new Views.Organizer.EditEventWindowView(selectedEvent, MainVM);
+		var editWindow = new Views.Organizer.EditEventWindowView(selectedEvent);
 		editWindow.Owner = Application.Current.MainWindow;
 		editWindow.Show();
 	}
 
-	public void SendEventInvitation(User user, Event selectedEvent)
+	public void SendEventInvitation(Event selectedEvent)
 	{
-		var invitationWindow = new Views.UserV.SendInviteView(user, selectedEvent);
+		var invitationWindow = new Views.UserV.SendInviteView(selectedEvent);
 		invitationWindow.Owner = Application.Current.MainWindow;
 		invitationWindow.Show();
 	}
 
-	public void SendBecomeOrganizerRequest(User currentUser)
+	public void SendBecomeOrganizerRequest()
 	{
-		var requestWindow = new Views.UserV.SendBecomeOrganizerRequestView(currentUser);
+		var requestWindow = new Views.UserV.SendBecomeOrganizerRequestView();
 		requestWindow.Owner = Application.Current.MainWindow;
 		requestWindow.Show();
 	}

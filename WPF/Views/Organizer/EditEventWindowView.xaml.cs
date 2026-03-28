@@ -1,20 +1,18 @@
 ﻿using System.Windows;
 using WPF.Models;
 using WPF.Viewmodels.Organizer;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WPF.Views.Organizer;
 
 public partial class EditEventWindowView : Window
 {
-    public EditEventWindowView(Event @event, MainViewModel mainVM)
+    public EditEventWindowView(Event @event)
     {
         InitializeComponent();
-        DataContext = new EditEventWindowViewModel(
-            @event,
-            mainVM,
-            new Services.Implementations.WpfDialogService(),
-			new Services.Implementations.WpfWindowService(),
-            new Services.Implementations.DefaultFileService()
+		DataContext = ActivatorUtilities.CreateInstance<EditEventWindowViewModel>(
+			App.Current.Services,
+			@event
 		);
-    }
+	}
 }

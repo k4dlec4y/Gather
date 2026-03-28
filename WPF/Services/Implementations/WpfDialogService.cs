@@ -7,11 +7,24 @@ internal class WpfDialogService : IDialogService
 {
 	public void ShowMessage(string message, string title = "Information")
 	{
-		MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
+		MessageBox.Show
+		(
+			Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive),
+			message,
+			title,
+			MessageBoxButton.OK, MessageBoxImage.Information
+		);
 	}
 
 	public void ShowError(string message, string title = "Error")
 	{
-		MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error);
+		MessageBox.Show
+		(
+			Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive),
+			message,
+			title,
+			MessageBoxButton.OK,
+			MessageBoxImage.Error
+		);
 	}
 }

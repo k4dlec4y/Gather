@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
 using System.Collections.ObjectModel;
-using System.IO;
 using WPF.Models;
+using WPF.Managers;
 using WPF.Services.Abstractions;
+using System.Diagnostics;
 
 namespace WPF.Viewmodels.Organizer;
 
@@ -14,8 +14,7 @@ internal partial class CreateEventWindowViewModel : ObservableObject
 	private IWindowService _windowService { get; init; }
 	private IFileService _fileService { get; init; }
 
-	private EventOrganizer _eventOrganizer;
-	private ObservableCollection<Event> _myEvents;
+	private EventOrganizer _currentEventOrganizer;
 
 	[ObservableProperty]
 	private string _name = "";
@@ -32,14 +31,14 @@ internal partial class CreateEventWindowViewModel : ObservableObject
 	private string _categoriesInput = "";
 
 	public CreateEventWindowViewModel(
-		EventOrganizer eventOrganizer,
-		ObservableCollection<Event> myEvents,
+		IOrganizerIdentityService organizerIdentityService,
 		IDialogService dialogService,
 		IWindowService windowService,
 		IFileService fileService
 	) {
-		_eventOrganizer = eventOrganizer;
-		_myEvents = myEvents;
+		Debug.Assert(organizerIdentityService.CurrentEventOrganizer != null, "Current event organizer cannot be null when initializing CreateEventWindowViewModel");
+		_currentEventOrganizer = organizerIdentityService.CurrentEventOrganizer;
+
 		_dialogService = dialogService;
 		_windowService = windowService;
 		_fileService = fileService;
@@ -96,14 +95,14 @@ internal partial class CreateEventWindowViewModel : ObservableObject
 			Date,
 			Location,
 			_imageData,
-			_eventOrganizer.Id,
+			_currentEventOrganizer.Id,
 			categories
 		);
 
-		if (await Managers.EventManager.CreateEvent(newEvent))
+		if (await EventManager.CreateEvent(newEvent))
 		{
-			newEvent.Organizer = _eventOrganizer;
-			_myEvents.Add(newEvent);
+			newEvent.Organizer = _currentEventOrganizer;
+			_currentEventOrganizer.Events.Add(newEvent);
 			_dialogService.ShowMessage("Event successfully created");
 			return;
 		}
@@ -119,6 +118,8 @@ internal partial class CreateEventWindowViewModel : ObservableObject
 			_dialogService.ShowError("Error while loading the image. Please try again");
 			return;
 		}
+		ImageName = filePath;
+
 		if (!_fileService.ReadFile(filePath, ref _imageData))
 		{
 			_dialogService.ShowError("Error while loading the image. Please try again");

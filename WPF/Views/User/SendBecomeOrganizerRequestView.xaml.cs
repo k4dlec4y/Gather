@@ -1,13 +1,13 @@
 ﻿using System.Windows;
-using WPF.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WPF.Views.UserV;
 
 public partial class SendBecomeOrganizerRequestView : Window
 {
-    public SendBecomeOrganizerRequestView(User user)
+    public SendBecomeOrganizerRequestView()
     {
 		InitializeComponent();
-		DataContext = new Viewmodels.UserVM.SendBecomeOrganizerRequestViewModel(this, user, new Services.Implementations.WpfDialogService());
+		DataContext = App.Current.Services.GetService<Viewmodels.User.SendBecomeOrganizerRequestViewModel>();
 	}
 }
