@@ -83,7 +83,7 @@ internal class WpfWindowService : IWindowService
 
 	public void CreateEvent()
 	{
-		var window = new Views.Organizer.CreateEventWindowView();
+		var window = new Views.Organizer.CreateEventView();
 		window.Owner = Application.Current.MainWindow;
 		window.Show();
 	}
@@ -97,7 +97,7 @@ internal class WpfWindowService : IWindowService
 
 	public void EditEvent(Event selectedEvent)
 	{
-		var editWindow = new Views.Organizer.EditEventWindowView(selectedEvent);
+		var editWindow = new Views.Organizer.EditEventView(selectedEvent);
 		editWindow.Owner = Application.Current.MainWindow;
 		editWindow.Show();
 	}

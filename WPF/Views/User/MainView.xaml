@@ -15,20 +15,20 @@
 	mc:Ignorable="d">
 
 	<Window.Resources>
-		<DataTemplate DataType="{x:Type vm:EventsPageViewModel}">
-			<views:EventsPageView />
+		<DataTemplate DataType="{x:Type vm:EventsViewModel}">
+			<views:EventsView />
 		</DataTemplate>
 
-		<DataTemplate DataType="{x:Type vm:FriendsPageViewModel}">
-			<views:FriendsPageView />
+		<DataTemplate DataType="{x:Type vm:FriendsViewModel}">
+			<views:FriendsView />
 		</DataTemplate>
 
-		<DataTemplate DataType="{x:Type vm:InboxPageViewModel}">
-			<views:InboxPageView />
+		<DataTemplate DataType="{x:Type vm:InboxViewModel}">
+			<views:InboxView />
 		</DataTemplate>
 
-		<DataTemplate DataType="{x:Type vm:SettingsPageViewModel}">
-			<views:SettingsPageView />
+		<DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+			<views:SettingsView />
 		</DataTemplate>
 		<Style TargetType="TextBlock">
 			<Setter Property="Foreground" Value="White" />

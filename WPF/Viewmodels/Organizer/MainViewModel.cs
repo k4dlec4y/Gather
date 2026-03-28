@@ -29,13 +29,13 @@ internal partial class MainViewModel : ObservableObject
 	[RelayCommand]
 	public void MyEvents()
 	{
-		Navigation.NavigateTo<MyEventsPageViewModel>();
+		Navigation.NavigateTo<MyEventsViewModel>();
 	}
 
 	[RelayCommand]
 	public void Settings()
 	{
-		Navigation.NavigateTo<SettingsPageViewModel>();
+		Navigation.NavigateTo<SettingsViewModel>();
 	}
 
 	[RelayCommand]

@@ -22,23 +22,23 @@ public partial class App : Application
 		services.AddSingleton<IOrganizerIdentityService, OrganizerIdentityService>();
 
 		services.AddTransient<Viewmodels.Admin.MainViewModel>();
-		services.AddTransient<Viewmodels.Admin.EventsPageViewModel>();
-		services.AddTransient<Viewmodels.Admin.RequestsPageViewModel>();
-		services.AddTransient<Viewmodels.Admin.SettingsPageViewModel>();
+		services.AddTransient<Viewmodels.Admin.EventsViewModel>();
+		services.AddTransient<Viewmodels.Admin.RequestsViewModel>();
+		services.AddTransient<Viewmodels.Admin.SettingsViewModel>();
 
 		services.AddTransient<Viewmodels.Organizer.MainViewModel>();
-		services.AddTransient<Viewmodels.Organizer.MyEventsPageViewModel>();
-		services.AddTransient<Viewmodels.Organizer.CreateEventWindowViewModel>();
-		services.AddTransient<Viewmodels.Organizer.EditEventWindowViewModel>();
-		services.AddTransient<Viewmodels.Organizer.SettingsPageViewModel>();
+		services.AddTransient<Viewmodels.Organizer.MyEventsViewModel>();
+		services.AddTransient<Viewmodels.Organizer.CreateEventViewModel>();
+		services.AddTransient<Viewmodels.Organizer.EditEventViewModel>();
+		services.AddTransient<Viewmodels.Organizer.SettingsViewModel>();
 
 		services.AddTransient<Viewmodels.User.MainViewModel>();
-		services.AddTransient<Viewmodels.User.EventsPageViewModel>();
-		services.AddTransient<Viewmodels.User.FriendsPageViewModel>();
-		services.AddTransient<Viewmodels.User.InboxPageViewModel>();
+		services.AddTransient<Viewmodels.User.EventsViewModel>();
+		services.AddTransient<Viewmodels.User.FriendsViewModel>();
+		services.AddTransient<Viewmodels.User.InboxViewModel>();
 		services.AddTransient<Viewmodels.User.SendBecomeOrganizerRequestViewModel>();
 		services.AddTransient<Viewmodels.User.SendInviteViewModel>();
-		services.AddTransient<Viewmodels.User.SettingsPageViewModel>();
+		services.AddTransient<Viewmodels.User.SettingsViewModel>();
 
 		services.AddSingleton<Viewmodels.LoginViewModel>();
 		services.AddTransient<Viewmodels.EventDetailsViewModel>();

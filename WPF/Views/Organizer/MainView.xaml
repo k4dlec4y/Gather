@@ -15,12 +15,12 @@
 	mc:Ignorable="d">
 
 	<Window.Resources>
-		<DataTemplate DataType="{x:Type vm:MyEventsPageViewModel}">
-			<views:MyEventsPageView />
+		<DataTemplate DataType="{x:Type vm:MyEventsViewModel}">
+			<views:MyEventsView />
 		</DataTemplate>
 
-		<DataTemplate DataType="{x:Type vm:SettingsPageViewModel}">
-			<views:SettingsPageView />
+		<DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+			<views:SettingsView />
 		</DataTemplate>
 
 		<Style TargetType="TextBlock">
