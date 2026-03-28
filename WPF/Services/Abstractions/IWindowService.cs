@@ -5,7 +5,7 @@ namespace WPF.Services.Abstractions;
 
 internal interface IWindowService
 {
-	public void ShowLoginWindow();
+	public void CreateLoginWindow();
 	public void CloseMainWindow(string name);
 	public void CloseAllWindows();
 

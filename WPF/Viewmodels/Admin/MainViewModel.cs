@@ -42,7 +42,7 @@ internal partial class MainViewModel : ObservableObject
 	[RelayCommand]
 	public void SignOut()
 	{
+		_windowService.CreateLoginWindow();
 		_userIdentityService.Logout();
-		_windowService.ShowLoginWindow();
 	}
 }

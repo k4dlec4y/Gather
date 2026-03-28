@@ -139,6 +139,6 @@ internal partial class LoginViewModel : ObservableObject
 	[RelayCommand]
 	public void Exit()
 	{
-		_windowService.CloseAllWindows();
+		// _windowService.CloseAllWindows();
 	}
 }

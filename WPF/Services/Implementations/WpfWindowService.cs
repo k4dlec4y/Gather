@@ -1,24 +1,24 @@
 ﻿using Microsoft.Win32;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using WPF.Models;
 using WPF.Services.Abstractions;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+using WPF.Views;
 
 namespace WPF.Services.Implementations;
 
 internal class WpfWindowService : IWindowService
 {
-	private Window _getLoginWindow()
+	private Window? _getLoginWindow()
 	{
 		var loginWindow = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.Title.Equals("Login"));
-		Debug.Assert(loginWindow != null, "Login window should not be null when getting it!");
 		return loginWindow;
 	}
 
-	public void ShowLoginWindow()
+	public void CreateLoginWindow()
 	{
-		var loginWindow = _getLoginWindow();
+		var loginWindow = new LoginView();
 		loginWindow.Show();
 		App.Current.MainWindow = loginWindow;
 	}
@@ -60,8 +60,8 @@ internal class WpfWindowService : IWindowService
 		var mainUserWindow = new Views.UserV.MainView(user);
 		mainUserWindow.Owner = null;
 		Application.Current.MainWindow = mainUserWindow;
-		_getLoginWindow().Hide();
 		mainUserWindow.Show();
+		_getLoginWindow()?.Close();
 	}
 
 	public void OpenMainOrganizerWindow(EventOrganizer organizer)
@@ -69,8 +69,8 @@ internal class WpfWindowService : IWindowService
 		var mainOrganizerWindow = new Views.Organizer.MainView(organizer);
 		mainOrganizerWindow.Owner = null;
 		Application.Current.MainWindow = mainOrganizerWindow;
-		_getLoginWindow().Hide();
 		mainOrganizerWindow.Show();
+		_getLoginWindow()?.Close();
 	}
 
 	public void OpenMainAdminWindow(User admin)
@@ -78,8 +78,8 @@ internal class WpfWindowService : IWindowService
 		var mainAdminWindow = new Views.Admin.MainView(admin);
 		mainAdminWindow.Owner = null;
 		Application.Current.MainWindow = mainAdminWindow;
-		_getLoginWindow().Hide();
 		mainAdminWindow.Show();
+		_getLoginWindow()?.Close();
 	}
 
 	public void CreateEvent()
