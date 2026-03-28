@@ -64,308 +64,308 @@ public static class WeatherFetcher
 public partial class Temp
 {
 	[JsonProperty("current_condition")]
-	public CurrentCondition[] CurrentCondition { get; set; }
+	public required CurrentCondition[] CurrentCondition { get; set; }
 
 	[JsonProperty("nearest_area")]
-	public NearestArea[] NearestArea { get; set; }
+	public required NearestArea[] NearestArea { get; set; }
 
 	[JsonProperty("request")]
-	public Request[] Request { get; set; }
+	public required Request[] Request { get; set; }
 
 	[JsonProperty("weather")]
-	public Weather[] Weather { get; set; }
+	public required Weather[] Weather { get; set; }
 }
 
 public partial class CurrentCondition
 {
 	[JsonProperty("FeelsLikeC")]
-	public string FeelsLikeC { get; set; }
+	public required string FeelsLikeC { get; set; }
 
 	[JsonProperty("FeelsLikeF")]
-	public string FeelsLikeF { get; set; }
+	public required string FeelsLikeF { get; set; }
 
 	[JsonProperty("cloudcover")]
-	public string Cloudcover { get; set; }
+	public required string Cloudcover { get; set; }
 
 	[JsonProperty("humidity")]
-	public string Humidity { get; set; }
+	public required string Humidity { get; set; }
 
 	[JsonProperty("localObsDateTime")]
-	public string LocalObsDateTime { get; set; }
+	public required string LocalObsDateTime { get; set; }
 
 	[JsonProperty("observation_time")]
-	public string ObservationTime { get; set; }
+	public required string ObservationTime { get; set; }
 
 	[JsonProperty("precipInches")]
-	public string PrecipInches { get; set; }
+	public required string PrecipInches { get; set; }
 
 	[JsonProperty("precipMM")]
-	public string PrecipMm { get; set; }
+	public required string PrecipMm { get; set; }
 
 	[JsonProperty("pressure")]
-	public string Pressure { get; set; }
+	public required string Pressure { get; set; }
 
 	[JsonProperty("pressureInches")]
-	public string PressureInches { get; set; }
+	public required string PressureInches { get; set; }
 
 	[JsonProperty("temp_C")]
-	public string TempC { get; set; }
+	public required string TempC { get; set; }
 
 	[JsonProperty("temp_F")]
-	public string TempF { get; set; }
+	public required string TempF { get; set; }
 
 	[JsonProperty("uvIndex")]
-	public string UvIndex { get; set; }
+	public required string UvIndex { get; set; }
 
 	[JsonProperty("visibility")]
-	public string Visibility { get; set; }
+	public required string Visibility { get; set; }
 
 	[JsonProperty("visibilityMiles")]
-	public string VisibilityMiles { get; set; }
+	public required string VisibilityMiles { get; set; }
 
 	[JsonProperty("weatherCode")]
-	public string WeatherCode { get; set; }
+	public required string WeatherCode { get; set; }
 
 	[JsonProperty("weatherDesc")]
-	public WeatherDesc[] WeatherDesc { get; set; }
+	public required WeatherDesc[] WeatherDesc { get; set; }
 
 	[JsonProperty("weatherIconUrl")]
-	public WeatherDesc[] WeatherIconUrl { get; set; }
+	public required WeatherDesc[] WeatherIconUrl { get; set; }
 
 	[JsonProperty("winddir16Point")]
-	public string Winddir16Point { get; set; }
+	public required string Winddir16Point { get; set; }
 
 	[JsonProperty("winddirDegree")]
-	public string WinddirDegree { get; set; }
+	public required string WinddirDegree { get; set; }
 
 	[JsonProperty("windspeedKmph")]
-	public string WindspeedKmph { get; set; }
+	public required string WindspeedKmph { get; set; }
 
 	[JsonProperty("windspeedMiles")]
-	public string WindspeedMiles { get; set; }
+	public required string WindspeedMiles { get; set; }
 }
 
 public partial class WeatherDesc
 {
 	[JsonProperty("value")]
-	public string Value { get; set; }
+	public required string Value { get; set; }
 }
 
 public partial class NearestArea
 {
 	[JsonProperty("areaName")]
-	public WeatherDesc[] AreaName { get; set; }
+	public required WeatherDesc[] AreaName { get; set; }
 
 	[JsonProperty("country")]
-	public WeatherDesc[] Country { get; set; }
+	public required WeatherDesc[] Country { get; set; }
 
 	[JsonProperty("latitude")]
-	public string Latitude { get; set; }
+	public required string Latitude { get; set; }
 
 	[JsonProperty("longitude")]
-	public string Longitude { get; set; }
+	public required string Longitude { get; set; }
 
 	[JsonProperty("population")]
-	public string Population { get; set; }
+	public required string Population { get; set; }
 
 	[JsonProperty("region")]
-	public WeatherDesc[] Region { get; set; }
+	public required WeatherDesc[] Region { get; set; }
 
 	[JsonProperty("weatherUrl")]
-	public WeatherDesc[] WeatherUrl { get; set; }
+	public required WeatherDesc[] WeatherUrl { get; set; }
 }
 
 public partial class Request
 {
 	[JsonProperty("query")]
-	public string Query { get; set; }
+	public required string Query { get; set; }
 
 	[JsonProperty("type")]
-	public string Type { get; set; }
+	public required string Type { get; set; }
 }
 
 public partial class Weather
 {
 	[JsonProperty("astronomy")]
-	public Astronomy[] Astronomy { get; set; }
+	public required Astronomy[] Astronomy { get; set; }
 
 	[JsonProperty("avgtempC")]
-	public string AvgtempC { get; set; }
+	public required string AvgtempC { get; set; }
 
 	[JsonProperty("avgtempF")]
-	public string AvgtempF { get; set; }
+	public required string AvgtempF { get; set; }
 
 	[JsonProperty("date")]
-	public DateTimeOffset Date { get; set; }
+	public required DateTimeOffset Date { get; set; }
 
 	[JsonProperty("hourly")]
-	public Hourly[] Hourly { get; set; }
+	public required Hourly[] Hourly { get; set; }
 
 	[JsonProperty("maxtempC")]
-	public string MaxtempC { get; set; }
+	public required string MaxtempC { get; set; }
 
 	[JsonProperty("maxtempF")]
-	public string MaxtempF { get; set; }
+	public required string MaxtempF { get; set; }
 
 	[JsonProperty("mintempC")]
-	public string MintempC { get; set; }
+	public required string MintempC { get; set; }
 
 	[JsonProperty("mintempF")]
-	public string MintempF { get; set; }
+	public required string MintempF { get; set; }
 
 	[JsonProperty("sunHour")]
-	public string SunHour { get; set; }
+	public required string SunHour { get; set; }
 
 	[JsonProperty("totalSnow_cm")]
-	public string TotalSnowCm { get; set; }
+	public required string TotalSnowCm { get; set; }
 
 	[JsonProperty("uvIndex")]
-	public string UvIndex { get; set; }
+	public required string UvIndex { get; set; }
 }
 
 public partial class Astronomy
 {
 	[JsonProperty("moon_illumination")]
-	public string MoonIllumination { get; set; }
+	public required string MoonIllumination { get; set; }
 
 	[JsonProperty("moon_phase")]
-	public string MoonPhase { get; set; }
+	public required string MoonPhase { get; set; }
 
 	[JsonProperty("moonrise")]
-	public string Moonrise { get; set; }
+	public required string Moonrise { get; set; }
 
 	[JsonProperty("moonset")]
-	public string Moonset { get; set; }
+	public required string Moonset { get; set; }
 
 	[JsonProperty("sunrise")]
-	public string Sunrise { get; set; }
+	public required string Sunrise { get; set; }
 
 	[JsonProperty("sunset")]
-	public string Sunset { get; set; }
+	public required string Sunset { get; set; }
 }
 
 public partial class Hourly
 {
 	[JsonProperty("DewPointC")]
-	public string DewPointC { get; set; }
+	public required string DewPointC { get; set; }
 
 	[JsonProperty("DewPointF")]
-	public string DewPointF { get; set; }
+	public required string DewPointF { get; set; }
 
 	[JsonProperty("FeelsLikeC")]
-	public string FeelsLikeC { get; set; }
+	public required string FeelsLikeC { get; set; }
 
 	[JsonProperty("FeelsLikeF")]
-	public string FeelsLikeF { get; set; }
+	public required string FeelsLikeF { get; set; }
 
 	[JsonProperty("HeatIndexC")]
-	public string HeatIndexC { get; set; }
+	public required string HeatIndexC { get; set; }
 
 	[JsonProperty("HeatIndexF")]
-	public string HeatIndexF { get; set; }
+	public required string HeatIndexF { get; set; }
 
 	[JsonProperty("WindChillC")]
-	public string WindChillC { get; set; }
+	public required string WindChillC { get; set; }
 
 	[JsonProperty("WindChillF")]
-	public string WindChillF { get; set; }
+	public required string WindChillF { get; set; }
 
 	[JsonProperty("WindGustKmph")]
-	public string WindGustKmph { get; set; }
+	public required string WindGustKmph { get; set; }
 
 	[JsonProperty("WindGustMiles")]
-	public string WindGustMiles { get; set; }
+	public required string WindGustMiles { get; set; }
 
 	[JsonProperty("chanceoffog")]
-	public string Chanceoffog { get; set; }
+	public required string Chanceoffog { get; set; }
 
 	[JsonProperty("chanceoffrost")]
-	public string Chanceoffrost { get; set; }
+	public required string Chanceoffrost { get; set; }
 
 	[JsonProperty("chanceofhightemp")]
-	public string Chanceofhightemp { get; set; }
+	public required string Chanceofhightemp { get; set; }
 
 	[JsonProperty("chanceofovercast")]
-	public string Chanceofovercast { get; set; }
+	public required string Chanceofovercast { get; set; }
 
 	[JsonProperty("chanceofrain")]
-	public string Chanceofrain { get; set; }
+	public required string Chanceofrain { get; set; }
 
 	[JsonProperty("chanceofremdry")]
-	public string Chanceofremdry { get; set; }
+	public required string Chanceofremdry { get; set; }
 
 	[JsonProperty("chanceofsnow")]
-	public string Chanceofsnow { get; set; }
+	public required string Chanceofsnow { get; set; }
 
 	[JsonProperty("chanceofsunshine")]
-	public string Chanceofsunshine { get; set; }
+	public required string Chanceofsunshine { get; set; }
 
 	[JsonProperty("chanceofthunder")]
-	public string Chanceofthunder { get; set; }
+	public required string Chanceofthunder { get; set; }
 
 	[JsonProperty("chanceofwindy")]
-	public string Chanceofwindy { get; set; }
+	public required string Chanceofwindy { get; set; }
 
 	[JsonProperty("cloudcover")]
-	public string Cloudcover { get; set; }
+	public required string Cloudcover { get; set; }
 
 	[JsonProperty("diffRad")]
-	public string DiffRad { get; set; }
+	public required string DiffRad { get; set; }
 
 	[JsonProperty("humidity")]
-	public string Humidity { get; set; }
+	public required string Humidity { get; set; }
 
 	[JsonProperty("precipInches")]
-	public string PrecipInches { get; set; }
+	public required string PrecipInches { get; set; }
 
 	[JsonProperty("precipMM")]
-	public string PrecipMm { get; set; }
+	public required string PrecipMm { get; set; }
 
 	[JsonProperty("pressure")]
-	public string Pressure { get; set; }
+	public required string Pressure { get; set; }
 
 	[JsonProperty("pressureInches")]
-	public string PressureInches { get; set; }
+	public required string PressureInches { get; set; }
 
 	[JsonProperty("shortRad")]
-	public string ShortRad { get; set; }
+	public required string ShortRad { get; set; }
 
 	[JsonProperty("tempC")]
-	public string TempC { get; set; }
+	public required string TempC { get; set; }
 
 	[JsonProperty("tempF")]
-	public string TempF { get; set; }
+	public required string TempF { get; set; }
 
 	[JsonProperty("time")]
-	public string Time { get; set; }
+	public required string Time { get; set; }
 
 	[JsonProperty("uvIndex")]
-	public string UvIndex { get; set; }
+	public required string UvIndex { get; set; }
 
 	[JsonProperty("visibility")]
-	public string Visibility { get; set; }
+	public required string Visibility { get; set; }
 
 	[JsonProperty("visibilityMiles")]
-	public string VisibilityMiles { get; set; }
+	public required string VisibilityMiles { get; set; }
 
 	[JsonProperty("weatherCode")]
-	public string WeatherCode { get; set; }
+	public required string WeatherCode { get; set; }
 
 	[JsonProperty("weatherDesc")]
-	public WeatherDesc[] WeatherDesc { get; set; }
+	public required WeatherDesc[] WeatherDesc { get; set; }
 
 	[JsonProperty("weatherIconUrl")]
-	public WeatherDesc[] WeatherIconUrl { get; set; }
+	public required WeatherDesc[] WeatherIconUrl { get; set; }
 
 	[JsonProperty("winddir16Point")]
-	public string Winddir16Point { get; set; }
+	public required string Winddir16Point { get; set; }
 
 	[JsonProperty("winddirDegree")]
-	public string WinddirDegree { get; set; }
+	public required string WinddirDegree { get; set; }
 
 	[JsonProperty("windspeedKmph")]
-	public string WindspeedKmph { get; set; }
+	public required string WindspeedKmph { get; set; }
 
 	[JsonProperty("windspeedMiles")]
-	public string WindspeedMiles { get; set; }
+	public required string WindspeedMiles { get; set; }
 }
