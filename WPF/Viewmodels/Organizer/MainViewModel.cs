@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
-using WPF.Models;
 using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Organizer;
@@ -15,9 +14,11 @@ internal partial class MainViewModel : ObservableObject
 	public MainViewModel(
 		IWindowService windowService,
 		IOrganizerIdentityService organizerIdentityService,
-		INavigationService navigation
-	) {
-		Debug.Assert(organizerIdentityService.CurrentEventOrganizer != null, "Current event organizer cannot be null when initializing MainViewModel");
+		INavigationService navigation)
+	{
+		Debug.Assert(
+			organizerIdentityService.CurrentEventOrganizer != null,
+			"Current event organizer cannot be null when initializing MainViewModel");
 
 		Navigation = navigation;
 		OrganizerIdentityService = organizerIdentityService;

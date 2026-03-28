@@ -7,10 +7,10 @@ namespace WPF.Managers;
 
 public static class MessageManager
 {
-	public static async Task<bool> SendMessage
-	(
-		User sender, User receiver, string content
-	)
+	public static async Task<bool> SendMessage(
+		User sender,
+		User receiver,
+		string content)
 	{
 		using var context = new AppDbContext();
 		using var transaction = await context.Database.BeginTransactionAsync();
@@ -27,7 +27,7 @@ public static class MessageManager
 				return false;
 			}
 
-				var message = new Message
+			var message = new Message
 			{
 				FromId = dbSender.Id,
 				ToId = dbReceiver.Id,

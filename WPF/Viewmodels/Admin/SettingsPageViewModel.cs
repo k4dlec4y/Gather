@@ -11,8 +11,8 @@ internal partial class SettingsPageViewModel : ObservableObject
 
 	public SettingsPageViewModel(
 		IWindowService windowService,
-		IUserIdentityService userIdentityService
-	) {
+		IUserIdentityService userIdentityService)
+	{
 		_windowService = windowService;
 		_userIdentityService = userIdentityService;
 	}

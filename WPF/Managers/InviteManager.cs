@@ -7,17 +7,25 @@ namespace WPF.Managers;
 
 public static class InviteManager
 {
-	public static async Task<string> SendInvite(User sender, User receiver, Event @event, string content)
+	public static async Task<string> SendInvite(
+		User sender,
+		User receiver,
+		Event @event,
+		string content)
 	{
 		using var context = new AppDbContext();
 		using var transaction = await context.Database.BeginTransactionAsync();
 		try
 		{
-			if (await context.Invites.AnyAsync(i =>
-				i.FromId == sender.Id &&
-				i.ToId == receiver.Id &&
-				i.EventId == @event.Id))
+			bool alreadyInvited = await context.Invites
+				.AnyAsync(i => i.FromId == sender.Id &&
+							   i.ToId == receiver.Id &&
+							   i.EventId == @event.Id);
+
+			if (alreadyInvited)
+			{
 				return "You have already sent an equivalent invite!";
+			}
 
 			var dbSender = await context.Users
 				.FirstOrDefaultAsync(u => u.Id == sender.Id);
@@ -29,7 +37,9 @@ public static class InviteManager
 				.FirstOrDefaultAsync(e => e.Id == @event.Id);
 
 			if (dbSender == null || dbReceiver == null || dbEvent == null)
+			{
 				return "One or more required entities could not be found.";
+			}
 
 			if (dbEvent.Participants.Any(p => p.Id == dbReceiver.Id))
 			{
@@ -74,7 +84,9 @@ public static class InviteManager
 				.FirstOrDefaultAsync(i => i.Id == invite.Id);
 
 			if (dbInvite == null)
+			{
 				return "Could not find invite in the database";
+			}
 
 			if (invite.Event.Participants.Any(p => p.Id == invite.To.Id))
 			{
@@ -127,7 +139,9 @@ public static class InviteManager
 				.FirstOrDefaultAsync(i => i.Id == invite.Id);
 
 			if (dbInvite == null)
+			{
 				return "Could not find invite in the database";
+			}
 
 			context.Invites.Attach(dbInvite);
 			context.Users.Attach(dbInvite.To);

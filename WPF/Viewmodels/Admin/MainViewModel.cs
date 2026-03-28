@@ -11,10 +11,10 @@ internal partial class MainViewModel : ObservableObject
 	private IUserIdentityService _userIdentityService { get; init; }
 
 	public MainViewModel(
-			IWindowService windowService,
-			IUserIdentityService userIdentityService,
-			INavigationService navigation
-	) {
+		IWindowService windowService,
+		IUserIdentityService userIdentityService,
+		INavigationService navigation)
+	{
 		_windowService = windowService;
 		_userIdentityService = userIdentityService;
 		Navigation = navigation;

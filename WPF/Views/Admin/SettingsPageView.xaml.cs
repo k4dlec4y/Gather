@@ -1,6 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Windows.Controls;
 using WPF.Viewmodels.Admin;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace WPF.Views.Admin;
 

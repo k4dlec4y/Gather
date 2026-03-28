@@ -3,6 +3,8 @@
 	internal static class Configuration
 	{
 		public const string databaseConnectionString =
-		@"server=(localdb)\MSSQLLocalDB; Initial Catalog = AppDb; Integrated Security = True;";
+			@"server=(localdb)\MSSQLLocalDB; " +
+			"Initial Catalog = AppDb; " +
+			"Integrated Security = True;";
 	}
 }

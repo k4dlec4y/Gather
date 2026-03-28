@@ -1,16 +1,16 @@
-﻿using WPF.Data;
-using WPF.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using WPF.Data;
+using WPF.Models;
 
 namespace WPF.Managers;
 
 public static class FriendRequestManager
 {
-	public static async Task<bool> SendFriendRequest
-	(
-		User sender, User receiver, string content
-	)
+	public static async Task<bool> SendFriendRequest(
+		User sender,
+		User receiver,
+		string content)
 	{
 		using var context = new AppDbContext();
 		using var transaction = await context.Database.BeginTransactionAsync();

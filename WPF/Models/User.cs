@@ -13,11 +13,11 @@ public class User
 	public string Username { get; set; }
 	public byte[] PasswordHash { get; set; }
 
-	public ObservableCollection<Event> EventsToAttend { get; set; } = new ();
-	public ObservableCollection<Message> Inbox { get; set; } = new ();
+	public ObservableCollection<Event> EventsToAttend { get; set; } = new();
+	public ObservableCollection<Message> Inbox { get; set; } = new();
 	public ObservableCollection<FriendRequest> FriendRequests { get; set; } = new();
 	public ObservableCollection<Invite> Invites { get; set; } = new();
-	public ObservableCollection<User> Friends { get; set; } = new ();
+	public ObservableCollection<User> Friends { get; set; } = new();
 
 	public User(string username, byte[] hash)
 	{
@@ -25,5 +25,6 @@ public class User
 		PasswordHash = hash;
 	}
 
-	protected User() { }  // for entity framework
+	// for entity framework
+	protected User() { }
 }

@@ -9,4 +9,4 @@ public partial class OrganizerIdentityService : ObservableObject, IOrganizerIden
 
 	public void Login(EventOrganizer eventOrganizer) => CurrentEventOrganizer = eventOrganizer;
 	public void Logout() => CurrentEventOrganizer = null;
-}	
+}

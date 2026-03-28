@@ -13,8 +13,8 @@ internal partial class SettingsPageViewModel : ObservableObject
 	public SettingsPageViewModel(
 		IOrganizerIdentityService organizerIdentityService,
 		IDialogService dialogService,
-		IWindowService windowService
-	) {
+		IWindowService windowService)
+	{
 		_organizerIdentityService = organizerIdentityService;
 		_dialogService = dialogService;
 		_windowService = windowService;
@@ -31,7 +31,8 @@ internal partial class SettingsPageViewModel : ObservableObject
 	[RelayCommand]
 	public async Task DeleteAccount()
 	{
-		bool success = await Managers.EventOrganizerManager.DeleteEventOrganizer(_organizerIdentityService.CurrentEventOrganizer);
+		bool success = await Managers.EventOrganizerManager.DeleteEventOrganizer(
+			_organizerIdentityService.CurrentEventOrganizer);
 		if (!success)
 		{
 			_dialogService.ShowError("Please, try again");

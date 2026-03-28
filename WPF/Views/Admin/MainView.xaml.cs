@@ -8,10 +8,10 @@ namespace WPF.Views.Admin;
 
 public partial class MainView : Window
 {
-    public MainView(User admin)
-    {
-        InitializeComponent();
-        App.Current.Services.GetRequiredService<IUserIdentityService>().Login(admin);
+	public MainView(User admin)
+	{
+		InitializeComponent();
+		App.Current.Services.GetRequiredService<IUserIdentityService>().Login(admin);
 		DataContext = App.Current.Services.GetRequiredService<MainViewModel>();
 	}
 }

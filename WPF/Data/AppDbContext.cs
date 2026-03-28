@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WPF.Models;
 using WPF.Config;
+using WPF.Models;
 
 namespace WPF.Data;
 
@@ -100,8 +100,7 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<Event>()
 			.HasMany(e => e.Participants)
 			.WithMany(u => u.EventsToAttend)
-			.UsingEntity<Dictionary<string, object>>
-			(
+			.UsingEntity<Dictionary<string, object>>(
 				"EventAttendance",
 				j => j.HasOne<User>()
 					  .WithMany()
@@ -111,15 +110,12 @@ public class AppDbContext : DbContext
 					  .WithMany()
 					  .HasForeignKey("EventId")
 					  .OnDelete(DeleteBehavior.Cascade),
-				j => j.HasKey("EventId", "UserId")
-			);
-
+				j => j.HasKey("EventId", "UserId"));
 
 		modelBuilder.Entity<User>()
 			.HasMany(u => u.Friends)
 			.WithMany()
-			.UsingEntity<Friendship>
-			(
+			.UsingEntity<Friendship>(
 				j => j.HasOne(f => f.Friend2)
 					  .WithMany()
 					  .HasForeignKey(f => f.Friend2Id),
@@ -130,8 +126,7 @@ public class AppDbContext : DbContext
 				{
 					j.ToTable("Friendship");
 					j.HasKey(f => new { f.Friend1Id, f.Friend2Id });
-				}
-			);
+				});
 
 		// Message
 		modelBuilder.Entity<Message>()
@@ -198,19 +193,15 @@ public class AppDbContext : DbContext
 			.OnDelete(DeleteBehavior.Cascade);
 
 		// Data
-		modelBuilder.Entity<User>().HasData( // so admin can send messages
-			new User
-			(
+
+		// so admin can send messages
+		modelBuilder.Entity<User>().HasData(
+			new User(
 				"admin",
-				Convert.FromHexString
-				(
-					"CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB"
-				)
-			)
+				Convert.FromHexString("CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB"))
 			{
 				Id = 1
-			}
-		);
+			});
 
 		base.OnModelCreating(modelBuilder);
 	}

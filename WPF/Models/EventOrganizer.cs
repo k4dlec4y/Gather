@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,5 +14,5 @@ public class EventOrganizer
 	public required byte[] PasswordHash { get; set; }
 	public required string Info { get; set; }
 
-	public ObservableCollection<Event> Events { get; set; } = new ();
+	public ObservableCollection<Event> Events { get; set; } = new();
 }

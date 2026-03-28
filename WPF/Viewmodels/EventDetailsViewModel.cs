@@ -6,8 +6,8 @@ namespace WPF.Viewmodels;
 
 public partial class EventDetailsViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private Event _event;
+	[ObservableProperty]
+	private Event _event;
 
 	[ObservableProperty]
 	private string _weatherInfo;
@@ -15,11 +15,10 @@ public partial class EventDetailsViewModel : ObservableObject
 	public ObservableCollection<Models.User> FriendsAttending { get; set; }
 
 	public EventDetailsViewModel(Event @event, ObservableCollection<Models.User> friends)
-    {
+	{
 		Event = @event;
 		FriendsAttending = new ObservableCollection<Models.User>(
-			friends.Where(friend => friend.EventsToAttend.Any(e => e.Id == @event.Id))
-		);
+			friends.Where(friend => friend.EventsToAttend.Any(e => e.Id == @event.Id)));
 		OnPropertyChanged(nameof(FriendsAttending));
 		LoadWeatherInfo();
 	}

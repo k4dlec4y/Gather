@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using WPF.Models;
-using WPF.Managers;
-using WPF.Services.Abstractions;
 using System.Diagnostics;
+using WPF.Managers;
+using WPF.Models;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Organizer;
 
@@ -34,8 +34,8 @@ internal partial class CreateEventWindowViewModel : ObservableObject
 		IOrganizerIdentityService organizerIdentityService,
 		IDialogService dialogService,
 		IWindowService windowService,
-		IFileService fileService
-	) {
+		IFileService fileService)
+	{
 		Debug.Assert(organizerIdentityService.CurrentEventOrganizer != null, "Current event organizer cannot be null when initializing CreateEventWindowViewModel");
 		_currentEventOrganizer = organizerIdentityService.CurrentEventOrganizer;
 

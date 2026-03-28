@@ -1,8 +1,8 @@
-﻿using WPF.Models;
-using WPF.Data;
-using System.Windows;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Windows;
+using WPF.Data;
+using WPF.Models;
 
 namespace WPF.Managers;
 

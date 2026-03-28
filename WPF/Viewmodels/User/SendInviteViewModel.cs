@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Windows;
 using WPF.Models;
 using WPF.Services.Abstractions;
 
@@ -24,9 +23,11 @@ internal partial class SendInviteViewModel : ObservableObject
 	public SendInviteViewModel(
 		IUserIdentityService userIdentityService,
 		IDialogService dialogService,
-		Event @event
-	) {
-		Debug.Assert(userIdentityService.CurrentUser != null, "User should not be null!");
+		Event @event)
+	{
+		Debug.Assert(
+			userIdentityService.CurrentUser != null,
+			"User should not be null when initializing SendInviteViewModel.");
 		_userIdentityService = userIdentityService;
 		Friends = _userIdentityService.CurrentUser!.Friends;
 		_event = @event;
@@ -49,11 +50,13 @@ internal partial class SendInviteViewModel : ObservableObject
 			$"{_userIdentityService.CurrentUser!.Username} has invited you to the event {_event.Name}!"
 		);
 
-		// SelectedFriend = null;
-
 		if (success.Equals(""))
+		{
 			_dialogService.ShowMessage("Invite sent successfully!");
+		}
 		else
+		{
 			_dialogService.ShowError(success);
+		}
 	}
 }

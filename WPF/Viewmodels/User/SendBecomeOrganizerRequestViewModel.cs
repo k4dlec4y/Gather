@@ -1,10 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Windows;
-using WPF.Models;
-using WPF.Managers;
-using WPF.Services.Abstractions;
 using System.Diagnostics;
+using WPF.Managers;
+using WPF.Models;
+using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.User;
 
@@ -18,9 +17,11 @@ internal partial class SendBecomeOrganizerRequestViewModel : ObservableObject
 
 	public SendBecomeOrganizerRequestViewModel(
 		IUserIdentityService userIdentityService,
-		IDialogService dialogService
-	) {
-		Debug.Assert(userIdentityService.CurrentUser != null, "User cannot be null");
+		IDialogService dialogService)
+	{
+		Debug.Assert(
+			userIdentityService.CurrentUser != null,
+			"User cannot be null when initializing SendBecomeOrganizerRequestViewModel");
 		_userIdentityService = userIdentityService;
 		_dialogService = dialogService;
 	}
@@ -58,8 +59,7 @@ internal partial class SendBecomeOrganizerRequestViewModel : ObservableObject
 			{
 				UserId = _userIdentityService.CurrentUser!.Id,
 				RequestText = RequestText
-			}
-		);
+			});
 
 		if (success)
 		{

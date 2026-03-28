@@ -26,9 +26,11 @@ internal partial class EventsPageViewModel : ObservableObject
 
 	public EventsPageViewModel(
 		IUserIdentityService userIdentityService,
-		IWindowService windowService
-	) {
-		Debug.Assert(userIdentityService.CurrentUser != null, "CurrentUser should not be null when initializing EventsPageViewModel");
+		IWindowService windowService)
+	{
+		Debug.Assert(
+			userIdentityService.CurrentUser != null,
+			"CurrentUser should not be null when initializing EventsPageViewModel");
 		_currentUser = userIdentityService.CurrentUser;
 		_windowService = windowService;
 		FilterEvents();
@@ -38,16 +40,20 @@ internal partial class EventsPageViewModel : ObservableObject
 	public void SelectEvent()
 	{
 		if (SelectedEvent != null)
+		{
 			_windowService.ShowEventDetails(SelectedEvent, _currentUser.Friends);
+		}
 		SelectedEvent = null;
 	}
 
 	[RelayCommand]
 	public void FilterEvents()
 	{
-		var filtered = (IsParticipatingOnly ? 
-			EventManager.GetEventsUserAttend(_currentUser) : 
-			EventManager.GetEvents(_currentUser))
+		var eventsToFilter = IsParticipatingOnly
+			? EventManager.GetEventsUserAttend(_currentUser)
+			: EventManager.GetEvents(_currentUser);
+
+		var filtered = eventsToFilter
 			.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
 				.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
 			.ToList();

@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using WPF.Models;
 using WPF.Managers;
+using WPF.Models;
 
 namespace WPF.Viewmodels.Admin;
 

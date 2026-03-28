@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Runtime.Intrinsics.X86;
 using WPF.Data;
 using WPF.Models;
 

@@ -15,7 +15,7 @@ internal partial class MyEventsPageViewModel : ObservableObject
 
 	public ObservableCollection<Event> MyEvents { get; set; }
 
-	private EventOrganizer _currentEventOrganizer {get; init; }
+	private EventOrganizer _currentEventOrganizer { get; init; }
 
 	[ObservableProperty]
 	private Event? _selectedEvent;
@@ -26,9 +26,11 @@ internal partial class MyEventsPageViewModel : ObservableObject
 	public MyEventsPageViewModel(
 		IOrganizerIdentityService organizerIdentityService,
 		IDialogService dialogService,
-		IWindowService windowService
-	) {
-		Debug.Assert(organizerIdentityService.CurrentEventOrganizer != null, "CurrentEventOrganizer should not be null when initializing MyEventsPageViewModel");
+		IWindowService windowService)
+	{
+		Debug.Assert(
+			organizerIdentityService.CurrentEventOrganizer != null,
+			"CurrentEventOrganizer should not be null when initializing MyEventsPageViewModel");
 		_currentEventOrganizer = organizerIdentityService.CurrentEventOrganizer!;
 		MyEvents = _currentEventOrganizer.Events;
 
@@ -40,7 +42,9 @@ internal partial class MyEventsPageViewModel : ObservableObject
 	public void SelectEvent()
 	{
 		if (SelectedEvent != null)
+		{
 			_windowService.ShowEventDetails(SelectedEvent, new ObservableCollection<Models.User>());
+		}
 		SelectedEvent = null;
 	}
 
@@ -71,7 +75,10 @@ internal partial class MyEventsPageViewModel : ObservableObject
 	[RelayCommand]
 	public async Task DeleteEvent(Event e)
 	{
-		if (e == null) return;
+		if (e == null)
+		{
+			return;
+		}
 
 		if (await EventManager.RemoveEvent(e))
 		{

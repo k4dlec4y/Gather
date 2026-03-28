@@ -14,24 +14,26 @@ internal partial class MainViewModel : ObservableObject
 	public MainViewModel(
 		IUserIdentityService userIdentityService,
 		INavigationService navigation,
-		IWindowService windowService
-	) {
-		Debug.Assert(userIdentityService.CurrentUser != null, "User cannot be null");
+		IWindowService windowService)
+	{
+		Debug.Assert(
+			userIdentityService.CurrentUser != null,
+			"User cannot be null when initializing MainViewModel");
 		UserIdentityService = userIdentityService;
 		Navigation = navigation;
 		_windowService = windowService;
 		Events();
 	}
 
-    [RelayCommand]
-    public void Events()
-    {
+	[RelayCommand]
+	public void Events()
+	{
 		Navigation.NavigateTo<EventsPageViewModel>();
 	}
 
 	[RelayCommand]
 	public void Friends()
-    {
+	{
 		Navigation.NavigateTo<FriendsPageViewModel>();
 	}
 
@@ -43,7 +45,7 @@ internal partial class MainViewModel : ObservableObject
 
 	[RelayCommand]
 	public void Settings()
-    {
+	{
 		Navigation.NavigateTo<SettingsPageViewModel>();
 	}
 

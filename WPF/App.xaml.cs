@@ -5,9 +5,6 @@ using WPF.Services.Implementations;
 
 namespace WPF;
 
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
 public partial class App : Application
 {
 	public IServiceProvider Services { get; }
@@ -42,7 +39,7 @@ public partial class App : Application
 		services.AddTransient<Viewmodels.User.SendBecomeOrganizerRequestViewModel>();
 		services.AddTransient<Viewmodels.User.SendInviteViewModel>();
 		services.AddTransient<Viewmodels.User.SettingsPageViewModel>();
-		
+
 		services.AddSingleton<Viewmodels.LoginViewModel>();
 		services.AddTransient<Viewmodels.EventDetailsViewModel>();
 

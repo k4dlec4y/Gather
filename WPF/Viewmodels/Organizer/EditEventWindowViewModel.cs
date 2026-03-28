@@ -39,8 +39,8 @@ internal partial class EditEventWindowViewModel : ObservableObject
 		IDialogService dialogService,
 		IWindowService windowService,
 		IFileService fileService,
-		INavigationService navigationService
-	) {
+		INavigationService navigationService)
+	{
 		_dialogService = dialogService;
 		_windowService = windowService;
 		_fileService = fileService;

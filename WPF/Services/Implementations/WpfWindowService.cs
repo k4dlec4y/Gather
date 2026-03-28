@@ -1,6 +1,5 @@
 ﻿using Microsoft.Win32;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows;
 using WPF.Models;
 using WPF.Services.Abstractions;
@@ -42,7 +41,7 @@ internal class WpfWindowService : IWindowService
 
 	public bool OpenFileDialog(string filter, out string filePath)
 	{
-		var openFileDialog = new OpenFileDialog{Filter = filter};
+		var openFileDialog = new OpenFileDialog { Filter = filter };
 		if (openFileDialog.ShowDialog() == true)
 		{
 			filePath = openFileDialog.FileName;

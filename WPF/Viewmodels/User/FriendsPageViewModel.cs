@@ -21,9 +21,11 @@ internal partial class FriendsPageViewModel : ObservableObject
 
 	public FriendsPageViewModel(
 		IUserIdentityService userIdentityService,
-		IDialogService dialogService
-	) {
-		Debug.Assert(userIdentityService.CurrentUser != null, "CurrentUser should not be null when initializing FriendsPageViewModel");
+		IDialogService dialogService)
+	{
+		Debug.Assert(
+			userIdentityService.CurrentUser != null,
+			"CurrentUser should not be null when initializing FriendsPageViewModel");
 		CurrentUser = userIdentityService.CurrentUser;
 		_dialogService = dialogService;
 	}
@@ -33,7 +35,7 @@ internal partial class FriendsPageViewModel : ObservableObject
 	{
 		Models.User? to = await UserManager.GetUser(NewFriendUsername);
 
-		if(NewFriendUsername == CurrentUser.Username)
+		if (NewFriendUsername == CurrentUser.Username)
 		{
 			_dialogService.ShowError("You cannot add yourself as a friend");
 			return;
@@ -59,7 +61,7 @@ internal partial class FriendsPageViewModel : ObservableObject
 			to,
 			$"{CurrentUser.Username} has sent you a friend request!");
 
-		_dialogService.ShowMessage(sent ? $"Friend request sent" : "Please, try again");	
+		_dialogService.ShowMessage(sent ? $"Friend request sent" : "Please, try again");
 	}
 
 	[RelayCommand]

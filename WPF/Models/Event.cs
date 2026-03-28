@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Windows.Media;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace WPF.Models;
@@ -39,7 +39,7 @@ public class Event
 	public EventOrganizer Organizer { get; set; }
 
 	public ObservableCollection<string> Categories { get; set; }
-	public ObservableCollection<User> Participants { get; set; } = new ObservableCollection<User>();
+	public ObservableCollection<User> Participants { get; set; } = new();
 
 	[NotMapped]
 	public bool IsCurrentUserParticipating { get; set; }
@@ -51,8 +51,7 @@ public class Event
 		string location,
 		byte[] imageData,
 		int organizerId,
-		ObservableCollection<string> categories
-	)
+		ObservableCollection<string> categories)
 	{
 		Name = name;
 		Description = description;
@@ -63,7 +62,8 @@ public class Event
 		Categories = categories;
 	}
 
-	protected Event() { }  // for entity framework
+	// for entity framework
+	protected Event() { }
 
 	public async Task<bool> AddParticipant(User participant)
 	{
@@ -71,7 +71,6 @@ public class Event
 		{
 			return false;
 		}
-
 		return await Managers.ParticipationManager.AddParticipation(this, participant);
 	}
 

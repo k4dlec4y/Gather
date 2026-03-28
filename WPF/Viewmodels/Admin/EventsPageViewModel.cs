@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using WPF.Models;
 using WPF.Managers;
+using WPF.Models;
 using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Admin;
@@ -22,8 +22,8 @@ internal partial class EventsPageViewModel : ObservableObject
 
 	public EventsPageViewModel(
 		IDialogService dialogService,
-		IWindowService windowService
-	) {
+		IWindowService windowService)
+	{
 		_dialogService = dialogService;
 		_windowService = windowService;
 	}
@@ -32,7 +32,9 @@ internal partial class EventsPageViewModel : ObservableObject
 	public void SelectEvent()
 	{
 		if (SelectedEvent != null)
+		{
 			_windowService.ShowEventDetails(SelectedEvent, new ObservableCollection<Models.User>());
+		}
 		SelectedEvent = null;
 	}
 
@@ -40,11 +42,8 @@ internal partial class EventsPageViewModel : ObservableObject
 	public void FilterEvents()
 	{
 		var filtered = EventManager.GetEvents()
-			.Where(e => (e.Name +
-						 e.Location +
-						 e.Description +
-						 string.Join(" ", e.Categories.ToList())
-						).Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
+			.Where(e => (e.Name + e.Location + e.Description + string.Join(" ", e.Categories.ToList()))
+				.Contains(SearchQuery, StringComparison.InvariantCultureIgnoreCase))
 			.ToList();
 
 		Events = new ObservableCollection<Event>(filtered);
@@ -55,13 +54,17 @@ internal partial class EventsPageViewModel : ObservableObject
 	public async Task DeleteEvent(Event e)
 	{
 		if (e == null)
+		{
 			return;
+		}
 
 		if (await EventManager.RemoveEvent(e))
 		{
 			Events.Remove(e);
 			if (SelectedEvent == e)
+			{
 				SelectedEvent = null;
+			}
 		}
 		else
 		{

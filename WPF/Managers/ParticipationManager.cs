@@ -29,7 +29,6 @@ public static class ParticipationManager
 			if (dbEvent.Participants.Contains(dbUser))
 			{
 				return false;
-				
 			}
 			dbEvent.Participants.Add(dbUser);
 
@@ -59,7 +58,9 @@ public static class ParticipationManager
 			var dbUser = await context.Users.FindAsync(user.Id);
 
 			if (dbEvent == null || dbUser == null)
+			{
 				return false;
+			}
 
 			dbEvent.Participants.Remove(dbUser);
 

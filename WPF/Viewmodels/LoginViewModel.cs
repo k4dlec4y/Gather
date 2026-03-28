@@ -29,8 +29,8 @@ internal partial class LoginViewModel : ObservableObject
 
 	public LoginViewModel(
 		IDialogService dialogService,
-		IWindowService windowService
-	) {
+		IWindowService windowService)
+	{
 		_dialogService = dialogService;
 		_windowService = windowService;
 	}
@@ -38,11 +38,15 @@ internal partial class LoginViewModel : ObservableObject
 	private bool _computePasswordHash()
 	{
 		if (SecurePassword == null)
+		{
 			return false;
+		}
 
 		string? plainPassword = Marshal.PtrToStringUni(Marshal.SecureStringToGlobalAllocUnicode(SecurePassword));
 		if (plainPassword == null)
+		{
 			return false;
+		}
 
 		using (SHA256 sha256 = SHA256.Create())
 		{
@@ -70,8 +74,8 @@ internal partial class LoginViewModel : ObservableObject
 		if (SelectedRole.Equals("Basic User"))
 		{
 			if (Username.Equals("admin") &&
-				_passwordHash.SequenceEqual(Convert.FromHexString("CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB"))
-			) {
+				_passwordHash.SequenceEqual(Convert.FromHexString("CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB")))
+			{
 				_windowService.OpenMainAdminWindow(new Models.User("admin", Array.Empty<byte>()));
 				return;
 			}

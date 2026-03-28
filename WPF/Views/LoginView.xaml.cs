@@ -1,7 +1,7 @@
-﻿using System.Windows;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
 using System.Windows.Controls;
 using WPF.Viewmodels;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace WPF.Views;
 

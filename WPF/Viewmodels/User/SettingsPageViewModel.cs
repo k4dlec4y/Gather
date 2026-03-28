@@ -12,20 +12,20 @@ internal partial class SettingsPageViewModel : ObservableObject
 	private IDialogService _dialogService { get; init; }
 	private IWindowService _windowService { get; init; }
 
-    public SettingsPageViewModel(
+	public SettingsPageViewModel(
 		IUserIdentityService userIdentityService,
 		IDialogService dialogService,
-		IWindowService windowService
-	) {
+		IWindowService windowService)
+	{
 		Debug.Assert(userIdentityService.CurrentUser != null, "User should not be null!");
 		_userIdentityService = userIdentityService;
 		_dialogService = dialogService;
 		_windowService = windowService;
 	}
 
-    [RelayCommand]
-    public void SignOut()
-    {
+	[RelayCommand]
+	public void SignOut()
+	{
 		_windowService.CreateLoginWindow();
 		_windowService.CloseMainWindow("User MainView");
 		_userIdentityService.Logout();

@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using WPF.Models;
-using WPF.Managers;
 using System.Diagnostics;
+using WPF.Managers;
+using WPF.Models;
 using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.User;
@@ -13,9 +13,11 @@ internal partial class InboxPageViewModel : ObservableObject
 	public Models.User _currentUser;
 
 	public InboxPageViewModel(
-		IUserIdentityService userIdentityService
-	) {
-		Debug.Assert(userIdentityService.CurrentUser != null, "CurrentUser should not be null when initializing InboxPageViewModel.");
+		IUserIdentityService userIdentityService)
+	{
+		Debug.Assert(
+			userIdentityService.CurrentUser != null,
+			"CurrentUser should not be null when initializing InboxPageViewModel.");
 		_currentUser = userIdentityService.CurrentUser;
 	}
 

@@ -6,9 +6,9 @@ namespace WPF.Views.Admin;
 
 public partial class EventsPageView : UserControl
 {
-    public EventsPageView()
-    {
-        InitializeComponent();
+	public EventsPageView()
+	{
+		InitializeComponent();
 		DataContext = App.Current.Services.GetService<EventsPageViewModel>();
 	}
 }
