@@ -20,6 +20,7 @@ internal partial class MainViewModel : ObservableObject
 			userIdentityService.CurrentUser != null,
 			"User cannot be null when initializing MainViewModel");
 		UserIdentityService = userIdentityService;
+
 		Navigation = navigation;
 		_windowService = windowService;
 		Events();

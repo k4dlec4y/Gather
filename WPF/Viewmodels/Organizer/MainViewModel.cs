@@ -19,9 +19,9 @@ internal partial class MainViewModel : ObservableObject
 		Debug.Assert(
 			organizerIdentityService.CurrentEventOrganizer != null,
 			"Current event organizer cannot be null when initializing MainViewModel");
+		OrganizerIdentityService = organizerIdentityService;
 
 		Navigation = navigation;
-		OrganizerIdentityService = organizerIdentityService;
 		_windowService = windowService;
 		MyEvents();
 	}

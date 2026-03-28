@@ -61,7 +61,14 @@ internal partial class FriendsPageViewModel : ObservableObject
 			to,
 			$"{CurrentUser.Username} has sent you a friend request!");
 
-		_dialogService.ShowMessage(sent ? $"Friend request sent" : "Please, try again");
+		if (sent)
+		{
+			_dialogService.ShowMessage($"Friend request sent");
+		}
+		else
+		{
+			_dialogService.ShowError("Please, try again");
+		}
 	}
 
 	[RelayCommand]

@@ -5,7 +5,7 @@ namespace WPF.Services.Implementations;
 
 internal class WpfDialogService : IDialogService
 {
-	private Window? _getActiveWindow()
+	private Window? GetActiveWindow()
 	{
 		var active = Application.Current.Windows.OfType<Window>().FirstOrDefault(x => x.IsActive);
 		if (active == null)
@@ -15,12 +15,12 @@ internal class WpfDialogService : IDialogService
 		return active ?? Application.Current.MainWindow;
 	}
 
-	private void _showMessageBox(
+	private void ShowMessageBox(
 		string message,
 		string title,
 		MessageBoxImage image)
 	{
-		var owner = _getActiveWindow();
+		var owner = GetActiveWindow();
 		MessageBox.Show(owner!, message, title, MessageBoxButton.OK, image);
 		owner?.Activate();
 		owner?.Focus();
@@ -30,7 +30,7 @@ internal class WpfDialogService : IDialogService
 	{
 		Application.Current.Dispatcher.Invoke(() =>
 		{
-			_showMessageBox(message, title, MessageBoxImage.Information);
+			ShowMessageBox(message, title, MessageBoxImage.Information);
 		});
 	}
 
@@ -38,7 +38,7 @@ internal class WpfDialogService : IDialogService
 	{
 		Application.Current.Dispatcher.Invoke(() =>
 		{
-			_showMessageBox(message, title, MessageBoxImage.Error);
+			ShowMessageBox(message, title, MessageBoxImage.Error);
 		});
 	}
 }

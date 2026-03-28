@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
+using WPF.Config;
 using WPF.Managers;
 using WPF.Models;
 using WPF.Services.Abstractions;
@@ -42,7 +43,8 @@ internal partial class LoginViewModel : ObservableObject
 			return false;
 		}
 
-		string? plainPassword = Marshal.PtrToStringUni(Marshal.SecureStringToGlobalAllocUnicode(SecurePassword));
+		string? plainPassword = Marshal.PtrToStringUni(
+			Marshal.SecureStringToGlobalAllocUnicode(SecurePassword));
 		if (plainPassword == null)
 		{
 			return false;
@@ -74,7 +76,7 @@ internal partial class LoginViewModel : ObservableObject
 		if (SelectedRole.Equals("Basic User"))
 		{
 			if (Username.Equals("admin") &&
-				_passwordHash.SequenceEqual(Convert.FromHexString("CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB")))
+				_passwordHash.SequenceEqual(Configuration.AdminPasswordHash))
 			{
 				_windowService.OpenMainAdminWindow(new Models.User("admin", Array.Empty<byte>()));
 				return;
@@ -90,7 +92,8 @@ internal partial class LoginViewModel : ObservableObject
 			return;
 		}
 
-		EventOrganizer? eventOrganizer = await EventOrganizerManager.GetEventOrganizerByUsername(Username);
+		EventOrganizer? eventOrganizer =
+			await EventOrganizerManager.GetEventOrganizerByUsername(Username);
 		if (eventOrganizer == null || !eventOrganizer.PasswordHash.SequenceEqual(_passwordHash))
 		{
 			_dialogService.ShowError("Invalid username or password");

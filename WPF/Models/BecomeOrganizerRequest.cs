@@ -9,7 +9,7 @@ public class BecomeOrganizerRequest
 	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	public int Id { get; set; }
 
-	public string RequestText { get; set; }
+	public string RequestText { get; set; } = string.Empty;
 	public int UserId { get; set; }
-	public User User { get; set; }
+	public User User { get; set; } = null!;
 }

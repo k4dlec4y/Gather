@@ -6,7 +6,7 @@ namespace WPF.Data;
 
 public class AppDbContext : DbContext
 {
-	private string connectionString = Configuration.databaseConnectionString;
+	private string connectionString = Configuration.DatabaseConnectionString;
 
 	public DbSet<User> Users { get; set; }
 	public DbSet<FriendRequest> FriendRequests { get; set; }
@@ -196,9 +196,7 @@ public class AppDbContext : DbContext
 
 		// so admin can send messages
 		modelBuilder.Entity<User>().HasData(
-			new User(
-				"admin",
-				Convert.FromHexString("CA978112CA1BBDCAFAC231B39A23DC4DA786EFF8147C4E72B9807785AFEE48BB"))
+			new User("admin", Configuration.AdminPasswordHash)
 			{
 				Id = 1
 			});

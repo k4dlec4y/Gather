@@ -10,7 +10,7 @@ public partial class EventDetailsViewModel : ObservableObject
 	private Event _event;
 
 	[ObservableProperty]
-	private string _weatherInfo;
+	private string _weatherInfo = string.Empty;
 
 	public ObservableCollection<Models.User> FriendsAttending { get; set; }
 

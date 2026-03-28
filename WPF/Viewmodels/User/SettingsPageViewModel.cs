@@ -40,6 +40,9 @@ internal partial class SettingsPageViewModel : ObservableObject
 	[RelayCommand]
 	public async Task DeleteAccount()
 	{
+		Debug.Assert(
+			_userIdentityService.CurrentUser != null,
+			"User should not be null when deleting account!");
 		bool success = await UserManager.RemoveUser(_userIdentityService.CurrentUser);
 		if (!success)
 		{

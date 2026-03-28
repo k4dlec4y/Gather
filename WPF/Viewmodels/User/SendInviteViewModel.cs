@@ -12,7 +12,7 @@ internal partial class SendInviteViewModel : ObservableObject
 	private IUserIdentityService _userIdentityService { get; init; }
 	private IDialogService _dialogService { get; init; }
 
-	Event _event;
+	private Event _event;
 
 	[ObservableProperty]
 	ObservableCollection<Models.User> _friends;
@@ -29,6 +29,7 @@ internal partial class SendInviteViewModel : ObservableObject
 			userIdentityService.CurrentUser != null,
 			"User should not be null when initializing SendInviteViewModel.");
 		_userIdentityService = userIdentityService;
+
 		Friends = _userIdentityService.CurrentUser!.Friends;
 		_event = @event;
 		_dialogService = dialogService;

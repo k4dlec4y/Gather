@@ -10,10 +10,10 @@ public class FriendRequest
 	public int Id { get; set; }
 
 	public int FromId { get; set; }
-	public User From { get; set; }
+	public User From { get; set; } = null!;
 
 	public int ToId { get; set; }
-	public User To { get; set; }
+	public User To { get; set; } = null!;
 
-	public string Content { get; set; }
+	public string Content { get; set; } = string.Empty;
 }

@@ -14,7 +14,6 @@ internal partial class EditEventWindowViewModel : ObservableObject
 	private INavigationService _navigationService { get; init; }
 
 	private Event _event;
-	private byte[] _imageData;
 
 	[ObservableProperty]
 	private string _name = "";
@@ -24,6 +23,7 @@ internal partial class EditEventWindowViewModel : ObservableObject
 
 	[ObservableProperty]
 	private string _imageName = "";
+	private byte[] _imageData;
 
 	[ObservableProperty]
 	private DateTime _date;
@@ -83,21 +83,19 @@ internal partial class EditEventWindowViewModel : ObservableObject
 			_dialogService.ShowMessage("Please, enter categories");
 			return;
 		}
-		if (ImageName == null)  // if ImageName is empty, image won't change
+		if (ImageName == null)
 		{
 			_dialogService.ShowMessage("Please, select an image");
 			return;
 		}
 
-		var categories = new ObservableCollection<string>
-		(
+		var categories = new ObservableCollection<string>(
 			CategoriesInput
 				.Trim()
 				.Split(',')
 				.Select(c => c.Trim())
 				.Where(c => !string.IsNullOrEmpty(c))
-				.ToList()
-		);
+				.ToList());
 
 		_event.Name = Name;
 		_event.Description = Description;

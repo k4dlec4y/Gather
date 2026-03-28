@@ -10,9 +10,9 @@ public class EventOrganizer
 	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 	public int Id { get; set; }
 
-	public required string Username { get; set; }
-	public required byte[] PasswordHash { get; set; }
-	public required string Info { get; set; }
+	public required string Username { get; set; } = string.Empty;
+	public required byte[] PasswordHash { get; set; } = Array.Empty<byte>();
+	public required string Info { get; set; } = string.Empty;
 
 	public ObservableCollection<Event> Events { get; set; } = new();
 }

@@ -13,9 +13,9 @@ internal partial class MyEventsPageViewModel : ObservableObject
 	private IDialogService _dialogService { get; init; }
 	private IWindowService _windowService { get; init; }
 
-	public ObservableCollection<Event> MyEvents { get; set; }
-
 	private EventOrganizer _currentEventOrganizer { get; init; }
+
+	public ObservableCollection<Event> MyEvents { get; set; }
 
 	[ObservableProperty]
 	private Event? _selectedEvent;

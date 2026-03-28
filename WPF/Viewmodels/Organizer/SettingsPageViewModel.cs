@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Diagnostics;
 using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Organizer;
@@ -31,8 +32,13 @@ internal partial class SettingsPageViewModel : ObservableObject
 	[RelayCommand]
 	public async Task DeleteAccount()
 	{
+		Debug.Assert(
+			_organizerIdentityService.CurrentEventOrganizer != null,
+			"EventOrganizer should not be null when deleting account!");
+
 		bool success = await Managers.EventOrganizerManager.DeleteEventOrganizer(
 			_organizerIdentityService.CurrentEventOrganizer);
+
 		if (!success)
 		{
 			_dialogService.ShowError("Please, try again");

@@ -36,7 +36,9 @@ internal partial class CreateEventWindowViewModel : ObservableObject
 		IWindowService windowService,
 		IFileService fileService)
 	{
-		Debug.Assert(organizerIdentityService.CurrentEventOrganizer != null, "Current event organizer cannot be null when initializing CreateEventWindowViewModel");
+		Debug.Assert(
+			organizerIdentityService.CurrentEventOrganizer != null,
+			"Current event organizer cannot be null when initializing CreateEventWindowViewModel");
 		_currentEventOrganizer = organizerIdentityService.CurrentEventOrganizer;
 
 		_dialogService = dialogService;
@@ -79,15 +81,13 @@ internal partial class CreateEventWindowViewModel : ObservableObject
 			return;
 		}
 
-		var categories = new ObservableCollection<string>
-		(
+		var categories = new ObservableCollection<string>(
 			CategoriesInput
 				.Trim()
 				.Split(',')
 				.Select(c => c.Trim())
 				.Where(c => !string.IsNullOrEmpty(c))
-				.ToList()
-		);
+				.ToList());
 
 		var newEvent = new Event(
 			Name,
@@ -96,8 +96,7 @@ internal partial class CreateEventWindowViewModel : ObservableObject
 			Location,
 			_imageData,
 			_currentEventOrganizer.Id,
-			categories
-		);
+			categories);
 
 		if (await EventManager.CreateEvent(newEvent))
 		{
@@ -113,7 +112,9 @@ internal partial class CreateEventWindowViewModel : ObservableObject
 	public void BrowseImage()
 	{
 		string filePath = "";
-		if (!_windowService.OpenFileDialog("Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png", out filePath))
+		if (!_windowService.OpenFileDialog(
+				"Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png",
+				out filePath))
 		{
 			_dialogService.ShowError("Error while loading the image. Please try again");
 			return;

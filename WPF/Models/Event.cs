@@ -15,9 +15,9 @@ public class Event
 
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
-	public DateTime Date { get; set; }
+	public DateTime Date { get; set; } = DateTime.Now;
 	public string Location { get; set; } = string.Empty;
-	public byte[] ImageData { get; set; }
+	public byte[] ImageData { get; set; } = Array.Empty<byte>();
 	public ImageSource GetImageSource
 	{
 		get
@@ -36,9 +36,9 @@ public class Event
 	}
 
 	public int OrganizerId { get; set; }
-	public EventOrganizer Organizer { get; set; }
+	public EventOrganizer Organizer { get; set; } = null!;
 
-	public ObservableCollection<string> Categories { get; set; }
+	public ObservableCollection<string> Categories { get; set; } = new();
 	public ObservableCollection<User> Participants { get; set; } = new();
 
 	[NotMapped]

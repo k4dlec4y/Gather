@@ -8,7 +8,7 @@ namespace WPF.Viewmodels.Admin;
 
 public partial class RequestsPageViewModel : ObservableObject
 {
-	public ObservableCollection<BecomeOrganizerRequest> BecomeOrganizerRequests { get; set; } =
+	public ObservableCollection<BecomeOrganizerRequest> Requests { get; set; } =
 		BecomeOrganizerRequestManager.GetRequests();
 
 	[RelayCommand]
@@ -17,7 +17,7 @@ public partial class RequestsPageViewModel : ObservableObject
 		if (bor != null)
 		{
 			await BecomeOrganizerRequestManager.AcceptRequest(bor);
-			BecomeOrganizerRequests.Remove(bor);
+			Requests.Remove(bor);
 		}
 	}
 
@@ -27,14 +27,14 @@ public partial class RequestsPageViewModel : ObservableObject
 		if (bor != null)
 		{
 			await BecomeOrganizerRequestManager.RemoveRequest(bor);
-			BecomeOrganizerRequests.Remove(bor);
+			Requests.Remove(bor);
 		}
 	}
 
 	[RelayCommand]
 	private void ReloadRequests()
 	{
-		BecomeOrganizerRequests = BecomeOrganizerRequestManager.GetRequests();
-		OnPropertyChanged(nameof(BecomeOrganizerRequests));
+		Requests = BecomeOrganizerRequestManager.GetRequests();
+		OnPropertyChanged(nameof(Requests));
 	}
 }

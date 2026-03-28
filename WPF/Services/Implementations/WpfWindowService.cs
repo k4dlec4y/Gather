@@ -9,7 +9,7 @@ namespace WPF.Services.Implementations;
 
 internal class WpfWindowService : IWindowService
 {
-	private Window? _getLoginWindow()
+	private Window? GetLoginWindow()
 	{
 		var loginWindow = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.Title.Equals("Login"));
 		return loginWindow;
@@ -60,7 +60,7 @@ internal class WpfWindowService : IWindowService
 		mainUserWindow.Owner = null;
 		Application.Current.MainWindow = mainUserWindow;
 		mainUserWindow.Show();
-		_getLoginWindow()?.Close();
+		GetLoginWindow()?.Close();
 	}
 
 	public void OpenMainOrganizerWindow(EventOrganizer organizer)
@@ -69,7 +69,7 @@ internal class WpfWindowService : IWindowService
 		mainOrganizerWindow.Owner = null;
 		Application.Current.MainWindow = mainOrganizerWindow;
 		mainOrganizerWindow.Show();
-		_getLoginWindow()?.Close();
+		GetLoginWindow()?.Close();
 	}
 
 	public void OpenMainAdminWindow(User admin)
@@ -78,7 +78,7 @@ internal class WpfWindowService : IWindowService
 		mainAdminWindow.Owner = null;
 		Application.Current.MainWindow = mainAdminWindow;
 		mainAdminWindow.Show();
-		_getLoginWindow()?.Close();
+		GetLoginWindow()?.Close();
 	}
 
 	public void CreateEvent()
