@@ -4,7 +4,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Services.Implementations;
 
-internal partial class WpfNavigationService : ObservableObject, INavigationService
+public partial class WpfNavigationService : ObservableObject, INavigationService
 {
 	private readonly IServiceProvider _serviceProvider;
 

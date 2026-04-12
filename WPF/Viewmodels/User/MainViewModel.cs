@@ -5,7 +5,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.User;
 
-internal partial class MainViewModel : ObservableObject
+public partial class MainViewModel : ObservableObject
 {
 	public IUserIdentityService UserIdentityService { get; init; }
 	public INavigationService Navigation { get; init; }

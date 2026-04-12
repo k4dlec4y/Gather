@@ -1,6 +1,6 @@
 ﻿namespace WPF.Services.Abstractions;
 
-internal interface IFileService
+public interface IFileService
 {
 	bool ReadFile(string filePath, ref byte[] fileContent);
 }

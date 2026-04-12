@@ -11,7 +11,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels;
 
-internal partial class LoginViewModel : ObservableObject
+public partial class LoginViewModel : ObservableObject
 {
 	private IDialogService _dialogService { get; init; }
 	private IWindowService _windowService { get; init; }

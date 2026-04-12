@@ -3,7 +3,7 @@ using WPF.Models;
 
 namespace WPF.Services.Abstractions;
 
-internal interface IWindowService
+public interface IWindowService
 {
 	public void CreateLoginWindow();
 	public void CloseMainWindow(string name);

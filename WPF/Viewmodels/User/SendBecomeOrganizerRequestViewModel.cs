@@ -7,7 +7,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.User;
 
-internal partial class SendBecomeOrganizerRequestViewModel : ObservableObject
+public partial class SendBecomeOrganizerRequestViewModel : ObservableObject
 {
 	private IUserIdentityService _userIdentityService { get; init; }
 	private IDialogService _dialogService { get; init; }

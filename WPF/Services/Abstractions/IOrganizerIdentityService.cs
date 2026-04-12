@@ -2,7 +2,7 @@
 
 namespace WPF.Services.Abstractions;
 
-internal interface IOrganizerIdentityService
+public interface IOrganizerIdentityService
 {
 	EventOrganizer? CurrentEventOrganizer { get; }
 	bool IsLoggedIn => CurrentEventOrganizer != null;

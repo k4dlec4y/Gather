@@ -8,7 +8,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.User;
 
-internal partial class EventsViewModel : ObservableObject
+public partial class EventsViewModel : ObservableObject
 {
 	private IWindowService _windowService { get; init; }
 	private Models.User _currentUser { get; init; }

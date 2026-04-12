@@ -3,7 +3,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Services.Implementations;
 
-internal class WpfDialogService : IDialogService
+public class WpfDialogService : IDialogService
 {
 	private void ShowMessageBox(
 		string message,

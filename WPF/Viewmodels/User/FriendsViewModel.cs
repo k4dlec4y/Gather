@@ -6,7 +6,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.User;
 
-internal partial class FriendsViewModel : ObservableObject
+public partial class FriendsViewModel : ObservableObject
 {
 	private IDialogService _dialogService { get; init; }
 

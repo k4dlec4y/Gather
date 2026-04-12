@@ -7,7 +7,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.User;
 
-internal partial class InboxViewModel : ObservableObject
+public partial class InboxViewModel : ObservableObject
 {
 	[ObservableProperty]
 	public Models.User _currentUser;

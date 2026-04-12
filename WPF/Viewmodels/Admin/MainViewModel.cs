@@ -4,7 +4,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Admin;
 
-internal partial class MainViewModel : ObservableObject
+public partial class MainViewModel : ObservableObject
 {
 	public INavigationService Navigation { get; init; }
 	private IWindowService _windowService { get; init; }

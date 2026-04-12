@@ -2,7 +2,7 @@
 
 namespace WPF.Services.Abstractions;
 
-internal interface IUserIdentityService
+public interface IUserIdentityService
 {
 	User? CurrentUser { get; }
 	bool IsLoggedIn => CurrentUser != null;

@@ -4,7 +4,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Admin;
 
-internal partial class SettingsViewModel : ObservableObject
+public partial class SettingsViewModel : ObservableObject
 {
 	private IWindowService _windowService { get; init; }
 

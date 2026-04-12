@@ -3,7 +3,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Services.Implementations;
 
-internal class DefaultFileService : IFileService
+public class DefaultFileService : IFileService
 {
 	public bool ReadFile(string filePath, ref byte[] fileContent)
 	{

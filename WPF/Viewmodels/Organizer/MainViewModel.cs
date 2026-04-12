@@ -5,7 +5,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Organizer;
 
-internal partial class MainViewModel : ObservableObject
+public partial class MainViewModel : ObservableObject
 {
 	public IOrganizerIdentityService OrganizerIdentityService { get; init; }
 	public INavigationService Navigation { get; init; }

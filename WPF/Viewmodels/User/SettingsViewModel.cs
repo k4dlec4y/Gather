@@ -6,7 +6,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.User;
 
-internal partial class SettingsViewModel : ObservableObject
+public partial class SettingsViewModel : ObservableObject
 {
 	private IUserIdentityService _userIdentityService { get; init; }
 	private IDialogService _dialogService { get; init; }

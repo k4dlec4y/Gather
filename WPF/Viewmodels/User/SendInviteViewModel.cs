@@ -7,7 +7,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.User;
 
-internal partial class SendInviteViewModel : ObservableObject
+public partial class SendInviteViewModel : ObservableObject
 {
 	private IUserIdentityService _userIdentityService { get; init; }
 	private IDialogService _dialogService { get; init; }

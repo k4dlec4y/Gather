@@ -8,7 +8,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Organizer;
 
-internal partial class CreateEventViewModel : ObservableObject
+public partial class CreateEventViewModel : ObservableObject
 {
 	private IDialogService _dialogService { get; init; }
 	private IWindowService _windowService { get; init; }

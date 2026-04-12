@@ -5,7 +5,7 @@ using WPF.Services.Abstractions;
 
 namespace WPF.Viewmodels.Organizer;
 
-internal partial class SettingsViewModel : ObservableObject
+public partial class SettingsViewModel : ObservableObject
 {
 	private IOrganizerIdentityService _organizerIdentityService { get; init; }
 	private IDialogService _dialogService { get; init; }

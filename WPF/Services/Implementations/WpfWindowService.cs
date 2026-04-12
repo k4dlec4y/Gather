@@ -7,7 +7,7 @@ using WPF.Views;
 
 namespace WPF.Services.Implementations;
 
-internal class WpfWindowService : IWindowService
+public class WpfWindowService : IWindowService
 {
 	private Window? GetLoginWindow()
 	{
