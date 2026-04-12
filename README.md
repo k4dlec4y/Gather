@@ -107,5 +107,16 @@ A few screenshots of the application:
 
 ---
 
+## Lessons Learned & Future Architecture
+
+Building this project provided valuable insights into software architecture, particularly regarding Entity Framework model design. If I were to rebuild or refactor this application, my primary focus would be overhauling the identity and role management system.
+
+### Refactoring the Identity System (Composition over Duplication)
+- **The Current State:** Currently, `User` and `EventOrganizer` are implemented as completely separate classes with no shared base, leading to duplicated logic for authentication (Username, PasswordHash). Furthermore, the `Admin` role is implemented as a hardcoded specific username rather than a dynamic role.
+- **The Ideal Solution:** The architecture should be refactored to use a unified `Account` entity that handles all core authentication data. Specific permissions (`User`, `Organizer`, `Admin`) should be attached to this base account via **composition**. 
+- **Benefits:** This approach eliminates database duplication, provides a single source of truth for authentication, and allows a single person to be both an event attendee and an organizer without needing two separate accounts.
+
+---
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
